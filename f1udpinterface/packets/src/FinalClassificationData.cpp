@@ -1,6 +1,6 @@
 #include <sstream>
-#include "FinalClassificationData.h"
-#include "../../util.h"
+#include "../FinalClassificationData.h"
+#include "../../../util.h"
 
 namespace F122::Network::Packets {
     FinalClassificationData::Data::Data(const std::array<std::uint8_t, SIZE>& bytes) :

@@ -1,5 +1,5 @@
 #include <stdexcept>
-#include "GameModeId.h"
+#include "../GameModeId.h"
 
 namespace F122 {
     std::string to_string(GameModeId id) {

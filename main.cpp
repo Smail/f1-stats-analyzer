@@ -1,24 +1,35 @@
 #include <QUdpSocket>
 #include <QObject>
 #include <QNetworkDatagram>
-#include <iostream>
 #include <QApplication>
-#include <fstream>
 #include <QLineSeries>
 #include <QChartView>
 #include <QChart>
 #include <QMainWindow>
 #include <thread>
+#include <iostream>
+#include <fstream>
 
 #include "f1udpinterface/public.h"
 
-static int abc = 12;
+using namespace F122::Network::Packets;
+
+//Packet createPacket(const QByteArray& bytes) {
+//    Packet packet;
+//
+//
+//
+//    return packet;
+//}
 
 void processTheDatagram(const QNetworkDatagram& datagram, std::ofstream& file, QLineSeries* series) {
-    using namespace F122::Network::Packets;
     QByteArray bytes = datagram.data();
 
     std::array<std::uint8_t, 24> packetHeaderBytes{};
+
+    CarDamageData packet{std::array<std::uint8_t, CarDamageData::SIZE>{}};
+
+    size_t size = packet.expectedPacketSize;
 
     std::cout << (*reinterpret_cast<PacketHeader*>(bytes.data())) << std::endl;
 
@@ -26,8 +37,6 @@ void processTheDatagram(const QNetworkDatagram& datagram, std::ofstream& file, Q
         packetHeaderBytes[i] = bytes[i];
     }
 
-
-    series->append(abc++, 4);
 //    chart->update();
 
     std::cout << (*reinterpret_cast<PacketHeader*>(packetHeaderBytes.data())) << std::endl;
@@ -35,7 +44,7 @@ void processTheDatagram(const QNetworkDatagram& datagram, std::ofstream& file, Q
 
     series->append(7, 4);
 
-//    IPacket* packet = PacketFactory::create_from_bytes(bytes);
+//    Packet* packet = PacketFactory::create_from_bytes(bytes);
 
 //    std::cout << (*packet) << std::endl;
 

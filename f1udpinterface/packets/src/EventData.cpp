@@ -1,5 +1,5 @@
-#include "EventData.h"
-#include "../../util.h"
+#include "../EventData.h"
+#include "../../../util.h"
 
 namespace F122::Network::Packets {
     EventData::EventData(const std::array<std::uint8_t, SIZE>& bytes) :

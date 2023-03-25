@@ -1,5 +1,5 @@
-#include "LobbyInfoData.h"
-#include "../../util.h"
+#include "../LobbyInfoData.h"
+#include "../../../util.h"
 
 namespace F122::Network::Packets {
     LobbyInfoData::Data::Data(const std::array<std::uint8_t, SIZE>& bytes) :

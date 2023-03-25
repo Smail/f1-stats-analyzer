@@ -1,5 +1,5 @@
-#include "SessionHistoryData.h"
-#include "../../util.h"
+#include "../SessionHistoryData.h"
+#include "../../../util.h"
 
 namespace F122::Network::Packets {
     SessionHistoryData::LapHistoryData::LapHistoryData(const std::array<std::uint8_t, SIZE>& bytes) :

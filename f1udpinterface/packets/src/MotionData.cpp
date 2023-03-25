@@ -1,5 +1,5 @@
-#include "MotionData.h"
-#include "../../util.h"
+#include "../MotionData.h"
+#include "../../../util.h"
 
 namespace F122::Network::Packets {
     MotionData::MotionData(const std::array<std::uint8_t, SIZE>& bytes) :

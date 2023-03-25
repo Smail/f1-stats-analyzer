@@ -1,5 +1,5 @@
 #include <stdexcept>
-#include "InfringementTypeId.h"
+#include "../InfringementTypeId.h"
 
 namespace F122 {
     std::string to_string(InfringementTypeId id) {

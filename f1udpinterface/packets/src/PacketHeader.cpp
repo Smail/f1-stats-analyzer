@@ -1,5 +1,5 @@
-#include "PacketHeader.h"
-#include "../../util.h"
+#include "../PacketHeader.h"
+#include "../../../util.h"
 
 namespace F122::Network::Packets {
     PacketHeader::PacketHeader(const std::array<std::uint8_t, SIZE>& bytes) :
