@@ -2,11 +2,11 @@
 #include "../../util.h"
 
 namespace F122::Network::Packets {
-    SessionData::MarshalZone::MarshalZone(const std::array<std::uint8_t, 5>& bytes) :
+    SessionData::MarshalZone::MarshalZone(const std::array<std::uint8_t, SIZE>& bytes) :
             m_zoneStart{util::convert<float>({bytes[0], bytes[1], bytes[2], bytes[3]})},
             m_zoneFlag{static_cast<std::int8_t>(bytes[4])} {}
 
-    SessionData::WeatherForecastSample::WeatherForecastSample(const std::array<std::uint8_t, 8>& bytes) :
+    SessionData::WeatherForecastSample::WeatherForecastSample(const std::array<std::uint8_t, SIZE>& bytes) :
             m_sessionType{bytes[0]},
             m_timeOffset{bytes[1]},
             m_weather{bytes[2]},
@@ -16,8 +16,8 @@ namespace F122::Network::Packets {
             m_airTemperatureChange{static_cast<std::int8_t>(bytes[6])},
             m_rainPercentage{bytes[7]} {}
 
-    SessionData::SessionData(const std::array<std::uint8_t, 632>& bytes) :
-            m_header{{util::copy_resize<std::uint8_t, 632, 24>(bytes)}},
+    SessionData::SessionData(const std::array<std::uint8_t, SIZE>& bytes) :
+            m_header{{util::copy_resize<std::uint8_t, SIZE, PacketHeader::SIZE>(bytes)}},
             m_weather{bytes[24]},
             m_trackTemperature{static_cast<std::int8_t>(bytes[25])},
             m_airTemperature{static_cast<std::int8_t>(bytes[26])},
@@ -34,11 +34,12 @@ namespace F122::Network::Packets {
             m_spectatorCarIndex{bytes[40]},
             m_sliProNativeSupport{bytes[41]},
             m_numMarshalZones{bytes[42]},
-            m_marshalZones{util::batch_create<MarshalZone, 632, 5, 21, 43>(bytes)},
+            m_marshalZones{util::batch_create<MarshalZone, SIZE, MarshalZone::SIZE, 21, 43>(bytes)},
             m_safetyCarStatus{bytes[148]},
             m_networkGame{bytes[149]},
             m_numWeatherForecastSamples{bytes[150]},
-            m_weatherForecastSamples{util::batch_create<WeatherForecastSample, 632, 8, 56, 151>(bytes)},
+            m_weatherForecastSamples{
+                    util::batch_create<WeatherForecastSample, SIZE, WeatherForecastSample::SIZE, 56, 151>(bytes)},
             m_forecastAccuracy{bytes[599]},
             m_aiDifficulty{bytes[600]},
             m_seasonLinkIdentifier{util::convert<std::uint32_t>({bytes[601], bytes[602], bytes[603], bytes[604]})},

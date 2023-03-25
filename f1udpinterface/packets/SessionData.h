@@ -14,6 +14,8 @@ namespace F122::Network::Packets {
     /// Version: 1<br>
     struct SessionData {
         struct MarshalZone {
+            static constexpr size_t SIZE = 5;
+
             MarshalZone() = default;
 
             explicit MarshalZone(const std::array<std::uint8_t, 5>& bytes);
@@ -27,6 +29,8 @@ namespace F122::Network::Packets {
         };
 
         struct WeatherForecastSample {
+            static constexpr size_t SIZE = 8;
+
             WeatherForecastSample() = default;
 
             explicit WeatherForecastSample(const std::array<std::uint8_t, 8>& bytes);
@@ -54,7 +58,12 @@ namespace F122::Network::Packets {
         };
 
     public:
-        explicit SessionData(const std::array<std::uint8_t, 632>& bytes);
+        static constexpr size_t SIZE = PacketHeader::SIZE + 21 * MarshalZone::SIZE +
+                                       56 * WeatherForecastSample::SIZE + 55;
+
+        explicit SessionData(const std::array<std::uint8_t, SIZE>& bytes);
+
+        friend std::ostream& operator<<(std::ostream& os, const SessionData& data);
 
         PacketHeader m_header;
         /// Weather - 0 = clear, 1 = light cloud, 2 = overcast, 3 = light rain, 4 = heavy rain, 5 = storm
@@ -147,7 +156,20 @@ namespace F122::Network::Packets {
         /// 0 = None, 2 = Very Short, 3 = Short, 4 = Medium, 5 = Medium Long, 6 = Long, 7 = Full
         std::uint8_t m_sessionLength;
 
-        friend std::ostream& operator<<(std::ostream& os, const SessionData& data);
+        static_assert(SIZE == 632, "Invalid size");
+        static_assert(PacketHeader::SIZE + sizeof(m_weather) + sizeof(m_trackTemperature) + sizeof(m_airTemperature) +
+                      sizeof(m_totalLaps) + sizeof(m_trackLength) + sizeof(m_sessionType) + sizeof(m_sessionLength) +
+                      sizeof(m_trackId) + sizeof(m_formula) + sizeof(m_sessionTimeLeft) + sizeof(m_sessionDuration) +
+                      sizeof(m_pitSpeedLimit) + sizeof(m_gamePaused) + sizeof(m_isSpectating) + sizeof(m_timeOfDay) +
+                      sizeof(m_spectatorCarIndex) + sizeof(m_sliProNativeSupport) + sizeof(m_numMarshalZones) +
+                      sizeof(m_safetyCarStatus) + sizeof(m_networkGame) + sizeof(m_numWeatherForecastSamples) +
+                      sizeof(m_forecastAccuracy) + sizeof(m_aiDifficulty) + sizeof(m_seasonLinkIdentifier) +
+                      sizeof(m_weekendLinkIdentifier) + sizeof(m_sessionLinkIdentifier) + sizeof(m_DRSAssist) +
+                      sizeof(m_pitStopWindowIdealLap) + sizeof(m_pitStopWindowLatestLap) + sizeof(m_ERSAssist) +
+                      sizeof(m_pitStopRejoinPosition) + sizeof(m_steeringAssist) + sizeof(m_brakingAssist) +
+                      sizeof(m_gearboxAssist) + sizeof(m_pitAssist) + sizeof(m_pitReleaseAssist) + sizeof(m_ruleSet) +
+                      sizeof(m_dynamicRacingLine) + sizeof(m_dynamicRacingLineType) + sizeof(m_gameMode) +
+                      (21 * MarshalZone::SIZE) + (56 * WeatherForecastSample::SIZE) == SIZE, "Invalid size 2");
     };
 
     std::ostream& operator<<(std::ostream& os, const SessionData& data);

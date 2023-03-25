@@ -18,9 +18,11 @@ namespace F122::Network::Packets {
     /// Version: 1<br>
     struct ParticipantsData {
         struct Data {
+            static constexpr size_t SIZE = 56;
+
             Data() = default;
 
-            explicit Data(const std::array<std::uint8_t, 56>& bytes);
+            explicit Data(const std::array<std::uint8_t, SIZE>& bytes);
 
             /// Whether the vehicle is AI (1) or Human (0) controlled
             std::uint8_t m_aiControlled;
@@ -49,17 +51,21 @@ namespace F122::Network::Packets {
             friend std::ostream& operator<<(std::ostream& os, const Data& data);
         };
 
-    private:
-
     public:
-        explicit ParticipantsData(const std::array<std::uint8_t, 1257>& bytes);
+        static constexpr size_t SIZE = PacketHeader::SIZE + 22 * Data::SIZE + 1;
+
+        explicit ParticipantsData(const std::array<std::uint8_t, SIZE>& bytes);
+
+        friend std::ostream& operator<<(std::ostream& os, const ParticipantsData& data);
 
         PacketHeader m_header;
         /// Number of active cars in the data - should match number of cars on HUD
         std::uint8_t m_numActiveCars;
         std::array<Data, 22> m_participants;
 
-        friend std::ostream& operator<<(std::ostream& os, const ParticipantsData& data);
+        static_assert(SIZE == 1257, "Invalid size");
+        static_assert(PacketHeader::SIZE + sizeof(m_numActiveCars) + (22 * Data::SIZE) == SIZE, "Invalid size 2");
+
     };
 
     std::ostream& operator<<(std::ostream& os, const ParticipantsData& data);

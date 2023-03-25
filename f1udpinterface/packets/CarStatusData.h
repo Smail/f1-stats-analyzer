@@ -11,6 +11,8 @@ namespace F122::Network::Packets {
     /// Version: 1<br>
     struct CarStatusData {
         struct Data {
+            static constexpr size_t SIZE = 47;
+
             Data() = default;
 
             explicit Data(const std::array<std::uint8_t, 47>& bytes);
@@ -82,12 +84,17 @@ namespace F122::Network::Packets {
         };
 
     public:
-        explicit CarStatusData(const std::array<std::uint8_t, 1058>& bytes);
+        static constexpr size_t SIZE = PacketHeader::SIZE + 22 * Data::SIZE;
+
+        explicit CarStatusData(const std::array<std::uint8_t, SIZE>& bytes);
 
         friend std::ostream& operator<<(std::ostream& os, const CarStatusData& data);
 
         PacketHeader m_header;
         std::array<Data, 22> m_carStatusData;
+
+        static_assert(SIZE == 1058, "Invalid size");
+        static_assert(PacketHeader::SIZE + 22 * Data::SIZE == SIZE, "Invalid size 2");
     };
 
     std::ostream& operator<<(std::ostream& os, const CarStatusData& data);

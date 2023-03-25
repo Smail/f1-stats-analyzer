@@ -149,7 +149,9 @@ namespace F122::Network::Packets {
         };
 
     public:
-        explicit EventData(const std::array<std::uint8_t, 40>& bytes);
+        static constexpr size_t SIZE = 40;
+
+        explicit EventData(const std::array<std::uint8_t, SIZE>& bytes);
 
         friend std::ostream& operator<<(std::ostream& os, const EventData& data);
 
@@ -158,6 +160,13 @@ namespace F122::Network::Packets {
         std::array<std::uint8_t, 4> m_eventStringCode;
         /// Event details - should be interpreted differently for each type
         EventDataDetails m_eventDetails;
+        // TODO
+//        static_assert(PacketHeader::SIZE + sizeof(m_suspensionPosition) + sizeof(m_suspensionVelocity) +
+//                      sizeof(m_suspensionAcceleration) + sizeof(m_wheelSpeed) + sizeof(m_wheelSlip) +
+//                      sizeof(m_localVelocityX) + sizeof(m_localVelocityY) + sizeof(m_localVelocityZ) +
+//                      sizeof(m_angularVelocityX) + sizeof(m_angularVelocityY) + sizeof(m_angularVelocityZ) +
+//                      sizeof(m_angularAccelerationX) + sizeof(m_angularAccelerationY) + sizeof(m_angularAccelerationZ) +
+//                      sizeof(m_frontWheelsAngle) + 22 * Data::SIZE == SIZE, "Invalid size 2");
     };
 
     std::ostream& operator<<(std::ostream& os, const EventData& data);

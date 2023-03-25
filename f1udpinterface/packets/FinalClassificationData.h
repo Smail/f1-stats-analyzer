@@ -13,9 +13,11 @@ namespace F122::Network::Packets {
     /// Version: 1<br>
     struct FinalClassificationData {
         struct Data {
+            static constexpr size_t SIZE = 45;
+
             Data() = default;
 
-            explicit Data(const std::array<std::uint8_t, 45>& bytes);
+            explicit Data(const std::array<std::uint8_t, SIZE>& bytes);
 
             /// Finishing position
             std::uint8_t m_position;
@@ -54,7 +56,9 @@ namespace F122::Network::Packets {
         };
 
     public:
-        explicit FinalClassificationData(const std::array<std::uint8_t, 1015>& bytes);
+        static constexpr size_t SIZE = PacketHeader::SIZE + 22 * Data::SIZE + 1;
+
+        explicit FinalClassificationData(const std::array<std::uint8_t, SIZE>& bytes);
 
         friend std::ostream& operator<<(std::ostream& os, const FinalClassificationData& data);
 
@@ -62,6 +66,9 @@ namespace F122::Network::Packets {
         /// Number of cars in the final classification
         std::uint8_t m_numCars;
         std::array<Data, 22> m_classificationData;
+
+        static_assert(SIZE == 1015, "Invalid size");
+        static_assert(PacketHeader::SIZE + sizeof(m_numCars) + 22 * Data::SIZE == SIZE, "Invalid size 2");
     };
 
     std::ostream& operator<<(std::ostream& os, const FinalClassificationData& data);

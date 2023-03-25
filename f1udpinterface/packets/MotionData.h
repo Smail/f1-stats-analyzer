@@ -16,6 +16,8 @@ namespace F122::Network::Packets {
     /// Version: 1<br>
     struct MotionData {
         struct Data {
+            static constexpr size_t SIZE = 60;
+
             Data() = default;
 
             explicit Data(const std::array<std::uint8_t, 60>& bytes);
@@ -61,7 +63,11 @@ namespace F122::Network::Packets {
         };
 
     public:
-        explicit MotionData(const std::array<std::uint8_t, 1464>& bytes);
+        static constexpr size_t SIZE = PacketHeader::SIZE + 22 * Data::SIZE + 120;
+
+        explicit MotionData(const std::array<std::uint8_t, SIZE>& bytes);
+
+        friend std::ostream& operator<<(std::ostream& os, const MotionData& data);
 
         PacketHeader m_header;
         /// Data for all cars on track
@@ -98,7 +104,14 @@ namespace F122::Network::Packets {
         /// Current front wheels angle in radians
         float m_frontWheelsAngle;
 
-        friend std::ostream& operator<<(std::ostream& os, const MotionData& data);
+        static_assert(SIZE == 1464, "Invalid size");
+        static_assert(PacketHeader::SIZE + sizeof(m_suspensionPosition) + sizeof(m_suspensionVelocity) +
+                      sizeof(m_suspensionAcceleration) + sizeof(m_wheelSpeed) + sizeof(m_wheelSlip) +
+                      sizeof(m_localVelocityX) + sizeof(m_localVelocityY) + sizeof(m_localVelocityZ) +
+                      sizeof(m_angularVelocityX) + sizeof(m_angularVelocityY) + sizeof(m_angularVelocityZ) +
+                      sizeof(m_angularAccelerationX) + sizeof(m_angularAccelerationY) + sizeof(m_angularAccelerationZ) +
+                      sizeof(m_frontWheelsAngle) + 22 * Data::SIZE == SIZE, "Invalid size 2");
+
     };
 
     std::ostream& operator<<(std::ostream& os, const MotionData& data);

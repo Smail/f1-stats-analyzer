@@ -2,7 +2,7 @@
 #include "../../util.h"
 
 namespace F122::Network::Packets {
-    ParticipantsData::Data::Data(const std::array<std::uint8_t, 56>& bytes) :
+    ParticipantsData::Data::Data(const std::array<std::uint8_t, SIZE>& bytes) :
             m_aiControlled{bytes[0]},
             m_driverId{bytes[1]},
             m_networkId{bytes[2]},
@@ -10,13 +10,14 @@ namespace F122::Network::Packets {
             m_myTeam{bytes[4]},
             m_raceNumber{bytes[5]},
             m_nationality{bytes[6]},
-            m_name{util::convert_type(util::copy_resize<std::uint8_t, 56, 48, 7>(bytes))},
+            m_name{util::convert_type(util::copy_resize<std::uint8_t, SIZE, 48, 7>(bytes))},
             m_yourTelemetry{bytes[55]} {}
 
-    ParticipantsData::ParticipantsData(const std::array<std::uint8_t, 1257>& bytes) :
-            m_header{{util::copy_resize<std::uint8_t, 1257, 24>(bytes)}},
+    ParticipantsData::ParticipantsData(const std::array<std::uint8_t, SIZE>& bytes) :
+            m_header{{util::copy_resize<std::uint8_t, SIZE, PacketHeader::SIZE>(bytes)}},
             m_numActiveCars{bytes[24]},
-            m_participants{util::batch_create<ParticipantsData::Data, 1257, 56, 22, 24 + 1>(bytes)} {}
+            m_participants{
+                    util::batch_create<ParticipantsData::Data, SIZE, Data::SIZE, 22, PacketHeader::SIZE + 1>(bytes)} {}
 
     std::string ParticipantsData::Data::name() const {
         auto i = std::find_if(m_name.begin(), m_name.end(), [](auto c) { return c == '\0'; });

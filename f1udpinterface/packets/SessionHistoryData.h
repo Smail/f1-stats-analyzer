@@ -18,6 +18,8 @@ namespace F122::Network::Packets {
     /// Version: 1<br>
     struct SessionHistoryData {
         struct LapHistoryData {
+            static constexpr size_t SIZE = 11;
+
             LapHistoryData() = default;
 
             explicit LapHistoryData(const std::array<std::uint8_t, 11>& bytes);
@@ -38,6 +40,8 @@ namespace F122::Network::Packets {
         };
 
         struct TyreStintHistoryData {
+            static constexpr size_t SIZE = 3;
+
             TyreStintHistoryData() = default;
 
             explicit TyreStintHistoryData(const std::array<std::uint8_t, 3>& bytes);
@@ -53,7 +57,12 @@ namespace F122::Network::Packets {
         };
 
     public:
-        explicit SessionHistoryData(const std::array<std::uint8_t, 1155>& bytes);
+        static constexpr size_t SIZE = PacketHeader::SIZE + 100 * LapHistoryData::SIZE +
+                                       8 * TyreStintHistoryData::SIZE + 7;
+
+        explicit SessionHistoryData(const std::array<std::uint8_t, SIZE>& bytes);
+
+        friend std::ostream& operator<<(std::ostream& os, const SessionHistoryData& data);
 
         PacketHeader m_header;
         /// Index of the car this lap data relates to
@@ -74,7 +83,11 @@ namespace F122::Network::Packets {
         std::array<LapHistoryData, 100> m_lapHistoryData;
         std::array<TyreStintHistoryData, 8> m_tyreStintsHistoryData;
 
-        friend std::ostream& operator<<(std::ostream& os, const SessionHistoryData& data);
+        static_assert(SIZE == 1155, "Invalid size");
+        static_assert(PacketHeader::SIZE + sizeof(m_carIdx) + sizeof(m_numLaps) + sizeof(m_numTyreStints) +
+                      sizeof(m_bestLapTimeLapNum) + sizeof(m_bestSector1LapNum) + sizeof(m_bestSector2LapNum) +
+                      sizeof(m_bestSector3LapNum) + (100 * LapHistoryData::SIZE) + (8 * TyreStintHistoryData::SIZE) ==
+                      SIZE, "Invalid size 2");
     };
 
     std::ostream& operator<<(std::ostream& os, const SessionHistoryData& data);

@@ -2,12 +2,6 @@
 #include "../../util.h"
 
 namespace F122::Network::Packets {
-    LapData::LapData(const std::array<std::uint8_t, 972>& bytes) :
-            m_header{{util::copy_resize<std::uint8_t, 972, 24>(bytes)}},
-            m_lapData{util::batch_create<Data, 972, 43, 22, 24>(bytes)},
-            m_timeTrialPBCarIdx{bytes[970]},
-            m_timeTrialRivalCarIdx{bytes[971]} {}
-
     LapData::Data::Data(const std::array<std::uint8_t, 43>& bytes) :
             m_lastLapTimeInMS{util::convert<std::uint32_t>({bytes[0], bytes[1], bytes[2], bytes[3]})},
             m_currentLapTimeInMS{util::convert<std::uint32_t>({bytes[4], bytes[5], bytes[6], bytes[7]})},
@@ -33,6 +27,12 @@ namespace F122::Network::Packets {
             m_pitLaneTimeInLaneInMS{util::convert<std::uint16_t>({bytes[38], bytes[39]})},
             m_pitStopTimerInMS{util::convert<std::uint16_t>({bytes[40], bytes[41]})},
             m_pitStopShouldServePen{bytes[42]} {}
+
+    LapData::LapData(const std::array<std::uint8_t, SIZE>& bytes) :
+            m_header{{util::copy_resize<std::uint8_t, SIZE, PacketHeader::SIZE>(bytes)}},
+            m_lapData{util::batch_create<Data, SIZE, Data::SIZE, 22, PacketHeader::SIZE>(bytes)},
+            m_timeTrialPBCarIdx{bytes[970]},
+            m_timeTrialRivalCarIdx{bytes[971]} {}
 
     std::ostream& operator<<(std::ostream& os, const LapData::Data& data) {
         os << "m_lastLapTimeInMS: " << std::to_string(data.m_lastLapTimeInMS) << "\n"

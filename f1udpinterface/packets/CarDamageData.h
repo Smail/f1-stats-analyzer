@@ -14,9 +14,11 @@ namespace F122::Network::Packets {
     /// Version: 1<br>
     struct CarDamageData : public Packet {
         struct Data {
+            static constexpr size_t SIZE = 42;
+
             Data() = default;
 
-            explicit Data(const std::array<std::uint8_t, 42>& bytes);
+            explicit Data(const std::array<std::uint8_t, SIZE>& bytes);
 
             /// Tyre wear (percentage)
             std::array<float, 4> m_tyresWear;
@@ -65,7 +67,9 @@ namespace F122::Network::Packets {
         };
 
     public:
-        explicit CarDamageData(const std::array<std::uint8_t, 948>& bytes);
+        static constexpr size_t SIZE = PacketHeader::SIZE + 22 * Data::SIZE;
+
+        explicit CarDamageData(const std::array<std::uint8_t, SIZE>& bytes);
 
         ~CarDamageData() override;
 
@@ -73,6 +77,9 @@ namespace F122::Network::Packets {
 
         PacketHeader m_header;
         std::array<Data, 22> m_carDamageData;
+
+        static_assert(SIZE == 948, "Invalid size");
+        static_assert(PacketHeader::SIZE + 22 * Data::SIZE == SIZE, "Invalid size 2");
     };
 
     std::ostream& operator<<(std::ostream& os, const CarDamageData& data);

@@ -13,9 +13,11 @@ namespace F122::Network::Packets {
     /// Version: 1<br>
     struct CarTelemetryData {
         struct Data {
+            static constexpr size_t SIZE = 60;
+
             Data() = default;
 
-            explicit Data(const std::array<std::uint8_t, 60>& bytes);
+            explicit Data(const std::array<std::uint8_t, SIZE>& bytes);
 
             /// Speed of car in kilometres per hour
             std::uint16_t m_speed;
@@ -59,7 +61,9 @@ namespace F122::Network::Packets {
         };
 
     public:
-        explicit CarTelemetryData(const std::array<std::uint8_t, 1347>& bytes);
+        static constexpr size_t SIZE = PacketHeader::SIZE + 22 * Data::SIZE + 3;
+
+        explicit CarTelemetryData(const std::array<std::uint8_t, SIZE>& bytes);
 
         friend std::ostream& operator<<(std::ostream& os, const CarTelemetryData& data);
 
@@ -74,6 +78,10 @@ namespace F122::Network::Packets {
         std::uint8_t m_mfdPanelIndexSecondaryPlayer;
         /// Suggested gear for the player (1-8) - 0 if no gear suggested
         std::int8_t m_suggestedGear;
+
+        static_assert(SIZE == 1347, "Invalid size");
+        static_assert(PacketHeader::SIZE + sizeof(m_mfdPanelIndex) + sizeof(m_mfdPanelIndexSecondaryPlayer) +
+                      sizeof(m_suggestedGear) + 22 * Data::SIZE == SIZE, "Invalid size 2");
     };
 
     std::ostream& operator<<(std::ostream& os, const CarTelemetryData::Data& data);

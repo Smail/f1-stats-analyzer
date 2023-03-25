@@ -37,11 +37,15 @@ namespace F122::Network::Packets {
 
         static PacketId from(std::uint8_t value);
 
-        explicit PacketHeader(const std::array<std::uint8_t, 24>& bytes);
-
         static std::string to_string(PacketId id);
 
     public:
+        static constexpr size_t SIZE = 24;
+
+        explicit PacketHeader(const std::array<std::uint8_t, SIZE>& bytes);
+
+        friend std::ostream& operator<<(std::ostream& os, const PacketHeader& header);
+
         /// 2022
         std::uint16_t m_packetFormat;
         /// Game major version - "X.00"
@@ -64,7 +68,10 @@ namespace F122::Network::Packets {
         /// 255 if no second player
         std::uint8_t m_secondaryPlayerCarIndex;
 
-        friend std::ostream& operator<<(std::ostream& os, const PacketHeader& header);
+        static_assert(sizeof(m_packetFormat) + sizeof(m_gameMajorVersion) + sizeof(m_gameMinorVersion) +
+                      sizeof(m_packetVersion) + sizeof(m_packetId) + sizeof(m_sessionUID) + sizeof(m_sessionTime) +
+                      sizeof(m_frameIdentifier) + sizeof(m_playerCarIndex) + sizeof(m_secondaryPlayerCarIndex) == SIZE,
+                      "Invalid size");
     };
 
     std::ostream& operator<<(std::ostream& os, const PacketHeader& header);

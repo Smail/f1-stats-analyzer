@@ -2,7 +2,7 @@
 #include "../../util.h"
 
 namespace F122::Network::Packets {
-    CarStatusData::Data::Data(const std::array<std::uint8_t, 47>& bytes) :
+    CarStatusData::Data::Data(const std::array<std::uint8_t, SIZE>& bytes) :
             m_tractionControl{bytes[0]},
             m_antiLockBrakes{bytes[1]},
             m_fuelMix{bytes[2]},
@@ -27,9 +27,9 @@ namespace F122::Network::Packets {
             m_ersDeployedThisLap{util::convert<float>({bytes[42], bytes[43], bytes[44], bytes[45]})},
             m_networkPaused{bytes[46]} {}
 
-    CarStatusData::CarStatusData(const std::array<std::uint8_t, 1058>& bytes) :
-            m_header{{util::copy_resize<std::uint8_t, 1058, 24>(bytes)}},
-            m_carStatusData{util::batch_create<Data, 1058, 47, 22, 24>(bytes)} {}
+    CarStatusData::CarStatusData(const std::array<std::uint8_t, SIZE>& bytes) :
+            m_header{{util::copy_resize<std::uint8_t, SIZE, PacketHeader::SIZE>(bytes)}},
+            m_carStatusData{util::batch_create<Data, SIZE, Data::SIZE, 22, PacketHeader::SIZE>(bytes)} {}
 
     std::ostream& operator<<(std::ostream& os, const CarStatusData::Data& data) {
         os << "m_tractionControl: " << std::to_string(data.m_tractionControl) << "\n"

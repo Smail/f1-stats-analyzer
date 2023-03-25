@@ -2,7 +2,7 @@
 #include "../../util.h"
 
 namespace F122::Network::Packets {
-    CarSetupData::Data::Data(const std::array<std::uint8_t, 49>& bytes) :
+    CarSetupData::Data::Data(const std::array<std::uint8_t, SIZE>& bytes) :
             m_frontWing{bytes[0]},
             m_rearWing{bytes[1]},
             m_onThrottle{bytes[2]},
@@ -26,9 +26,9 @@ namespace F122::Network::Packets {
             m_ballast{bytes[44]},
             m_fuelLoad{util::convert<float>({bytes[45], bytes[46], bytes[47], bytes[48]})} {}
 
-    CarSetupData::CarSetupData(const std::array<std::uint8_t, 1102>& bytes) :
-            m_header{{util::copy_resize<std::uint8_t, 1102, 24>(bytes)}},
-            m_carSetups{util::batch_create<Data, 1102, 49, 22, 24>(bytes)} {}
+    CarSetupData::CarSetupData(const std::array<std::uint8_t, SIZE>& bytes) :
+            m_header{{util::copy_resize<std::uint8_t, SIZE, PacketHeader::SIZE>(bytes)}},
+            m_carSetups{util::batch_create<Data, SIZE, Data::SIZE, 22, PacketHeader::SIZE>(bytes)} {}
 
     std::ostream& operator<<(std::ostream& os, const CarSetupData& data) {
         os << "m_header: " << "\n" << data.m_header << "\n"

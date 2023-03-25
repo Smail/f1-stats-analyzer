@@ -2,9 +2,9 @@
 #include "../../util.h"
 
 namespace F122::Network::Packets {
-    EventData::EventData(const std::array<std::uint8_t, 40>& bytes) :
-            m_header{{util::copy_resize<std::uint8_t, 40, 24>(bytes)}},
-            m_eventStringCode{util::copy_resize<std::uint8_t, 40, 4, 24 + 1>(bytes)} {
+    EventData::EventData(const std::array<std::uint8_t, SIZE>& bytes) :
+            m_header{{util::copy_resize<std::uint8_t, SIZE, PacketHeader::SIZE>(bytes)}},
+            m_eventStringCode{util::copy_resize<std::uint8_t, SIZE, 4, PacketHeader::SIZE + 1>(bytes)} {
         // TODO init m_eventDetails: Check for string code to get size of struct
     }
 

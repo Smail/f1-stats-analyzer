@@ -2,18 +2,18 @@
 #include "../../util.h"
 
 namespace F122::Network::Packets {
-    LobbyInfoData::Data::Data(const std::array<std::uint8_t, 53>& bytes) :
+    LobbyInfoData::Data::Data(const std::array<std::uint8_t, SIZE>& bytes) :
             m_aiControlled{bytes[0]},
             m_teamId{bytes[1]},
             m_nationality{bytes[2]},
-            m_name{util::convert_type<48>(util::copy_resize<std::uint8_t, 53, 48, 3>(bytes))},
+            m_name{util::convert_type<48>(util::copy_resize<std::uint8_t, SIZE, 48, 3>(bytes))},
             m_carNumber{bytes[51]},
             m_readyStatus{bytes[52]} {}
 
-    LobbyInfoData::LobbyInfoData(const std::array<std::uint8_t, 1191>& bytes) :
-            m_header{{util::copy_resize<std::uint8_t, 1191, 24>(bytes)}},
+    LobbyInfoData::LobbyInfoData(const std::array<std::uint8_t, SIZE>& bytes) :
+            m_header{{util::copy_resize<std::uint8_t, SIZE, PacketHeader::SIZE>(bytes)}},
             m_numPlayers{bytes[24]},
-            m_lobbyPlayers{util::batch_create<Data, 1191, 53, 22, 24 + 1>(bytes)} {}
+            m_lobbyPlayers{util::batch_create<Data, SIZE, Data::SIZE, 22, PacketHeader::SIZE + 1>(bytes)} {}
 
     std::ostream& operator<<(std::ostream& os, const LobbyInfoData::Data& data) {
         os << "m_aiControlled: " << std::to_string(data.m_aiControlled) << "\n"

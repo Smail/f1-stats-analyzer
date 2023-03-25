@@ -12,9 +12,11 @@ namespace F122::Network::Packets {
     /// Version: 1<br>
     struct LapData {
         struct Data {
+            static constexpr size_t SIZE = 43;
+
             Data() = default;
 
-            explicit Data(const std::array<std::uint8_t, 43>& bytes);
+            explicit Data(const std::array<std::uint8_t, SIZE>& bytes);
 
             /// Last lap time in milliseconds
             std::uint32_t m_lastLapTimeInMS;
@@ -71,7 +73,11 @@ namespace F122::Network::Packets {
         };
 
     public:
-        explicit LapData(const std::array<std::uint8_t, 972>& bytes);
+        static constexpr size_t SIZE = PacketHeader::SIZE + 22 * Data::SIZE + 2;
+
+        explicit LapData(const std::array<std::uint8_t, SIZE>& bytes);
+
+        friend std::ostream& operator<<(std::ostream& os, const LapData& data);
 
         PacketHeader m_header;
         /// Lap data for all cars on track
@@ -81,7 +87,9 @@ namespace F122::Network::Packets {
         /// Index of Rival car in time trial (255 if invalid)
         std::uint8_t m_timeTrialRivalCarIdx;
 
-        friend std::ostream& operator<<(std::ostream& os, const LapData& data);
+        static_assert(SIZE == 972, "Invalid size");
+        static_assert(PacketHeader::SIZE + sizeof(m_timeTrialPBCarIdx) + sizeof(m_timeTrialRivalCarIdx) +
+                      22 * Data::SIZE == SIZE, "Invalid size 2");
     };
 
     std::ostream& operator<<(std::ostream& os, const LapData& data);

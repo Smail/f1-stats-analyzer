@@ -2,7 +2,7 @@
 #include "../../util.h"
 
 namespace F122::Network::Packets {
-    CarDamageData::Data::Data(const std::array<std::uint8_t, 42>& bytes) :
+    CarDamageData::Data::Data(const std::array<std::uint8_t, SIZE>& bytes) :
             m_tyresWear{util::convert<float>({bytes[0], bytes[1], bytes[2], bytes[3]}),
                         util::convert<float>({bytes[4], bytes[5], bytes[6], bytes[7]}),
                         util::convert<float>({bytes[8], bytes[9], bytes[10], bytes[11]}),
@@ -28,10 +28,10 @@ namespace F122::Network::Packets {
             m_engineBlown{bytes[40]},
             m_engineSeized{bytes[41]} {}
 
-    CarDamageData::CarDamageData(const std::array<std::uint8_t, 948>& bytes) :
+    CarDamageData::CarDamageData(const std::array<std::uint8_t, SIZE>& bytes) :
             Packet(bytes),
-            m_header{{util::copy_resize<std::uint8_t, 948, 24>(bytes)}},
-            m_carDamageData{util::batch_create<Data, 948, 42, 22, 24>(bytes)} {}
+            m_header{{util::copy_resize<std::uint8_t, SIZE, PacketHeader::SIZE>(bytes)}},
+            m_carDamageData{util::batch_create<Data, SIZE, Data::SIZE, 22, PacketHeader::SIZE>(bytes)} {}
 
     CarDamageData::~CarDamageData() = default;
 

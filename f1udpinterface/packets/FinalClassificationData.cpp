@@ -3,7 +3,7 @@
 #include "../../util.h"
 
 namespace F122::Network::Packets {
-    FinalClassificationData::Data::Data(const std::array<std::uint8_t, 45>& bytes) :
+    FinalClassificationData::Data::Data(const std::array<std::uint8_t, SIZE>& bytes) :
             m_position{bytes[0]},
             m_numLaps{bytes[1]},
             m_gridPosition{bytes[2]},
@@ -26,10 +26,10 @@ namespace F122::Network::Packets {
                     {bytes[37], bytes[38], bytes[39], bytes[40], bytes[41], bytes[42], bytes[43], bytes[44]},
             } {}
 
-    FinalClassificationData::FinalClassificationData(const std::array<std::uint8_t, 1015>& bytes) :
-            m_header{{util::copy_resize<std::uint8_t, 1015, 24>(bytes)}},
+    FinalClassificationData::FinalClassificationData(const std::array<std::uint8_t, SIZE>& bytes) :
+            m_header{{util::copy_resize<std::uint8_t, SIZE, PacketHeader::SIZE>(bytes)}},
             m_numCars{bytes[24]},
-            m_classificationData{util::batch_create<Data, 1015, 45, 22, 24 + 1>(bytes)} {}
+            m_classificationData{util::batch_create<Data, SIZE, Data::SIZE, 22, PacketHeader::SIZE + 1>(bytes)} {}
 
     std::string FinalClassificationData::Data::to_string() const {
         std::stringstream ss;

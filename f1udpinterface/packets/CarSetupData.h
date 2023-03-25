@@ -13,9 +13,11 @@ namespace F122::Network::Packets {
     /// Version: 1<br>
     struct CarSetupData {
         struct Data {
+            static constexpr size_t SIZE = 49;
+
             Data() = default;
 
-            explicit Data(const std::array<std::uint8_t, 49>& bytes);
+            explicit Data(const std::array<std::uint8_t, SIZE>& bytes);
 
             /// Front wing aero
             std::uint8_t m_frontWing;
@@ -66,12 +68,17 @@ namespace F122::Network::Packets {
         };
 
     public:
-        explicit CarSetupData(const std::array<std::uint8_t, 1102>& bytes);
+        static constexpr size_t SIZE = PacketHeader::SIZE + 22 * Data::SIZE;
+
+        explicit CarSetupData(const std::array<std::uint8_t, SIZE>& bytes);
 
         friend std::ostream& operator<<(std::ostream& os, const CarSetupData& data);
 
         PacketHeader m_header;
         std::array<Data, 22> m_carSetups;
+
+        static_assert(SIZE == 1102, "Invalid size");
+        static_assert(PacketHeader::SIZE + 22 * Data::SIZE == SIZE, "Invalid size 2");
     };
 
     std::ostream& operator<<(std::ostream& os, const CarSetupData::Data& data);
