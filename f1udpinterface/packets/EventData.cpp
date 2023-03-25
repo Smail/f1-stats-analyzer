@@ -1,14 +1,14 @@
-#include "PacketEventData.h"
+#include "EventData.h"
 #include "../../util.h"
 
 namespace F122::Network::Packets {
-    PacketEventData::PacketEventData(const std::array<std::uint8_t, 40>& bytes) :
+    EventData::EventData(const std::array<std::uint8_t, 40>& bytes) :
             m_header{{util::copy_resize<std::uint8_t, 40, 24>(bytes)}},
             m_eventStringCode{util::copy_resize<std::uint8_t, 40, 4, 24 + 1>(bytes)} {
         // TODO init m_eventDetails: Check for string code to get size of struct
     }
 
-    std::string PacketEventData::EventDataDetails::to_string(PacketEventData::EventStringCodes type) const {
+    std::string EventData::EventDataDetails::to_string(EventData::EventStringCodes type) const {
         std::stringstream ss;
 
         if (type == EventStringCodes::FASTEST_LAP) {
@@ -51,7 +51,7 @@ namespace F122::Network::Packets {
         return ss.str();
     }
 
-    PacketEventData::EventStringCodes PacketEventData::from(const std::string& str) {
+    EventData::EventStringCodes EventData::from(const std::string& str) {
         switch (to_ascii_int(str)) {
             case static_cast<std::uint64_t>(EventStringCodes::SESSION_STARTED):
                 return EventStringCodes::SESSION_STARTED;
@@ -92,7 +92,7 @@ namespace F122::Network::Packets {
         }
     }
 
-    std::string PacketEventData::to_string(PacketEventData::EventStringCodes enumCase) {
+    std::string EventData::to_string(EventData::EventStringCodes enumCase) {
         return std::string{
                 static_cast<char>(static_cast<std::uint64_t>(enumCase) >> 24),
                 static_cast<char>(static_cast<std::uint64_t>(enumCase) >> 16),
@@ -101,14 +101,14 @@ namespace F122::Network::Packets {
         };
     }
 
-    std::ostream& operator<<(std::ostream& os, const PacketEventData& data) {
+    std::ostream& operator<<(std::ostream& os, const EventData& data) {
         char cs[5] = {
                 static_cast<char>(data.m_eventStringCode[0]), static_cast<char>(data.m_eventStringCode[1]),
                 static_cast<char>(data.m_eventStringCode[2]), static_cast<char>(data.m_eventStringCode[3]), '\0'
         };
 
-        PacketEventData::EventStringCodes eventCode = PacketEventData::from(std::string{cs});
-        std::string eventCodeString = PacketEventData::to_string(eventCode);
+        EventData::EventStringCodes eventCode = EventData::from(std::string{cs});
+        std::string eventCodeString = EventData::to_string(eventCode);
 
         os << "m_header: " << "\n" << data.m_header << "\n"
            << "m_eventStringCode: " << eventCodeString << "\n"

@@ -21,7 +21,7 @@ namespace F122::Network::Packets {
     /// <br>
     /// <b>The event details packet is different for each type of event.
     /// Make sure only the correct type is interpreted.</b>
-    struct PacketEventData {
+    struct EventData {
         enum class EventStringCodes : std::uint64_t {
             /// Sent when the session starts
             SESSION_STARTED = to_ascii_int("SSTA"),
@@ -149,9 +149,9 @@ namespace F122::Network::Packets {
         };
 
     public:
-        explicit PacketEventData(const std::array<std::uint8_t, 40>& bytes);
+        explicit EventData(const std::array<std::uint8_t, 40>& bytes);
 
-        friend std::ostream& operator<<(std::ostream& os, const PacketEventData& data);
+        friend std::ostream& operator<<(std::ostream& os, const EventData& data);
 
         PacketHeader m_header;
         /// Event string code @see EventStringCodes
@@ -160,5 +160,5 @@ namespace F122::Network::Packets {
         EventDataDetails m_eventDetails;
     };
 
-    std::ostream& operator<<(std::ostream& os, const PacketEventData& data);
+    std::ostream& operator<<(std::ostream& os, const EventData& data);
 }

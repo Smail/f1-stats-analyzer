@@ -1,8 +1,8 @@
-#include "PacketCarSetupData.h"
+#include "CarSetupData.h"
 #include "../../util.h"
 
 namespace F122::Network::Packets {
-    PacketCarSetupData::Data::Data(const std::array<std::uint8_t, 49>& bytes) :
+    CarSetupData::Data::Data(const std::array<std::uint8_t, 49>& bytes) :
             m_frontWing{bytes[0]},
             m_rearWing{bytes[1]},
             m_onThrottle{bytes[2]},
@@ -26,11 +26,11 @@ namespace F122::Network::Packets {
             m_ballast{bytes[44]},
             m_fuelLoad{util::convert<float>({bytes[45], bytes[46], bytes[47], bytes[48]})} {}
 
-    PacketCarSetupData::PacketCarSetupData(const std::array<std::uint8_t, 1102>& bytes) :
+    CarSetupData::CarSetupData(const std::array<std::uint8_t, 1102>& bytes) :
             m_header{{util::copy_resize<std::uint8_t, 1102, 24>(bytes)}},
             m_carSetups{util::batch_create<Data, 1102, 49, 22, 24>(bytes)} {}
 
-    std::ostream& operator<<(std::ostream& os, const PacketCarSetupData& data) {
+    std::ostream& operator<<(std::ostream& os, const CarSetupData& data) {
         os << "m_header: " << "\n" << data.m_header << "\n"
            << "m_carSetups: " << "\n\n";
 
@@ -42,7 +42,7 @@ namespace F122::Network::Packets {
         return os;
     }
 
-    std::ostream& operator<<(std::ostream& os, const PacketCarSetupData::Data& data) {
+    std::ostream& operator<<(std::ostream& os, const CarSetupData::Data& data) {
         os << "m_frontWing: " << std::to_string(data.m_frontWing) << "\n"
            << "m_rearWing: " << std::to_string(data.m_rearWing) << "\n"
            << "m_onThrottle: " << std::to_string(data.m_onThrottle) << "\n"

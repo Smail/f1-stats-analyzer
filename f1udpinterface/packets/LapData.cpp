@@ -1,14 +1,14 @@
-#include "PacketLapData.h"
+#include "LapData.h"
 #include "../../util.h"
 
 namespace F122::Network::Packets {
-    PacketLapData::PacketLapData(const std::array<std::uint8_t, 972>& bytes) :
+    LapData::LapData(const std::array<std::uint8_t, 972>& bytes) :
             m_header{{util::copy_resize<std::uint8_t, 972, 24>(bytes)}},
             m_lapData{util::batch_create<Data, 972, 43, 22, 24>(bytes)},
             m_timeTrialPBCarIdx{bytes[970]},
             m_timeTrialRivalCarIdx{bytes[971]} {}
 
-    PacketLapData::Data::Data(const std::array<std::uint8_t, 43>& bytes) :
+    LapData::Data::Data(const std::array<std::uint8_t, 43>& bytes) :
             m_lastLapTimeInMS{util::convert<std::uint32_t>({bytes[0], bytes[1], bytes[2], bytes[3]})},
             m_currentLapTimeInMS{util::convert<std::uint32_t>({bytes[4], bytes[5], bytes[6], bytes[7]})},
             m_sector1TimeInMS{util::convert<std::uint16_t>({bytes[8], bytes[9]})},
@@ -34,7 +34,7 @@ namespace F122::Network::Packets {
             m_pitStopTimerInMS{util::convert<std::uint16_t>({bytes[40], bytes[41]})},
             m_pitStopShouldServePen{bytes[42]} {}
 
-    std::ostream& operator<<(std::ostream& os, const PacketLapData::Data& data) {
+    std::ostream& operator<<(std::ostream& os, const LapData::Data& data) {
         os << "m_lastLapTimeInMS: " << std::to_string(data.m_lastLapTimeInMS) << "\n"
            << "m_currentLapTimeInMS: " << std::to_string(data.m_currentLapTimeInMS) << "\n"
            << "m_sector1TimeInMS: " << std::to_string(data.m_sector1TimeInMS) << "\n"
@@ -63,7 +63,7 @@ namespace F122::Network::Packets {
         return os;
     }
 
-    std::ostream& operator<<(std::ostream& os, const PacketLapData& data) {
+    std::ostream& operator<<(std::ostream& os, const LapData& data) {
         os << "m_header: " << "\n" << data.m_header << "\n"
            << "m_timeTrialPBCarIdx: " << std::to_string(data.m_timeTrialPBCarIdx) << "\n"
            << "m_timeTrialRivalCarIdx: " << std::to_string(data.m_timeTrialRivalCarIdx) << "\n"

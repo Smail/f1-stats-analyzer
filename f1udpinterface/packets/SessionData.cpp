@@ -1,12 +1,12 @@
-#include "PacketSessionData.h"
+#include "SessionData.h"
 #include "../../util.h"
 
 namespace F122::Network::Packets {
-    PacketSessionData::MarshalZone::MarshalZone(const std::array<std::uint8_t, 5>& bytes) :
+    SessionData::MarshalZone::MarshalZone(const std::array<std::uint8_t, 5>& bytes) :
             m_zoneStart{util::convert<float>({bytes[0], bytes[1], bytes[2], bytes[3]})},
             m_zoneFlag{static_cast<std::int8_t>(bytes[4])} {}
 
-    PacketSessionData::WeatherForecastSample::WeatherForecastSample(const std::array<std::uint8_t, 8>& bytes) :
+    SessionData::WeatherForecastSample::WeatherForecastSample(const std::array<std::uint8_t, 8>& bytes) :
             m_sessionType{bytes[0]},
             m_timeOffset{bytes[1]},
             m_weather{bytes[2]},
@@ -16,7 +16,7 @@ namespace F122::Network::Packets {
             m_airTemperatureChange{static_cast<std::int8_t>(bytes[6])},
             m_rainPercentage{bytes[7]} {}
 
-    PacketSessionData::PacketSessionData(const std::array<std::uint8_t, 632>& bytes) :
+    SessionData::SessionData(const std::array<std::uint8_t, 632>& bytes) :
             m_header{{util::copy_resize<std::uint8_t, 632, 24>(bytes)}},
             m_weather{bytes[24]},
             m_trackTemperature{static_cast<std::int8_t>(bytes[25])},
@@ -61,14 +61,14 @@ namespace F122::Network::Packets {
             m_timeOfDay{util::convert<std::uint32_t>({bytes[627], bytes[628], bytes[629], bytes[630]})},
             m_sessionLength{bytes[631]} {}
 
-    std::ostream& operator<<(std::ostream& os, const PacketSessionData::MarshalZone& zone) {
+    std::ostream& operator<<(std::ostream& os, const SessionData::MarshalZone& zone) {
         os << "m_zoneStart: " << std::to_string(zone.m_zoneStart) << "\n"
            << "m_zoneFlag: " << std::to_string(zone.m_zoneFlag);
 
         return os;
     }
 
-    std::ostream& operator<<(std::ostream& os, const PacketSessionData::WeatherForecastSample& forecastSample) {
+    std::ostream& operator<<(std::ostream& os, const SessionData::WeatherForecastSample& forecastSample) {
         os << "m_sessionType: " << std::to_string(forecastSample.m_sessionType) << "\n"
            << "m_timeOffset: " << std::to_string(forecastSample.m_timeOffset) << "\n"
            << "m_weather: " << std::to_string(forecastSample.m_weather) << "\n"
@@ -81,7 +81,7 @@ namespace F122::Network::Packets {
         return os;
     }
 
-    std::ostream& operator<<(std::ostream& os, const PacketSessionData& data) {
+    std::ostream& operator<<(std::ostream& os, const SessionData& data) {
         os << "m_header: " << "\n" << data.m_header << "\n"
            << "m_weather: " << std::to_string(data.m_weather) << "\n"
            << "m_trackTemperature: " << std::to_string(data.m_trackTemperature) << "\n"

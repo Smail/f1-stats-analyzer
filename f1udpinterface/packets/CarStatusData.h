@@ -9,7 +9,7 @@ namespace F122::Network::Packets {
     /// Frequency: Rate as specified in menus<br>
     /// Size: 1058 bytes<br>
     /// Version: 1<br>
-    struct PacketCarStatusData {
+    struct CarStatusData {
         struct Data {
             Data() = default;
 
@@ -82,15 +82,15 @@ namespace F122::Network::Packets {
         };
 
     public:
-        explicit PacketCarStatusData(const std::array<std::uint8_t, 1058>& bytes);
+        explicit CarStatusData(const std::array<std::uint8_t, 1058>& bytes);
 
-        friend std::ostream& operator<<(std::ostream& os, const PacketCarStatusData& data);
+        friend std::ostream& operator<<(std::ostream& os, const CarStatusData& data);
 
         PacketHeader m_header;
         std::array<Data, 22> m_carStatusData;
     };
 
-    std::ostream& operator<<(std::ostream& os, const PacketCarStatusData& data);
+    std::ostream& operator<<(std::ostream& os, const CarStatusData& data);
 
-    std::ostream& operator<<(std::ostream& os, const PacketCarStatusData::Data& data);
+    std::ostream& operator<<(std::ostream& os, const CarStatusData::Data& data);
 }

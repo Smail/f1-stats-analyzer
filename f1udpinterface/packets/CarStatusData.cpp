@@ -1,8 +1,8 @@
-#include "PacketCarStatusData.h"
+#include "CarStatusData.h"
 #include "../../util.h"
 
 namespace F122::Network::Packets {
-    PacketCarStatusData::Data::Data(const std::array<std::uint8_t, 47>& bytes) :
+    CarStatusData::Data::Data(const std::array<std::uint8_t, 47>& bytes) :
             m_tractionControl{bytes[0]},
             m_antiLockBrakes{bytes[1]},
             m_fuelMix{bytes[2]},
@@ -27,11 +27,11 @@ namespace F122::Network::Packets {
             m_ersDeployedThisLap{util::convert<float>({bytes[42], bytes[43], bytes[44], bytes[45]})},
             m_networkPaused{bytes[46]} {}
 
-    PacketCarStatusData::PacketCarStatusData(const std::array<std::uint8_t, 1058>& bytes) :
+    CarStatusData::CarStatusData(const std::array<std::uint8_t, 1058>& bytes) :
             m_header{{util::copy_resize<std::uint8_t, 1058, 24>(bytes)}},
             m_carStatusData{util::batch_create<Data, 1058, 47, 22, 24>(bytes)} {}
 
-    std::ostream& operator<<(std::ostream& os, const PacketCarStatusData::Data& data) {
+    std::ostream& operator<<(std::ostream& os, const CarStatusData::Data& data) {
         os << "m_tractionControl: " << std::to_string(data.m_tractionControl) << "\n"
            << "m_antiLockBrakes: " << std::to_string(data.m_antiLockBrakes) << "\n"
            << "m_fuelMix: " << std::to_string(data.m_fuelMix) << "\n"
@@ -59,7 +59,7 @@ namespace F122::Network::Packets {
         return os;
     }
 
-    std::string PacketCarStatusData::Data::ers_deploy_mode() const {
+    std::string CarStatusData::Data::ers_deploy_mode() const {
         switch (m_ersDeployMode) {
             case 0:
                 return "None";
@@ -74,7 +74,7 @@ namespace F122::Network::Packets {
         }
     }
 
-    std::ostream& operator<<(std::ostream& os, const PacketCarStatusData& data) {
+    std::ostream& operator<<(std::ostream& os, const CarStatusData& data) {
         os << "m_header: " << "\n" << data.m_header << "\n"
            << "m_carStatusData: " << "\n\n";
 

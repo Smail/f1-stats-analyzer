@@ -16,23 +16,23 @@ find_package(Qt6 COMPONENTS
         Charts
         REQUIRED)
 
-set(FILES f1udpinterface/packets/PacketHeader.h f1udpinterface/packets/PacketSessionData.h
-        f1udpinterface/packets/PacketMotionData.h f1udpinterface/packets/PacketEventData.h f1udpinterface/packets/PacketLapData.h
-        f1udpinterface/packets/PacketParticipantsData.h f1udpinterface/packets/PacketCarSetupData.h f1udpinterface/packets/PacketFinalClassificationData.h
-        f1udpinterface/packets/PacketLobbyInfoData.h f1udpinterface/packets/PacketCarDamageData.h f1udpinterface/packets/PacketCarStatusData.h
+set(FILES f1udpinterface/packets/PacketHeader.h f1udpinterface/packets/SessionData.h
+        f1udpinterface/packets/MotionData.h f1udpinterface/packets/EventData.h f1udpinterface/packets/LapData.h
+        f1udpinterface/packets/ParticipantsData.h f1udpinterface/packets/CarSetupData.h f1udpinterface/packets/FinalClassificationData.h
+        f1udpinterface/packets/LobbyInfoData.h f1udpinterface/packets/CarDamageData.h f1udpinterface/packets/CarStatusData.h
         f1udpinterface/ids/TeamId.h f1udpinterface/ids/DriverId.h f1udpinterface/ids/TrackId.h f1udpinterface/ids/NationalityId.h
         f1udpinterface/ids/RulesetId.h f1udpinterface/ids/SurfaceTypeId.h f1udpinterface/ids/PenaltyTypeId.h
         f1udpinterface/ids/InfringementTypeId.h f1udpinterface/ids/ButtonFlags.h f1udpinterface/ids/GameModeId.h
-        f1udpinterface/packets/PacketCarTelemetryData.h f1udpinterface/packets/PacketSessionHistoryData.h
+        f1udpinterface/packets/CarTelemetryData.h f1udpinterface/packets/SessionHistoryData.h
         f1udpinterface/public.h util.h f1udpinterface/packets/PacketHeader.cpp
-        f1udpinterface/packets/PacketCarDamageData.cpp f1udpinterface/packets/PacketCarSetupData.cpp
-        f1udpinterface/packets/PacketCarTelemetryData.cpp f1udpinterface/packets/PacketEventData.cpp
-        f1udpinterface/packets/PacketFinalClassificationData.cpp f1udpinterface/packets/PacketLobbyInfoData.cpp
-        f1udpinterface/packets/PacketMotionData.cpp f1udpinterface/packets/PacketParticipantsData.cpp
-        f1udpinterface/packets/PacketSessionData.cpp f1udpinterface/packets/PacketLapData.cpp
-        f1udpinterface/packets/PacketCarStatusData.cpp)
+        f1udpinterface/packets/CarDamageData.cpp f1udpinterface/packets/CarSetupData.cpp
+        f1udpinterface/packets/CarTelemetryData.cpp f1udpinterface/packets/EventData.cpp
+        f1udpinterface/packets/FinalClassificationData.cpp f1udpinterface/packets/LobbyInfoData.cpp
+        f1udpinterface/packets/MotionData.cpp f1udpinterface/packets/ParticipantsData.cpp
+        f1udpinterface/packets/SessionData.cpp f1udpinterface/packets/LapData.cpp
+        f1udpinterface/packets/CarStatusData.cpp)
 
-add_executable(${PROJECT_NAME} main.cpp ${FILES} f1udpinterface/packets/PacketSessionHistoryData.cpp)
+add_executable(${PROJECT_NAME} main.cpp ${FILES} f1udpinterface/packets/SessionHistoryData.cpp)
 
 add_executable(${PROJECT_NAME}_test test/main.cpp ${FILES})
 

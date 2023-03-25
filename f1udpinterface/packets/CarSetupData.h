@@ -11,7 +11,7 @@ namespace F122::Network::Packets {
     /// Frequency: 2 per second<br>
     /// Size: 1102 bytes<br>
     /// Version: 1<br>
-    struct PacketCarSetupData {
+    struct CarSetupData {
         struct Data {
             Data() = default;
 
@@ -66,15 +66,15 @@ namespace F122::Network::Packets {
         };
 
     public:
-        explicit PacketCarSetupData(const std::array<std::uint8_t, 1102>& bytes);
+        explicit CarSetupData(const std::array<std::uint8_t, 1102>& bytes);
 
-        friend std::ostream& operator<<(std::ostream& os, const PacketCarSetupData& data);
+        friend std::ostream& operator<<(std::ostream& os, const CarSetupData& data);
 
         PacketHeader m_header;
         std::array<Data, 22> m_carSetups;
     };
 
-    std::ostream& operator<<(std::ostream& os, const PacketCarSetupData::Data& data);
+    std::ostream& operator<<(std::ostream& os, const CarSetupData::Data& data);
 
-    std::ostream& operator<<(std::ostream& os, const PacketCarSetupData& data);
+    std::ostream& operator<<(std::ostream& os, const CarSetupData& data);
 }

@@ -16,7 +16,7 @@ namespace F122::Network::Packets {
     /// Frequency: 20 per second but cycling through cars<br>
     /// Size: 1155 bytes<br>
     /// Version: 1<br>
-    struct PacketSessionHistoryData {
+    struct SessionHistoryData {
         struct LapHistoryData {
             LapHistoryData() = default;
 
@@ -53,7 +53,7 @@ namespace F122::Network::Packets {
         };
 
     public:
-        explicit PacketSessionHistoryData(const std::array<std::uint8_t, 1155>& bytes);
+        explicit SessionHistoryData(const std::array<std::uint8_t, 1155>& bytes);
 
         PacketHeader m_header;
         /// Index of the car this lap data relates to
@@ -74,12 +74,12 @@ namespace F122::Network::Packets {
         std::array<LapHistoryData, 100> m_lapHistoryData;
         std::array<TyreStintHistoryData, 8> m_tyreStintsHistoryData;
 
-        friend std::ostream& operator<<(std::ostream& os, const PacketSessionHistoryData& data);
+        friend std::ostream& operator<<(std::ostream& os, const SessionHistoryData& data);
     };
 
-    std::ostream& operator<<(std::ostream& os, const PacketSessionHistoryData& data);
+    std::ostream& operator<<(std::ostream& os, const SessionHistoryData& data);
 
-    std::ostream& operator<<(std::ostream& os, const PacketSessionHistoryData::TyreStintHistoryData& data);
+    std::ostream& operator<<(std::ostream& os, const SessionHistoryData::TyreStintHistoryData& data);
 
-    std::ostream& operator<<(std::ostream& os, const PacketSessionHistoryData::LapHistoryData& data);
+    std::ostream& operator<<(std::ostream& os, const SessionHistoryData::LapHistoryData& data);
 }

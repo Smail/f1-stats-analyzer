@@ -12,7 +12,7 @@ namespace F122::Network::Packets {
     /// Frequency: 2 per second<br>
     /// Size: 632 bytes<br>
     /// Version: 1<br>
-    struct PacketSessionData {
+    struct SessionData {
         struct MarshalZone {
             MarshalZone() = default;
 
@@ -54,7 +54,7 @@ namespace F122::Network::Packets {
         };
 
     public:
-        explicit PacketSessionData(const std::array<std::uint8_t, 632>& bytes);
+        explicit SessionData(const std::array<std::uint8_t, 632>& bytes);
 
         PacketHeader m_header;
         /// Weather - 0 = clear, 1 = light cloud, 2 = overcast, 3 = light rain, 4 = heavy rain, 5 = storm
@@ -147,12 +147,12 @@ namespace F122::Network::Packets {
         /// 0 = None, 2 = Very Short, 3 = Short, 4 = Medium, 5 = Medium Long, 6 = Long, 7 = Full
         std::uint8_t m_sessionLength;
 
-        friend std::ostream& operator<<(std::ostream& os, const PacketSessionData& data);
+        friend std::ostream& operator<<(std::ostream& os, const SessionData& data);
     };
 
-    std::ostream& operator<<(std::ostream& os, const PacketSessionData& data);
+    std::ostream& operator<<(std::ostream& os, const SessionData& data);
 
-    std::ostream& operator<<(std::ostream& os, const PacketSessionData::MarshalZone& zone);
+    std::ostream& operator<<(std::ostream& os, const SessionData::MarshalZone& zone);
 
-    std::ostream& operator<<(std::ostream& os, const PacketSessionData::WeatherForecastSample& forecastSample);
+    std::ostream& operator<<(std::ostream& os, const SessionData::WeatherForecastSample& forecastSample);
 }

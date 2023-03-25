@@ -1,8 +1,8 @@
-#include "PacketLobbyInfoData.h"
+#include "LobbyInfoData.h"
 #include "../../util.h"
 
 namespace F122::Network::Packets {
-    PacketLobbyInfoData::Data::Data(const std::array<std::uint8_t, 53>& bytes) :
+    LobbyInfoData::Data::Data(const std::array<std::uint8_t, 53>& bytes) :
             m_aiControlled{bytes[0]},
             m_teamId{bytes[1]},
             m_nationality{bytes[2]},
@@ -10,12 +10,12 @@ namespace F122::Network::Packets {
             m_carNumber{bytes[51]},
             m_readyStatus{bytes[52]} {}
 
-    PacketLobbyInfoData::PacketLobbyInfoData(const std::array<std::uint8_t, 1191>& bytes) :
+    LobbyInfoData::LobbyInfoData(const std::array<std::uint8_t, 1191>& bytes) :
             m_header{{util::copy_resize<std::uint8_t, 1191, 24>(bytes)}},
             m_numPlayers{bytes[24]},
             m_lobbyPlayers{util::batch_create<Data, 1191, 53, 22, 24 + 1>(bytes)} {}
 
-    std::ostream& operator<<(std::ostream& os, const PacketLobbyInfoData::Data& data) {
+    std::ostream& operator<<(std::ostream& os, const LobbyInfoData::Data& data) {
         os << "m_aiControlled: " << std::to_string(data.m_aiControlled) << "\n"
            << "m_teamId: " << std::to_string(data.m_teamId) << "\n"
            << "m_nationality: " << std::to_string(data.m_nationality) << "\n"
@@ -26,7 +26,7 @@ namespace F122::Network::Packets {
         return os;
     }
 
-    std::ostream& operator<<(std::ostream& os, const PacketLobbyInfoData& data) {
+    std::ostream& operator<<(std::ostream& os, const LobbyInfoData& data) {
         os << "m_header: " << "\n" << data.m_header << "\n"
            << "m_numPlayers: " << std::to_string(data.m_numPlayers) << "\n"
            << "m_lobbyPlayers: " << "\n\n";

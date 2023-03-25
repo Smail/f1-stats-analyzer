@@ -1,8 +1,8 @@
-#include "PacketMotionData.h"
+#include "MotionData.h"
 #include "../../util.h"
 
 namespace F122::Network::Packets {
-    PacketMotionData::PacketMotionData(const std::array<std::uint8_t, 1464>& bytes) :
+    MotionData::MotionData(const std::array<std::uint8_t, 1464>& bytes) :
             m_header{{util::copy_resize<std::uint8_t, 1464, 24>(bytes)}},
             m_carMotionData{util::batch_create<Data, 1464, 60, 22, 24>(bytes)},
             m_suspensionPosition{
@@ -46,7 +46,7 @@ namespace F122::Network::Packets {
             m_angularAccelerationZ{util::convert<float>({bytes[1456], bytes[1457], bytes[1458], bytes[1459]})},
             m_frontWheelsAngle{util::convert<float>({bytes[1460], bytes[1461], bytes[1462], bytes[1463]})} {}
 
-    PacketMotionData::Data::Data(const std::array<std::uint8_t, 60>& bytes) :
+    MotionData::Data::Data(const std::array<std::uint8_t, 60>& bytes) :
             m_worldPositionX{util::convert<float>({bytes[0], bytes[1], bytes[2], bytes[3]})},
             m_worldPositionY{util::convert<float>({bytes[4], bytes[5], bytes[6], bytes[7]})},
             m_worldPositionZ{util::convert<float>({bytes[8], bytes[9], bytes[10], bytes[11]})},
@@ -66,7 +66,7 @@ namespace F122::Network::Packets {
             m_pitch{util::convert<float>({bytes[52], bytes[53], bytes[54], bytes[55]})},
             m_roll{util::convert<float>({bytes[56], bytes[57], bytes[58], bytes[59]})} {}
 
-    std::ostream& operator<<(std::ostream& os, const PacketMotionData::Data& data) {
+    std::ostream& operator<<(std::ostream& os, const MotionData::Data& data) {
         os << "m_worldPositionX: " << std::to_string(data.m_worldPositionX) << "\n"
            << "m_worldPositionY: " << std::to_string(data.m_worldPositionY) << "\n"
            << "m_worldPositionZ: " << std::to_string(data.m_worldPositionZ) << "\n"
@@ -89,7 +89,7 @@ namespace F122::Network::Packets {
         return os;
     }
 
-    std::ostream& operator<<(std::ostream& os, const PacketMotionData& data) {
+    std::ostream& operator<<(std::ostream& os, const MotionData& data) {
         os << "m_header: " << "\n" << data.m_header << "\n"
            << "m_suspensionPosition: " << util::to_string(data.m_suspensionPosition) << "\n"
            << "m_suspensionVelocity: " << util::to_string(data.m_suspensionVelocity) << "\n"

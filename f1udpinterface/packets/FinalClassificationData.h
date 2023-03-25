@@ -11,7 +11,7 @@ namespace F122::Network::Packets {
     /// Frequency: Once at the end of a race<br>
     /// Size: 1015 bytes<br>
     /// Version: 1<br>
-    struct PacketFinalClassificationData {
+    struct FinalClassificationData {
         struct Data {
             Data() = default;
 
@@ -54,9 +54,9 @@ namespace F122::Network::Packets {
         };
 
     public:
-        explicit PacketFinalClassificationData(const std::array<std::uint8_t, 1015>& bytes);
+        explicit FinalClassificationData(const std::array<std::uint8_t, 1015>& bytes);
 
-        friend std::ostream& operator<<(std::ostream& os, const PacketFinalClassificationData& data);
+        friend std::ostream& operator<<(std::ostream& os, const FinalClassificationData& data);
 
         PacketHeader m_header;
         /// Number of cars in the final classification
@@ -64,7 +64,7 @@ namespace F122::Network::Packets {
         std::array<Data, 22> m_classificationData;
     };
 
-    std::ostream& operator<<(std::ostream& os, const PacketFinalClassificationData& data);
+    std::ostream& operator<<(std::ostream& os, const FinalClassificationData& data);
 
-    std::ostream& operator<<(std::ostream& os, const PacketFinalClassificationData::Data& data);
+    std::ostream& operator<<(std::ostream& os, const FinalClassificationData::Data& data);
 }

@@ -11,7 +11,7 @@ namespace F122::Network::Packets {
     /// Frequency: Rate as specified in menus<br>
     /// Size: 1347 bytes<br>
     /// Version: 1<br>
-    struct PacketCarTelemetryData {
+    struct CarTelemetryData {
         struct Data {
             Data() = default;
 
@@ -59,9 +59,9 @@ namespace F122::Network::Packets {
         };
 
     public:
-        explicit PacketCarTelemetryData(const std::array<std::uint8_t, 1347>& bytes);
+        explicit CarTelemetryData(const std::array<std::uint8_t, 1347>& bytes);
 
-        friend std::ostream& operator<<(std::ostream& os, const PacketCarTelemetryData& data);
+        friend std::ostream& operator<<(std::ostream& os, const CarTelemetryData& data);
 
         PacketHeader m_header;
         std::array<Data, 22> m_carTelemetryData;
@@ -76,7 +76,7 @@ namespace F122::Network::Packets {
         std::int8_t m_suggestedGear;
     };
 
-    std::ostream& operator<<(std::ostream& os, const PacketCarTelemetryData::Data& data);
+    std::ostream& operator<<(std::ostream& os, const CarTelemetryData::Data& data);
 
-    std::ostream& operator<<(std::ostream& os, const PacketCarTelemetryData& data);
+    std::ostream& operator<<(std::ostream& os, const CarTelemetryData& data);
 }

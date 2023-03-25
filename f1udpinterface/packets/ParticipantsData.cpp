@@ -1,8 +1,8 @@
-#include "PacketParticipantsData.h"
+#include "ParticipantsData.h"
 #include "../../util.h"
 
 namespace F122::Network::Packets {
-    PacketParticipantsData::Data::Data(const std::array<std::uint8_t, 56>& bytes) :
+    ParticipantsData::Data::Data(const std::array<std::uint8_t, 56>& bytes) :
             m_aiControlled{bytes[0]},
             m_driverId{bytes[1]},
             m_networkId{bytes[2]},
@@ -13,12 +13,12 @@ namespace F122::Network::Packets {
             m_name{util::convert_type(util::copy_resize<std::uint8_t, 56, 48, 7>(bytes))},
             m_yourTelemetry{bytes[55]} {}
 
-    PacketParticipantsData::PacketParticipantsData(const std::array<std::uint8_t, 1257>& bytes) :
+    ParticipantsData::ParticipantsData(const std::array<std::uint8_t, 1257>& bytes) :
             m_header{{util::copy_resize<std::uint8_t, 1257, 24>(bytes)}},
             m_numActiveCars{bytes[24]},
-            m_participants{util::batch_create<PacketParticipantsData::Data, 1257, 56, 22, 24 + 1>(bytes)} {}
+            m_participants{util::batch_create<ParticipantsData::Data, 1257, 56, 22, 24 + 1>(bytes)} {}
 
-    std::string PacketParticipantsData::Data::name() const {
+    std::string ParticipantsData::Data::name() const {
         auto i = std::find_if(m_name.begin(), m_name.end(), [](auto c) { return c == '\0'; });
 
         if (i == m_name.end()) {
@@ -28,11 +28,11 @@ namespace F122::Network::Packets {
         return std::string{m_name.data()};
     }
 
-    bool PacketParticipantsData::Data::is_ai_controlled() const {
+    bool ParticipantsData::Data::is_ai_controlled() const {
         return m_aiControlled == 1;
     }
 
-    std::ostream& operator<<(std::ostream& os, const PacketParticipantsData::Data& data) {
+    std::ostream& operator<<(std::ostream& os, const ParticipantsData::Data& data) {
         os << "m_aiControlled: " << std::to_string(data.m_aiControlled) << "\n"
            << "m_driverId: " << std::to_string(data.m_driverId) << "\n"
            << "m_networkId: " << std::to_string(data.m_networkId) << "\n"
@@ -46,7 +46,7 @@ namespace F122::Network::Packets {
         return os;
     }
 
-    std::ostream& operator<<(std::ostream& os, const PacketParticipantsData& data) {
+    std::ostream& operator<<(std::ostream& os, const ParticipantsData& data) {
         os << "m_header: " << "\n" << data.m_header
            << "m_numActiveCars: " << std::to_string(data.m_numActiveCars) << "\n"
            << "m_participants: " << "\n\n";

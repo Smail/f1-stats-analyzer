@@ -1,8 +1,8 @@
-#include "PacketCarDamageData.h"
+#include "CarDamageData.h"
 #include "../../util.h"
 
 namespace F122::Network::Packets {
-    PacketCarDamageData::Data::Data(const std::array<std::uint8_t, 42>& bytes) :
+    CarDamageData::Data::Data(const std::array<std::uint8_t, 42>& bytes) :
             m_tyresWear{util::convert<float>({bytes[0], bytes[1], bytes[2], bytes[3]}),
                         util::convert<float>({bytes[4], bytes[5], bytes[6], bytes[7]}),
                         util::convert<float>({bytes[8], bytes[9], bytes[10], bytes[11]}),
@@ -28,11 +28,11 @@ namespace F122::Network::Packets {
             m_engineBlown{bytes[40]},
             m_engineSeized{bytes[41]} {}
 
-    PacketCarDamageData::PacketCarDamageData(const std::array<std::uint8_t, 948>& bytes) :
+    CarDamageData::CarDamageData(const std::array<std::uint8_t, 948>& bytes) :
             m_header{{util::copy_resize<std::uint8_t, 948, 24>(bytes)}},
             m_carDamageData{util::batch_create<Data, 948, 42, 22, 24>(bytes)} {}
 
-    std::ostream& operator<<(std::ostream& os, const PacketCarDamageData& data) {
+    std::ostream& operator<<(std::ostream& os, const CarDamageData& data) {
         os << "m_header: " << "\n" << data.m_header << "\n"
            << "m_carDamageData: " << "\n\n";
 
@@ -44,7 +44,7 @@ namespace F122::Network::Packets {
         return os;
     }
 
-    std::ostream& operator<<(std::ostream& os, const PacketCarDamageData::Data& data) {
+    std::ostream& operator<<(std::ostream& os, const CarDamageData::Data& data) {
         os << "m_tyresWear: " << util::to_string(data.m_tyresWear) << "\n"
            << "m_tyresDamage: " << util::to_string(data.m_tyresDamage) << "\n"
            << "m_brakesDamage: " << util::to_string(data.m_brakesDamage) << "\n"

@@ -14,7 +14,7 @@ namespace F122::Network::Packets {
     /// Frequency: Rate as specified in menus<br>
     /// Size: 1464 bytes<br>
     /// Version: 1<br>
-    struct PacketMotionData {
+    struct MotionData {
         struct Data {
             Data() = default;
 
@@ -61,7 +61,7 @@ namespace F122::Network::Packets {
         };
 
     public:
-        explicit PacketMotionData(const std::array<std::uint8_t, 1464>& bytes);
+        explicit MotionData(const std::array<std::uint8_t, 1464>& bytes);
 
         PacketHeader m_header;
         /// Data for all cars on track
@@ -98,10 +98,10 @@ namespace F122::Network::Packets {
         /// Current front wheels angle in radians
         float m_frontWheelsAngle;
 
-        friend std::ostream& operator<<(std::ostream& os, const PacketMotionData& data);
+        friend std::ostream& operator<<(std::ostream& os, const MotionData& data);
     };
 
-    std::ostream& operator<<(std::ostream& os, const PacketMotionData& data);
+    std::ostream& operator<<(std::ostream& os, const MotionData& data);
 
-    std::ostream& operator<<(std::ostream& os, const PacketMotionData::Data& data);
+    std::ostream& operator<<(std::ostream& os, const MotionData::Data& data);
 }

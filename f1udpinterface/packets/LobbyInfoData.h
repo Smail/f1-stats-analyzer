@@ -11,7 +11,7 @@ namespace F122::Network::Packets {
     /// Frequency: Two every second when in the lobby<br>
     /// Size: 1191 bytes<br>
     /// Version: 1<br>
-    struct PacketLobbyInfoData {
+    struct LobbyInfoData {
         struct Data {
             Data() = default;
 
@@ -35,7 +35,7 @@ namespace F122::Network::Packets {
         };
 
     public:
-        explicit PacketLobbyInfoData(const std::array<std::uint8_t, 1191>& bytes);
+        explicit LobbyInfoData(const std::array<std::uint8_t, 1191>& bytes);
 
         PacketHeader m_header;
         /// Number of players in the lobby data
@@ -43,10 +43,10 @@ namespace F122::Network::Packets {
         /// Data of each player
         std::array<Data, 22> m_lobbyPlayers;
 
-        friend std::ostream& operator<<(std::ostream& os, const PacketLobbyInfoData& data);
+        friend std::ostream& operator<<(std::ostream& os, const LobbyInfoData& data);
     };
 
-    std::ostream& operator<<(std::ostream& os, const PacketLobbyInfoData& data);
+    std::ostream& operator<<(std::ostream& os, const LobbyInfoData& data);
 
-    std::ostream& operator<<(std::ostream& os, const PacketLobbyInfoData::Data& data);
+    std::ostream& operator<<(std::ostream& os, const LobbyInfoData::Data& data);
 }

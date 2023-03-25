@@ -10,7 +10,7 @@ namespace F122::Network::Packets {
     /// Frequency: Rate as specified in menus<br>
     /// Size: 972 bytes<br>
     /// Version: 1<br>
-    struct PacketLapData {
+    struct LapData {
         struct Data {
             Data() = default;
 
@@ -71,7 +71,7 @@ namespace F122::Network::Packets {
         };
 
     public:
-        explicit PacketLapData(const std::array<std::uint8_t, 972>& bytes);
+        explicit LapData(const std::array<std::uint8_t, 972>& bytes);
 
         PacketHeader m_header;
         /// Lap data for all cars on track
@@ -81,10 +81,10 @@ namespace F122::Network::Packets {
         /// Index of Rival car in time trial (255 if invalid)
         std::uint8_t m_timeTrialRivalCarIdx;
 
-        friend std::ostream& operator<<(std::ostream& os, const PacketLapData& data);
+        friend std::ostream& operator<<(std::ostream& os, const LapData& data);
     };
 
-    std::ostream& operator<<(std::ostream& os, const PacketLapData& data);
+    std::ostream& operator<<(std::ostream& os, const LapData& data);
 
-    std::ostream& operator<<(std::ostream& os, const PacketLapData::Data& data);
+    std::ostream& operator<<(std::ostream& os, const LapData::Data& data);
 }

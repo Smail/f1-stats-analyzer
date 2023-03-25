@@ -1,8 +1,8 @@
-#include "PacketCarTelemetryData.h"
+#include "CarTelemetryData.h"
 #include "../../util.h"
 
 namespace F122::Network::Packets {
-    PacketCarTelemetryData::Data::Data(const std::array<std::uint8_t, 60>& bytes) :
+    CarTelemetryData::Data::Data(const std::array<std::uint8_t, 60>& bytes) :
             m_speed{util::convert<std::uint16_t>({bytes[0], bytes[1]})},
             m_throttle{util::convert<float>({bytes[2], bytes[3], bytes[4], bytes[5]})},
             m_steer{util::convert<float>({bytes[6], bytes[7], bytes[8], bytes[9]})},
@@ -31,14 +31,14 @@ namespace F122::Network::Packets {
                     util::convert<float>({bytes[52], bytes[53], bytes[54], bytes[55]})},
             m_surfaceType{{bytes[56], bytes[57], bytes[58], bytes[59]}} {}
 
-    PacketCarTelemetryData::PacketCarTelemetryData(const std::array<std::uint8_t, 1347>& bytes) :
+    CarTelemetryData::CarTelemetryData(const std::array<std::uint8_t, 1347>& bytes) :
             m_header{{util::copy_resize<std::uint8_t, 1347, 24>(bytes)}},
             m_carTelemetryData{util::batch_create<Data, 1347, 60, 22, 24>(bytes)},
             m_mfdPanelIndex{bytes[22 * 60 + 24]},
             m_mfdPanelIndexSecondaryPlayer{bytes[22 * 60 + 24 + 1]},
             m_suggestedGear{static_cast<std::int8_t>(bytes[22 * 60 + 24 + 2])} {}
 
-    std::ostream& operator<<(std::ostream& os, const PacketCarTelemetryData& data) {
+    std::ostream& operator<<(std::ostream& os, const CarTelemetryData& data) {
         os << "m_header: " << "\n" << data.m_header << "\n"
            << "m_mfdPanelIndex: " << std::to_string(data.m_mfdPanelIndex) << "\n"
            << "m_mfdPanelIndexSecondaryPlayer: " << std::to_string(data.m_mfdPanelIndexSecondaryPlayer) << "\n"
@@ -53,7 +53,7 @@ namespace F122::Network::Packets {
         return os;
     }
 
-    std::ostream& operator<<(std::ostream& os, const PacketCarTelemetryData::Data& data) {
+    std::ostream& operator<<(std::ostream& os, const CarTelemetryData::Data& data) {
         os << "m_speed: " << std::to_string(data.m_speed) << "\n"
            << "m_throttle: " << std::to_string(data.m_throttle) << "\n"
            << "m_steer: " << std::to_string(data.m_steer) << "\n"

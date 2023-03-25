@@ -1,9 +1,9 @@
 #include <sstream>
-#include "PacketFinalClassificationData.h"
+#include "FinalClassificationData.h"
 #include "../../util.h"
 
 namespace F122::Network::Packets {
-    PacketFinalClassificationData::Data::Data(const std::array<std::uint8_t, 45>& bytes) :
+    FinalClassificationData::Data::Data(const std::array<std::uint8_t, 45>& bytes) :
             m_position{bytes[0]},
             m_numLaps{bytes[1]},
             m_gridPosition{bytes[2]},
@@ -26,12 +26,12 @@ namespace F122::Network::Packets {
                     {bytes[37], bytes[38], bytes[39], bytes[40], bytes[41], bytes[42], bytes[43], bytes[44]},
             } {}
 
-    PacketFinalClassificationData::PacketFinalClassificationData(const std::array<std::uint8_t, 1015>& bytes) :
+    FinalClassificationData::FinalClassificationData(const std::array<std::uint8_t, 1015>& bytes) :
             m_header{{util::copy_resize<std::uint8_t, 1015, 24>(bytes)}},
             m_numCars{bytes[24]},
             m_classificationData{util::batch_create<Data, 1015, 45, 22, 24 + 1>(bytes)} {}
 
-    std::string PacketFinalClassificationData::Data::to_string() const {
+    std::string FinalClassificationData::Data::to_string() const {
         std::stringstream ss;
 
         ss << "m_position: " << std::to_string(m_position) << "\n"
@@ -52,12 +52,12 @@ namespace F122::Network::Packets {
         return ss.str();
     }
 
-    std::ostream& operator<<(std::ostream& os, const PacketFinalClassificationData::Data& data) {
+    std::ostream& operator<<(std::ostream& os, const FinalClassificationData::Data& data) {
         os << data.to_string();
         return os;
     }
 
-    std::ostream& operator<<(std::ostream& os, const PacketFinalClassificationData& data) {
+    std::ostream& operator<<(std::ostream& os, const FinalClassificationData& data) {
         os << "m_header: " << "\n" << data.m_header << "\n"
            << "m_numCars: " << data.m_numCars << "\n"
            << "m_classificationData: " << "\n\n";

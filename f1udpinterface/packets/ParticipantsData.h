@@ -16,7 +16,7 @@ namespace F122::Network::Packets {
     /// Frequency: Every 5 seconds<br>
     /// Size: 1257 bytes<br>
     /// Version: 1<br>
-    struct PacketParticipantsData {
+    struct ParticipantsData {
         struct Data {
             Data() = default;
 
@@ -52,17 +52,17 @@ namespace F122::Network::Packets {
     private:
 
     public:
-        explicit PacketParticipantsData(const std::array<std::uint8_t, 1257>& bytes);
+        explicit ParticipantsData(const std::array<std::uint8_t, 1257>& bytes);
 
         PacketHeader m_header;
         /// Number of active cars in the data - should match number of cars on HUD
         std::uint8_t m_numActiveCars;
         std::array<Data, 22> m_participants;
 
-        friend std::ostream& operator<<(std::ostream& os, const PacketParticipantsData& data);
+        friend std::ostream& operator<<(std::ostream& os, const ParticipantsData& data);
     };
 
-    std::ostream& operator<<(std::ostream& os, const PacketParticipantsData& data);
+    std::ostream& operator<<(std::ostream& os, const ParticipantsData& data);
 
-    std::ostream& operator<<(std::ostream& os, const PacketParticipantsData::Data& data);
+    std::ostream& operator<<(std::ostream& os, const ParticipantsData::Data& data);
 }
