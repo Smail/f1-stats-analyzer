@@ -29,10 +29,13 @@ namespace F122::Network::Packets {
             m_pitStopShouldServePen{bytes[42]} {}
 
     LapData::LapData(const std::array<std::uint8_t, SIZE>& bytes) :
+            Packet(bytes),
             m_header{{util::copy_resize<std::uint8_t, SIZE, PacketHeader::SIZE>(bytes)}},
             m_lapData{util::batch_create<Data, SIZE, Data::SIZE, 22, PacketHeader::SIZE>(bytes)},
             m_timeTrialPBCarIdx{bytes[970]},
             m_timeTrialRivalCarIdx{bytes[971]} {}
+
+    LapData::~LapData() = default;
 
     std::ostream& operator<<(std::ostream& os, const LapData::Data& data) {
         os << "m_lastLapTimeInMS: " << std::to_string(data.m_lastLapTimeInMS) << "\n"

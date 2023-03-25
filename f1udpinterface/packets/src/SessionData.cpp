@@ -17,6 +17,7 @@ namespace F122::Network::Packets {
             m_rainPercentage{bytes[7]} {}
 
     SessionData::SessionData(const std::array<std::uint8_t, SIZE>& bytes) :
+            Packet(bytes),
             m_header{{util::copy_resize<std::uint8_t, SIZE, PacketHeader::SIZE>(bytes)}},
             m_weather{bytes[24]},
             m_trackTemperature{static_cast<std::int8_t>(bytes[25])},
@@ -61,6 +62,8 @@ namespace F122::Network::Packets {
             m_ruleSet{bytes[626]},
             m_timeOfDay{util::convert<std::uint32_t>({bytes[627], bytes[628], bytes[629], bytes[630]})},
             m_sessionLength{bytes[631]} {}
+
+    SessionData::~SessionData() = default;
 
     std::ostream& operator<<(std::ostream& os, const SessionData::MarshalZone& zone) {
         os << "m_zoneStart: " << std::to_string(zone.m_zoneStart) << "\n"

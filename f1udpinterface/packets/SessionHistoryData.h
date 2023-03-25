@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <string>
 #include "PacketHeader.h"
+#include "Packet.h"
 
 namespace F122::Network::Packets {
     /// This packet contains lap times and tyre usage for the session.<br><br><b>This packet works slightly differently
@@ -16,7 +17,7 @@ namespace F122::Network::Packets {
     /// Frequency: 20 per second but cycling through cars<br>
     /// Size: 1155 bytes<br>
     /// Version: 1<br>
-    struct SessionHistoryData {
+    struct SessionHistoryData : public Packet {
         struct LapHistoryData {
             static constexpr size_t SIZE = 11;
 
@@ -61,6 +62,8 @@ namespace F122::Network::Packets {
                                        8 * TyreStintHistoryData::SIZE + 7;
 
         explicit SessionHistoryData(const std::array<std::uint8_t, SIZE>& bytes);
+
+        ~SessionHistoryData() override;
 
         friend std::ostream& operator<<(std::ostream& os, const SessionHistoryData& data);
 

@@ -11,9 +11,12 @@ namespace F122::Network::Packets {
             m_readyStatus{bytes[52]} {}
 
     LobbyInfoData::LobbyInfoData(const std::array<std::uint8_t, SIZE>& bytes) :
+            Packet(bytes),
             m_header{{util::copy_resize<std::uint8_t, SIZE, PacketHeader::SIZE>(bytes)}},
             m_numPlayers{bytes[24]},
             m_lobbyPlayers{util::batch_create<Data, SIZE, Data::SIZE, 22, PacketHeader::SIZE + 1>(bytes)} {}
+
+    LobbyInfoData::~LobbyInfoData() = default;
 
     std::ostream& operator<<(std::ostream& os, const LobbyInfoData::Data& data) {
         os << "m_aiControlled: " << std::to_string(data.m_aiControlled) << "\n"

@@ -27,9 +27,12 @@ namespace F122::Network::Packets {
             } {}
 
     FinalClassificationData::FinalClassificationData(const std::array<std::uint8_t, SIZE>& bytes) :
+            Packet(bytes),
             m_header{{util::copy_resize<std::uint8_t, SIZE, PacketHeader::SIZE>(bytes)}},
             m_numCars{bytes[24]},
             m_classificationData{util::batch_create<Data, SIZE, Data::SIZE, 22, PacketHeader::SIZE + 1>(bytes)} {}
+
+    FinalClassificationData::~FinalClassificationData() = default;
 
     std::string FinalClassificationData::Data::to_string() const {
         std::stringstream ss;

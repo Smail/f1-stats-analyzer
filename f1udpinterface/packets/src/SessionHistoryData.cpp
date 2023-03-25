@@ -15,6 +15,7 @@ namespace F122::Network::Packets {
             m_tyreVisualCompound{bytes[2]} {}
 
     SessionHistoryData::SessionHistoryData(const std::array<std::uint8_t, SIZE>& bytes) :
+            Packet(bytes),
             m_header{{util::copy_resize<std::uint8_t, SIZE, PacketHeader::SIZE>(bytes)}},
             m_carIdx{bytes[24]},
             m_numLaps{bytes[25]},
@@ -26,6 +27,9 @@ namespace F122::Network::Packets {
             m_lapHistoryData{util::batch_create<LapHistoryData, SIZE, LapHistoryData::SIZE, 100, 31>(bytes)},
             m_tyreStintsHistoryData{
                     util::batch_create<TyreStintHistoryData, SIZE, TyreStintHistoryData::SIZE, 8, 1131>(bytes)} {}
+
+
+    SessionHistoryData::~SessionHistoryData() = default;
 
     std::ostream& operator<<(std::ostream& os, const SessionHistoryData::LapHistoryData& data) {
         os << "m_lapTimeInMS: " << std::to_string(data.m_lapTimeInMS) << "\n"

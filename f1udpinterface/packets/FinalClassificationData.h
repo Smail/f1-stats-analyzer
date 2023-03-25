@@ -11,7 +11,7 @@ namespace F122::Network::Packets {
     /// Frequency: Once at the end of a race<br>
     /// Size: 1015 bytes<br>
     /// Version: 1<br>
-    struct FinalClassificationData {
+    struct FinalClassificationData : public Packet {
         struct Data {
             static constexpr size_t SIZE = 45;
 
@@ -59,6 +59,8 @@ namespace F122::Network::Packets {
         static constexpr size_t SIZE = PacketHeader::SIZE + 22 * Data::SIZE + 1;
 
         explicit FinalClassificationData(const std::array<std::uint8_t, SIZE>& bytes);
+
+        ~FinalClassificationData() override;
 
         friend std::ostream& operator<<(std::ostream& os, const FinalClassificationData& data);
 

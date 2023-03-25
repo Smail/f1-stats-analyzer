@@ -28,8 +28,11 @@ namespace F122::Network::Packets {
             m_networkPaused{bytes[46]} {}
 
     CarStatusData::CarStatusData(const std::array<std::uint8_t, SIZE>& bytes) :
+            Packet(bytes),
             m_header{{util::copy_resize<std::uint8_t, SIZE, PacketHeader::SIZE>(bytes)}},
             m_carStatusData{util::batch_create<Data, SIZE, Data::SIZE, 22, PacketHeader::SIZE>(bytes)} {}
+
+    CarStatusData::~CarStatusData() = default;
 
     std::ostream& operator<<(std::ostream& os, const CarStatusData::Data& data) {
         os << "m_tractionControl: " << std::to_string(data.m_tractionControl) << "\n"

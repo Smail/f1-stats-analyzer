@@ -32,11 +32,14 @@ namespace F122::Network::Packets {
             m_surfaceType{{bytes[56], bytes[57], bytes[58], bytes[59]}} {}
 
     CarTelemetryData::CarTelemetryData(const std::array<std::uint8_t, SIZE>& bytes) :
+            Packet(bytes),
             m_header{{util::copy_resize<std::uint8_t, SIZE, PacketHeader::SIZE>(bytes)}},
             m_carTelemetryData{util::batch_create<Data, SIZE, Data::SIZE, 22, PacketHeader::SIZE>(bytes)},
             m_mfdPanelIndex{bytes[22 * Data::SIZE + PacketHeader::SIZE]},
             m_mfdPanelIndexSecondaryPlayer{bytes[22 * Data::SIZE + PacketHeader::SIZE + 1]},
             m_suggestedGear{static_cast<std::int8_t>(bytes[22 * Data::SIZE + PacketHeader::SIZE + 2])} {}
+
+    CarTelemetryData::~CarTelemetryData() = default;
 
     std::ostream& operator<<(std::ostream& os, const CarTelemetryData& data) {
         os << "m_header: " << "\n" << data.m_header << "\n"

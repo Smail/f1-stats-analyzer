@@ -14,10 +14,14 @@ namespace F122::Network::Packets {
             m_yourTelemetry{bytes[55]} {}
 
     ParticipantsData::ParticipantsData(const std::array<std::uint8_t, SIZE>& bytes) :
+            Packet(bytes),
             m_header{{util::copy_resize<std::uint8_t, SIZE, PacketHeader::SIZE>(bytes)}},
             m_numActiveCars{bytes[24]},
             m_participants{
                     util::batch_create<ParticipantsData::Data, SIZE, Data::SIZE, 22, PacketHeader::SIZE + 1>(bytes)} {}
+
+
+    ParticipantsData::~ParticipantsData() = default;
 
     std::string ParticipantsData::Data::name() const {
         auto i = std::find_if(m_name.begin(), m_name.end(), [](auto c) { return c == '\0'; });

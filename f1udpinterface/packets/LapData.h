@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <ostream>
 #include "PacketHeader.h"
+#include "Packet.h"
 
 namespace F122::Network::Packets {
     /// The lap data packet gives details of all the cars in the session.<br>
@@ -10,7 +11,7 @@ namespace F122::Network::Packets {
     /// Frequency: Rate as specified in menus<br>
     /// Size: 972 bytes<br>
     /// Version: 1<br>
-    struct LapData {
+    struct LapData : public Packet {
         struct Data {
             static constexpr size_t SIZE = 43;
 
@@ -76,6 +77,8 @@ namespace F122::Network::Packets {
         static constexpr size_t SIZE = PacketHeader::SIZE + 22 * Data::SIZE + 2;
 
         explicit LapData(const std::array<std::uint8_t, SIZE>& bytes);
+
+        ~LapData() override;
 
         friend std::ostream& operator<<(std::ostream& os, const LapData& data);
 

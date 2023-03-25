@@ -4,10 +4,11 @@
 #include <ostream>
 #include <string>
 #include <array>
+#include "Packet.h"
 
 namespace F122::Network::Packets {
     /// Size: 24 bytes
-    struct PacketHeader {
+    struct PacketHeader : public Packet {
         enum class PacketId : std::uint8_t {
             /// Contains all motion data for player's car - only sent while player is in control
             MOTION = 0,
@@ -43,6 +44,8 @@ namespace F122::Network::Packets {
         static constexpr size_t SIZE = 24;
 
         explicit PacketHeader(const std::array<std::uint8_t, SIZE>& bytes);
+
+        ~PacketHeader() override;
 
         friend std::ostream& operator<<(std::ostream& os, const PacketHeader& header);
 

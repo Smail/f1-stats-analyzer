@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <array>
 #include "PacketHeader.h"
+#include "Packet.h"
 
 namespace F122::Network::Packets {
     /// The motion packet gives physics data for all the cars being driven. There is additional data for the car
@@ -14,7 +15,7 @@ namespace F122::Network::Packets {
     /// Frequency: Rate as specified in menus<br>
     /// Size: 1464 bytes<br>
     /// Version: 1<br>
-    struct MotionData {
+    struct MotionData : public Packet {
         struct Data {
             static constexpr size_t SIZE = 60;
 
@@ -66,6 +67,8 @@ namespace F122::Network::Packets {
         static constexpr size_t SIZE = PacketHeader::SIZE + 22 * Data::SIZE + 120;
 
         explicit MotionData(const std::array<std::uint8_t, SIZE>& bytes);
+
+        ~MotionData() override;
 
         friend std::ostream& operator<<(std::ostream& os, const MotionData& data);
 

@@ -27,8 +27,11 @@ namespace F122::Network::Packets {
             m_fuelLoad{util::convert<float>({bytes[45], bytes[46], bytes[47], bytes[48]})} {}
 
     CarSetupData::CarSetupData(const std::array<std::uint8_t, SIZE>& bytes) :
+            Packet(bytes),
             m_header{{util::copy_resize<std::uint8_t, SIZE, PacketHeader::SIZE>(bytes)}},
             m_carSetups{util::batch_create<Data, SIZE, Data::SIZE, 22, PacketHeader::SIZE>(bytes)} {}
+
+    CarSetupData::~CarSetupData() = default;
 
     std::ostream& operator<<(std::ostream& os, const CarSetupData& data) {
         os << "m_header: " << "\n" << data.m_header << "\n"

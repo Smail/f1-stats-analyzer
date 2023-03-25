@@ -3,6 +3,7 @@
 
 namespace F122::Network::Packets {
     PacketHeader::PacketHeader(const std::array<std::uint8_t, SIZE>& bytes) :
+            Packet(bytes),
             m_packetFormat{util::convert<std::uint16_t>({bytes[0], bytes[1]})},
             m_gameMajorVersion{bytes[2]},
             m_gameMinorVersion{bytes[3]},
@@ -15,6 +16,8 @@ namespace F122::Network::Packets {
             m_frameIdentifier{util::convert<std::uint32_t>({bytes[18], bytes[19], bytes[20], bytes[21]})},
             m_playerCarIndex{bytes[22]},
             m_secondaryPlayerCarIndex{bytes[23]} {}
+
+    PacketHeader::~PacketHeader() = default;
 
     PacketHeader::PacketId PacketHeader::from(std::uint8_t value) {
         if (value < static_cast<std::uint8_t>(PacketId::MOTION) ||

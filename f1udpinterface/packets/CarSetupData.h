@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <ostream>
 #include "PacketHeader.h"
+#include "Packet.h"
 
 namespace F122::Network::Packets {
     /// This packet details the car setups for each vehicle in the session. Note that in multiplayer games, other
@@ -11,7 +12,7 @@ namespace F122::Network::Packets {
     /// Frequency: 2 per second<br>
     /// Size: 1102 bytes<br>
     /// Version: 1<br>
-    struct CarSetupData {
+    struct CarSetupData : public Packet {
         struct Data {
             static constexpr size_t SIZE = 49;
 
@@ -71,6 +72,8 @@ namespace F122::Network::Packets {
         static constexpr size_t SIZE = PacketHeader::SIZE + 22 * Data::SIZE;
 
         explicit CarSetupData(const std::array<std::uint8_t, SIZE>& bytes);
+
+        ~CarSetupData() override;
 
         friend std::ostream& operator<<(std::ostream& os, const CarSetupData& data);
 

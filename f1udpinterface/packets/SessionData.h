@@ -5,6 +5,7 @@
 #include <string>
 #include <array>
 #include "PacketHeader.h"
+#include "Packet.h"
 
 namespace F122::Network::Packets {
     /// The session packet includes details about the current session in progress.<br>
@@ -12,7 +13,7 @@ namespace F122::Network::Packets {
     /// Frequency: 2 per second<br>
     /// Size: 632 bytes<br>
     /// Version: 1<br>
-    struct SessionData {
+    struct SessionData : public Packet {
         struct MarshalZone {
             static constexpr size_t SIZE = 5;
 
@@ -62,6 +63,8 @@ namespace F122::Network::Packets {
                                        56 * WeatherForecastSample::SIZE + 55;
 
         explicit SessionData(const std::array<std::uint8_t, SIZE>& bytes);
+
+        ~SessionData() override;
 
         friend std::ostream& operator<<(std::ostream& os, const SessionData& data);
 

@@ -16,7 +16,7 @@ namespace F122::Network::Packets {
     /// Frequency: Every 5 seconds<br>
     /// Size: 1257 bytes<br>
     /// Version: 1<br>
-    struct ParticipantsData {
+    struct ParticipantsData : public Packet {
         struct Data {
             static constexpr size_t SIZE = 56;
 
@@ -55,6 +55,8 @@ namespace F122::Network::Packets {
         static constexpr size_t SIZE = PacketHeader::SIZE + 22 * Data::SIZE + 1;
 
         explicit ParticipantsData(const std::array<std::uint8_t, SIZE>& bytes);
+
+        ~ParticipantsData() override;
 
         friend std::ostream& operator<<(std::ostream& os, const ParticipantsData& data);
 

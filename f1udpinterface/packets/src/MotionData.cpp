@@ -3,6 +3,7 @@
 
 namespace F122::Network::Packets {
     MotionData::MotionData(const std::array<std::uint8_t, SIZE>& bytes) :
+            Packet(bytes),
             m_header{{util::copy_resize<std::uint8_t, SIZE, PacketHeader::SIZE>(bytes)}},
             m_carMotionData{util::batch_create<Data, SIZE, Data::SIZE, 22, PacketHeader::SIZE>(bytes)},
             m_suspensionPosition{
@@ -45,6 +46,8 @@ namespace F122::Network::Packets {
             m_angularAccelerationY{util::convert<float>({bytes[1452], bytes[1453], bytes[1454], bytes[1455]})},
             m_angularAccelerationZ{util::convert<float>({bytes[1456], bytes[1457], bytes[1458], bytes[1459]})},
             m_frontWheelsAngle{util::convert<float>({bytes[1460], bytes[1461], bytes[1462], bytes[1463]})} {}
+
+    MotionData::~MotionData() = default;
 
     MotionData::Data::Data(const std::array<std::uint8_t, SIZE>& bytes) :
             m_worldPositionX{util::convert<float>({bytes[0], bytes[1], bytes[2], bytes[3]})},

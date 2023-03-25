@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include "PacketHeader.h"
+#include "Packet.h"
 
 namespace F122::Network::Packets {
     /// This packet details telemetry for all the cars in the race. It details various values that would be recorded
@@ -11,7 +12,7 @@ namespace F122::Network::Packets {
     /// Frequency: Rate as specified in menus<br>
     /// Size: 1347 bytes<br>
     /// Version: 1<br>
-    struct CarTelemetryData {
+    struct CarTelemetryData : public Packet {
         struct Data {
             static constexpr size_t SIZE = 60;
 
@@ -64,6 +65,8 @@ namespace F122::Network::Packets {
         static constexpr size_t SIZE = PacketHeader::SIZE + 22 * Data::SIZE + 3;
 
         explicit CarTelemetryData(const std::array<std::uint8_t, SIZE>& bytes);
+
+        ~CarTelemetryData() override;
 
         friend std::ostream& operator<<(std::ostream& os, const CarTelemetryData& data);
 

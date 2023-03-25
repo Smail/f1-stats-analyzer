@@ -6,6 +6,7 @@
 #include <ostream>
 #include <cstdint>
 #include "PacketHeader.h"
+#include "Packet.h"
 
 namespace F122::Network::Packets {
     constexpr std::uint64_t to_ascii_int(const std::string& str) {
@@ -21,7 +22,7 @@ namespace F122::Network::Packets {
     /// <br>
     /// <b>The event details packet is different for each type of event.
     /// Make sure only the correct type is interpreted.</b>
-    struct EventData {
+    struct EventData : public Packet {
         enum class EventStringCodes : std::uint64_t {
             /// Sent when the session starts
             SESSION_STARTED = to_ascii_int("SSTA"),
@@ -152,6 +153,8 @@ namespace F122::Network::Packets {
         static constexpr size_t SIZE = 40;
 
         explicit EventData(const std::array<std::uint8_t, SIZE>& bytes);
+
+        ~EventData() override;
 
         friend std::ostream& operator<<(std::ostream& os, const EventData& data);
 

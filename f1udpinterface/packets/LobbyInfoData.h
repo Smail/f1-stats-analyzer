@@ -11,7 +11,7 @@ namespace F122::Network::Packets {
     /// Frequency: Two every second when in the lobby<br>
     /// Size: 1191 bytes<br>
     /// Version: 1<br>
-    struct LobbyInfoData {
+    struct LobbyInfoData : public Packet {
         struct Data {
             static constexpr size_t SIZE = 53;
 
@@ -40,6 +40,8 @@ namespace F122::Network::Packets {
         static constexpr size_t SIZE = PacketHeader::SIZE + 22 * Data::SIZE + 1;
 
         explicit LobbyInfoData(const std::array<std::uint8_t, SIZE>& bytes);
+
+        ~LobbyInfoData() override;
 
         friend std::ostream& operator<<(std::ostream& os, const LobbyInfoData& data);
 
