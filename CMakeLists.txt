@@ -24,8 +24,13 @@ set(FILES f1udpinterface/packets/PacketHeader.h f1udpinterface/packets/PacketSes
         f1udpinterface/ids/RulesetId.h f1udpinterface/ids/SurfaceTypeId.h f1udpinterface/ids/PenaltyTypeId.h
         f1udpinterface/ids/InfringementTypeId.h f1udpinterface/ids/ButtonFlags.h f1udpinterface/ids/GameModeId.h
         f1udpinterface/packets/PacketCarTelemetryData.h f1udpinterface/packets/PacketSessionHistoryData.h
-        f1udpinterface/public.h util.h f1udpinterface/PacketFactory.cpp f1udpinterface/PacketFactory.h
-        f1udpinterface/packets/PacketHeader.cpp f1udpinterface/packets/PacketCarDamageData.cpp util.cpp f1udpinterface/packets/PacketCarSetupData.cpp f1udpinterface/packets/PacketCarTelemetryData.cpp f1udpinterface/packets/PacketEventData.cpp f1udpinterface/packets/PacketFinalClassificationData.cpp f1udpinterface/packets/PacketLobbyInfoData.cpp f1udpinterface/packets/PacketMotionData.cpp f1udpinterface/packets/PacketParticipantsData.cpp f1udpinterface/packets/PacketSessionData.cpp f1udpinterface/packets/PacketLapData.cpp f1udpinterface/packets/PacketCarStatusData.cpp)
+        f1udpinterface/public.h util.h f1udpinterface/packets/PacketHeader.cpp
+        f1udpinterface/packets/PacketCarDamageData.cpp f1udpinterface/packets/PacketCarSetupData.cpp
+        f1udpinterface/packets/PacketCarTelemetryData.cpp f1udpinterface/packets/PacketEventData.cpp
+        f1udpinterface/packets/PacketFinalClassificationData.cpp f1udpinterface/packets/PacketLobbyInfoData.cpp
+        f1udpinterface/packets/PacketMotionData.cpp f1udpinterface/packets/PacketParticipantsData.cpp
+        f1udpinterface/packets/PacketSessionData.cpp f1udpinterface/packets/PacketLapData.cpp
+        f1udpinterface/packets/PacketCarStatusData.cpp)
 
 add_executable(${PROJECT_NAME} main.cpp ${FILES} f1udpinterface/packets/PacketSessionHistoryData.cpp)
 
