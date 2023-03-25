@@ -37,8 +37,7 @@ namespace F122 {
             case TrackId::BAKU_AZERBAIJAN:   return "Baku (Azerbaijan)";
             case TrackId::SILVERSTONE_SHORT: return "Silverstone Short";
             default: throw std::invalid_argument("Unknown enum value: " + std::to_string(
-                        static_cast<std::underlying_type<TrackId>::type>(id)
-                     ));
+                                                 static_cast<std::underlying_type<TrackId>::type>(id)));
             // @formatter:on
         }
     }
