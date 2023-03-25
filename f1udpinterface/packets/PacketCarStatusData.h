@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include "PacketHeader.h"
 
 namespace F122::Network {
@@ -15,15 +16,15 @@ namespace F122::Network {
             explicit Data(const std::array<std::uint8_t, 47>& bytes);
 
             /// Traction control - 0 = off, 1 = medium, 2 = full
-            uint8 m_tractionControl;
+            std::uint8_t m_tractionControl;
             /// 0 (off) - 1 (on)
-            uint8 m_antiLockBrakes;
+            std::uint8_t m_antiLockBrakes;
             /// Fuel mix - 0 = lean, 1 = standard, 2 = rich, 3 = max
-            uint8 m_fuelMix;
+            std::uint8_t m_fuelMix;
             /// Front brake bias (percentage)
-            uint8 m_frontBrakeBias;
+            std::uint8_t m_frontBrakeBias;
             /// Pit limiter status - 0 = off, 1 = on
-            uint8 m_pitLimiterStatus;
+            std::uint8_t m_pitLimiterStatus;
             /// Current fuel mass
             float m_fuelInTank;
             /// Fuel capacity
@@ -31,33 +32,33 @@ namespace F122::Network {
             /// Fuel remaining in terms of laps (value on MFD)
             float m_fuelRemainingLaps;
             /// Cars max RPM, point of rev limiter
-            uint16 m_maxRPM;
+            std::uint16_t m_maxRPM;
             /// Cars idle RPM
-            uint16 m_idleRPM;
+            std::uint16_t m_idleRPM;
             /// Maximum number of gears
-            uint8 m_maxGears;
+            std::uint8_t m_maxGears;
             /// 0 = not allowed, 1 = allowed
-            uint8 m_drsAllowed;
+            std::uint8_t m_drsAllowed;
             /// 0 = DRS not available, non-zero - DRS will be available, in [X] metres
-            uint16 m_drsActivationDistance;
+            std::uint16_t m_drsActivationDistance;
             /// F1 Modern -
             /// 16 = C5, 17 = C4, 18 = C3, 19 = C2, 20 = C1, 7 = inter, 8 = wet
             /// F1 Classic -
             /// 9 = dry, 10 = wet, F2 – 11 = super soft, 12 = soft, 13 = medium, 14 = hard, 15 = wet
-            uint8 m_actualTyreCompound;
+            std::uint8_t m_actualTyreCompound;
             /// F1 visual (can be different from actual compound)
             /// 16 = soft, 17 = medium, 18 = hard, 7 = inter, 8 = wet
             /// F1 Classic – same as above
             /// F2 ‘19, 15 = wet, 19 – super soft, 20 = soft, 21 = medium , 22 = hard
-            uint8 m_visualTyreCompound;
+            std::uint8_t m_visualTyreCompound;
             /// Age in laps of the current set of tyres
-            uint8 m_tyresAgeLaps;
+            std::uint8_t m_tyresAgeLaps;
             /// -1 = invalid/unknown, 0 = none, 1 = green, 2 = blue, 3 = yellow, 4 = red
-            int8 m_vehicleFiaFlags;
+            std::int8_t m_vehicleFiaFlags;
             /// ERS energy store in Joules
             float m_ersStoreEnergy;
             /// ERS deployment mode, 0 = none, 1 = medium, 2 = hotlap, 3 = overtake
-            uint8 m_ersDeployMode;
+            std::uint8_t m_ersDeployMode;
             /// ERS energy harvested this lap by MGU-K
             float m_ersHarvestedThisLapMGUK;
             /// ERS energy harvested this lap by MGU-H
@@ -65,13 +66,13 @@ namespace F122::Network {
             /// ERS energy deployed this lap
             float m_ersDeployedThisLap;
             /// Whether the car is paused in a network game
-            uint8 m_networkPaused;
+            std::uint8_t m_networkPaused;
 
             [[nodiscard]] bool is_drs_available() const {
                 return m_drsActivationDistance > 0;
             }
 
-            [[nodiscard]] uint16 distance_to_next_drs_zone() const {
+            [[nodiscard]] std::uint16_t distance_to_next_drs_zone() const {
                 return m_drsActivationDistance;
             }
 
@@ -83,10 +84,10 @@ namespace F122::Network {
     public:
         explicit PacketCarStatusData(const std::array<std::uint8_t, 1058>& bytes);
 
+        friend std::ostream& operator<<(std::ostream& os, const PacketCarStatusData& data);
+
         PacketHeader m_header;
         std::array<Data, 22> m_carStatusData;
-
-        friend std::ostream& operator<<(std::ostream& os, const PacketCarStatusData& data);
     };
 
     std::ostream& operator<<(std::ostream& os, const PacketCarStatusData& data);

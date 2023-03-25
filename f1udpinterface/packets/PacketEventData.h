@@ -4,6 +4,7 @@
 #include <array>
 #include <sstream>
 #include <ostream>
+#include <cstdint>
 #include "PacketHeader.h"
 
 namespace F122::Network {
@@ -65,53 +66,53 @@ namespace F122::Network {
         union EventDataDetails {
             struct {
                 /// Vehicle index of car achieving fastest lap
-                uint8 vehicleIdx;
+                std::uint8_t vehicleIdx;
                 /// Lap time is in seconds
                 float lapTime;
             } FastestLap;
 
             struct {
-                uint8 vehicleIdx;
+                std::uint8_t vehicleIdx;
                 /// Vehicle index of car retiring
             } Retirement;
 
             struct {
-                uint8 vehicleIdx;
+                std::uint8_t vehicleIdx;
                 /// Vehicle index of team mate
             } TeamMateInPits;
 
             struct {
-                uint8 vehicleIdx;
+                std::uint8_t vehicleIdx;
                 /// Vehicle index of the race winner
             } RaceWinner;
 
             struct {
-                uint8 penaltyType;
+                std::uint8_t penaltyType;
                 /// Penalty type – see Appendices
-                uint8 infringementType;
+                std::uint8_t infringementType;
                 /// Infringement type – see Appendices
-                uint8 vehicleIdx;
+                std::uint8_t vehicleIdx;
                 /// Vehicle index of the car the penalty is applied to
-                uint8 otherVehicleIdx;
+                std::uint8_t otherVehicleIdx;
                 /// Vehicle index of the other car involved
-                uint8 time;
+                std::uint8_t time;
                 /// Time gained, or time spent doing action in seconds
-                uint8 lapNum;
+                std::uint8_t lapNum;
                 /// Lap the penalty occurred on
-                uint8 placesGained;
+                std::uint8_t placesGained;
                 /// Number of places gained by this
             } Penalty;
 
             struct {
-                uint8 vehicleIdx;
+                std::uint8_t vehicleIdx;
                 /// Vehicle index of the vehicle triggering speed trap
                 float speed;
                 /// Top speed achieved in kilometres per hour
-                uint8 isOverallFastestInSession;
+                std::uint8_t isOverallFastestInSession;
                 /// Overall fastest speed in session = 1, otherwise 0
-                uint8 isDriverFastestInSession;
+                std::uint8_t isDriverFastestInSession;
                 /// Fastest speed for driver in session = 1, otherwise 0
-                uint8 fastestVehicleIdxInSession;
+                std::uint8_t fastestVehicleIdxInSession;
                 /// Vehicle index of the vehicle that is the fastest in this session
                 float fastestSpeedInSession;
                 /// Speed of the vehicle that is the fastest in this session
@@ -119,29 +120,29 @@ namespace F122::Network {
 
             struct {
                 /// Number of lights showing
-                uint8 numLights;
+                std::uint8_t numLights;
             } StartLights;
 
             struct {
                 /// Vehicle index of the vehicle serving drive through
-                uint8 vehicleIdx;
+                std::uint8_t vehicleIdx;
             } DriveThroughPenaltyServed;
 
             struct {
                 /// Vehicle index of the vehicle serving stop go
-                uint8 vehicleIdx;
+                std::uint8_t vehicleIdx;
             } StopGoPenaltyServed;
 
             struct {
                 /// Frame identifier flashed back to
-                uint32 flashbackFrameIdentifier;
+                std::uint32_t flashbackFrameIdentifier;
                 /// Session time flashed back to
                 float flashbackSessionTime;
             } Flashback;
 
             struct {
                 /// Bit flags specifying which buttons are being pressed currently - see appendices
-                uint32 m_buttonStatus;
+                std::uint32_t m_buttonStatus;
             } Buttons;
 
             [[nodiscard]] std::string to_string(EventStringCodes type) const;
@@ -150,13 +151,13 @@ namespace F122::Network {
     public:
         explicit PacketEventData(const std::array<std::uint8_t, 40>& bytes);
 
+        friend std::ostream& operator<<(std::ostream& os, const PacketEventData& data);
+
         PacketHeader m_header;
         /// Event string code @see EventStringCodes
-        std::array<uint8, 4> m_eventStringCode;
+        std::array<std::uint8_t, 4> m_eventStringCode;
         /// Event details - should be interpreted differently for each type
         EventDataDetails m_eventDetails;
-
-        friend std::ostream& operator<<(std::ostream& os, const PacketEventData& data);
     };
 
     std::ostream& operator<<(std::ostream& os, const PacketEventData& data);

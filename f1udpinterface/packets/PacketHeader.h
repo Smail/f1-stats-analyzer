@@ -6,16 +6,9 @@
 #include <array>
 
 namespace F122::Network {
-    using int8 = std::int8_t;
-    using uint8 = std::uint8_t;
-    using int16 = std::int16_t;
-    using uint16 = std::uint16_t;
-    using uint32 = std::uint32_t;
-    using uint64 = std::uint64_t;
-
     /// Size: 24 bytes
     struct PacketHeader {
-        enum class PacketId : uint8 {
+        enum class PacketId : std::uint8_t {
             /// Contains all motion data for player's car - only sent while player is in control
             MOTION = 0,
             /// Data about the session - track, time left
@@ -42,7 +35,7 @@ namespace F122::Network {
             SESSION_HISTORY = 11,
         };
 
-        static PacketId from(uint8 value);
+        static PacketId from(std::uint8_t value);
 
         explicit PacketHeader(const std::array<std::uint8_t, 24>& bytes);
 
@@ -50,26 +43,26 @@ namespace F122::Network {
 
     public:
         /// 2022
-        uint16 m_packetFormat;
+        std::uint16_t m_packetFormat;
         /// Game major version - "X.00"
-        uint8 m_gameMajorVersion;
+        std::uint8_t m_gameMajorVersion;
         /// Game minor version - "1.XX"
-        uint8 m_gameMinorVersion;
+        std::uint8_t m_gameMinorVersion;
         /// Version of this packet type, all start from 1
-        uint8 m_packetVersion;
+        std::uint8_t m_packetVersion;
         /// Identifier for the packet type, see below
-        uint8 m_packetId;
+        std::uint8_t m_packetId;
         /// Unique identifier for the session
-        uint64 m_sessionUID;
+        std::uint64_t m_sessionUID;
         /// Session timestamp
         float m_sessionTime;
         /// Identifier for the frame the data was retrieved on
-        uint32 m_frameIdentifier;
+        std::uint32_t m_frameIdentifier;
         /// Index of player's car in the array
-        uint8 m_playerCarIndex;
+        std::uint8_t m_playerCarIndex;
         /// Index of secondary player's car in the array (splitscreen)
         /// 255 if no second player
-        uint8 m_secondaryPlayerCarIndex;
+        std::uint8_t m_secondaryPlayerCarIndex;
 
         friend std::ostream& operator<<(std::ostream& os, const PacketHeader& header);
     };

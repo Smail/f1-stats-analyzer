@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <ostream>
 #include <array>
 #include "PacketHeader.h"
@@ -19,45 +20,45 @@ namespace F122::Network {
             /// Tyre wear (percentage)
             std::array<float, 4> m_tyresWear;
             /// Tyre damage (percentage)
-            std::array<uint8, 4> m_tyresDamage;
+            std::array<std::uint8_t, 4> m_tyresDamage;
             /// Brakes damage (percentage)
-            std::array<uint8, 4> m_brakesDamage;
+            std::array<std::uint8_t, 4> m_brakesDamage;
             /// Front left wing damage (percentage)
-            uint8 m_frontLeftWingDamage;
+            std::uint8_t m_frontLeftWingDamage;
             /// Front right wing damage (percentage)
-            uint8 m_frontRightWingDamage;
+            std::uint8_t m_frontRightWingDamage;
             /// Rear wing damage (percentage)
-            uint8 m_rearWingDamage;
+            std::uint8_t m_rearWingDamage;
             /// Floor damage (percentage)
-            uint8 m_floorDamage;
+            std::uint8_t m_floorDamage;
             /// Diffuser damage (percentage)
-            uint8 m_diffuserDamage;
+            std::uint8_t m_diffuserDamage;
             /// Sidepod damage (percentage)
-            uint8 m_sidepodDamage;
+            std::uint8_t m_sidepodDamage;
             /// Indicator for DRS fault, 0 = OK, 1 = fault
-            uint8 m_drsFault;
+            std::uint8_t m_drsFault;
             /// Indicator for ERS fault, 0 = OK, 1 = fault
-            uint8 m_ersFault;
+            std::uint8_t m_ersFault;
             /// Gear box damage (percentage)
-            uint8 m_gearBoxDamage;
+            std::uint8_t m_gearBoxDamage;
             /// Engine damage (percentage)
-            uint8 m_engineDamage;
+            std::uint8_t m_engineDamage;
             /// Engine wear MGU-H (percentage)
-            uint8 m_engineMGUHWear;
+            std::uint8_t m_engineMGUHWear;
             /// Engine wear ES (percentage)
-            uint8 m_engineESWear;
+            std::uint8_t m_engineESWear;
             /// Engine wear CE (percentage)
-            uint8 m_engineCEWear;
+            std::uint8_t m_engineCEWear;
             /// Engine wear ICE (percentage)
-            uint8 m_engineICEWear;
+            std::uint8_t m_engineICEWear;
             /// Engine wear MGU-K (percentage)
-            uint8 m_engineMGUKWear;
+            std::uint8_t m_engineMGUKWear;
             /// Engine wear TC (percentage)
-            uint8 m_engineTCWear;
+            std::uint8_t m_engineTCWear;
             /// Engine blown, 0 = OK, 1 = fault
-            uint8 m_engineBlown;
+            std::uint8_t m_engineBlown;
             /// Engine seized, 0 = OK, 1 = fault
-            uint8 m_engineSeized;
+            std::uint8_t m_engineSeized;
 
             friend std::ostream& operator<<(std::ostream& os, const Data& data);
         };
@@ -65,10 +66,10 @@ namespace F122::Network {
     public:
         explicit PacketCarDamageData(const std::array<std::uint8_t, 948>& bytes);
 
+        friend std::ostream& operator<<(std::ostream& os, const PacketCarDamageData& data);
+
         PacketHeader m_header;
         std::array<Data, 22> m_carDamageData;
-
-        friend std::ostream& operator<<(std::ostream& os, const PacketCarDamageData& data);
     };
 
     std::ostream& operator<<(std::ostream& os, const PacketCarDamageData& data);

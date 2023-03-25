@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <ostream>
 #include "PacketHeader.h"
 
@@ -17,13 +18,13 @@ namespace F122::Network {
             explicit Data(const std::array<std::uint8_t, 49>& bytes);
 
             /// Front wing aero
-            uint8 m_frontWing;
+            std::uint8_t m_frontWing;
             /// Rear wing aero
-            uint8 m_rearWing;
+            std::uint8_t m_rearWing;
             /// Differential adjustment on throttle (percentage)
-            uint8 m_onThrottle;
+            std::uint8_t m_onThrottle;
             /// Differential adjustment off throttle (percentage)
-            uint8 m_offThrottle;
+            std::uint8_t m_offThrottle;
             /// Front camber angle (suspension geometry)
             float m_frontCamber;
             /// Rear camber angle (suspension geometry)
@@ -33,21 +34,21 @@ namespace F122::Network {
             /// Rear toe angle (suspension geometry)
             float m_rearToe;
             /// Front suspension
-            uint8 m_frontSuspension;
+            std::uint8_t m_frontSuspension;
             /// Rear suspension
-            uint8 m_rearSuspension;
+            std::uint8_t m_rearSuspension;
             /// Front anti-roll bar
-            uint8 m_frontAntiRollBar;
+            std::uint8_t m_frontAntiRollBar;
             /// Front anti-roll bar
-            uint8 m_rearAntiRollBar;
+            std::uint8_t m_rearAntiRollBar;
             /// Front ride height
-            uint8 m_frontSuspensionHeight;
+            std::uint8_t m_frontSuspensionHeight;
             /// Rear ride height
-            uint8 m_rearSuspensionHeight;
+            std::uint8_t m_rearSuspensionHeight;
             /// Brake pressure (percentage)
-            uint8 m_brakePressure;
+            std::uint8_t m_brakePressure;
             /// Brake bias (percentage)
-            uint8 m_brakeBias;
+            std::uint8_t m_brakeBias;
             /// Rear left tyre pressure (PSI)
             float m_rearLeftTyrePressure;
             /// Rear right tyre pressure (PSI)
@@ -57,7 +58,7 @@ namespace F122::Network {
             /// Front right tyre pressure (PSI)
             float m_frontRightTyrePressure;
             /// Ballast
-            uint8 m_ballast;
+            std::uint8_t m_ballast;
             /// Fuel load
             float m_fuelLoad;
 
@@ -67,10 +68,10 @@ namespace F122::Network {
     public:
         explicit PacketCarSetupData(const std::array<std::uint8_t, 1102>& bytes);
 
+        friend std::ostream& operator<<(std::ostream& os, const PacketCarSetupData& data);
+
         PacketHeader m_header;
         std::array<Data, 22> m_carSetups;
-
-        friend std::ostream& operator<<(std::ostream& os, const PacketCarSetupData& data);
     };
 
     std::ostream& operator<<(std::ostream& os, const PacketCarSetupData::Data& data);

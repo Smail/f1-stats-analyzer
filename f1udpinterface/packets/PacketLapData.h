@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <ostream>
 #include "PacketHeader.h"
 
@@ -16,13 +17,13 @@ namespace F122::Network {
             explicit Data(const std::array<std::uint8_t, 43>& bytes);
 
             /// Last lap time in milliseconds
-            uint32 m_lastLapTimeInMS;
+            std::uint32_t m_lastLapTimeInMS;
             /// Current time around the lap in milliseconds
-            uint32 m_currentLapTimeInMS;
+            std::uint32_t m_currentLapTimeInMS;
             /// Sector 1 time in milliseconds
-            uint16 m_sector1TimeInMS;
+            std::uint16_t m_sector1TimeInMS;
             /// Sector 2 time in milliseconds
-            uint16 m_sector2TimeInMS;
+            std::uint16_t m_sector2TimeInMS;
             /// Distance vehicle is around current lap in metres – could
             /// be negative if line hasn't been crossed yet
             float m_lapDistance;
@@ -31,40 +32,40 @@ namespace F122::Network {
             /// Delta in seconds for safety car
             float m_safetyCarDelta;
             /// Car race position
-            uint8 m_carPosition;
+            std::uint8_t m_carPosition;
             /// Current lap number
-            uint8 m_currentLapNum;
+            std::uint8_t m_currentLapNum;
             /// 0 = none, 1 = pitting, 2 = in pit area
-            uint8 m_pitStatus;
+            std::uint8_t m_pitStatus;
             /// Number of pit stops taken in this race
-            uint8 m_numPitStops;
+            std::uint8_t m_numPitStops;
             /// 0 = sector1, 1 = sector2, 2 = sector3
-            uint8 m_sector;
+            std::uint8_t m_sector;
             /// Current lap invalid - 0 = valid, 1 = invalid
-            uint8 m_currentLapInvalid;
+            std::uint8_t m_currentLapInvalid;
             /// Accumulated time penalties in seconds to be added
-            uint8 m_penalties;
+            std::uint8_t m_penalties;
             /// Accumulated number of warnings issued
-            uint8 m_warnings;
+            std::uint8_t m_warnings;
             /// Num drive through pens left to serve
-            uint8 m_numUnservedDriveThroughPens;
+            std::uint8_t m_numUnservedDriveThroughPens;
             /// Num stop go pens left to serve
-            uint8 m_numUnservedStopGoPens;
+            std::uint8_t m_numUnservedStopGoPens;
             /// Grid position the vehicle started the race in
-            uint8 m_gridPosition;
+            std::uint8_t m_gridPosition;
             /// Status of driver - 0 = in garage, 1 = flying lap, 2 = in lap, 3 = out lap, 4 = on track
-            uint8 m_driverStatus;
+            std::uint8_t m_driverStatus;
             /// Result status - 0 = invalid, 1 = inactive, 2 = active, 3 = finished, 4 = didnotfinish, 5 = disqualified,
             /// 6 = not classified, 7 = retired
-            uint8 m_resultStatus;
+            std::uint8_t m_resultStatus;
             /// Pit lane timing, 0 = inactive, 1 = active
-            uint8 m_pitLaneTimerActive;
+            std::uint8_t m_pitLaneTimerActive;
             /// If active, the current time spent in the pit lane in ms
-            uint16 m_pitLaneTimeInLaneInMS;
+            std::uint16_t m_pitLaneTimeInLaneInMS;
             /// Time of the actual pit stop in ms
-            uint16 m_pitStopTimerInMS;
+            std::uint16_t m_pitStopTimerInMS;
             /// Whether the car should serve a penalty at this stop
-            uint8 m_pitStopShouldServePen;
+            std::uint8_t m_pitStopShouldServePen;
 
             friend std::ostream& operator<<(std::ostream& os, const Data& data);
         };
@@ -76,9 +77,9 @@ namespace F122::Network {
         /// Lap data for all cars on track
         std::array<Data, 22> m_lapData;
         /// Index of Personal Best car in time trial (255 if invalid)
-        uint8 m_timeTrialPBCarIdx;
+        std::uint8_t m_timeTrialPBCarIdx;
         /// Index of Rival car in time trial (255 if invalid)
-        uint8 m_timeTrialRivalCarIdx;
+        std::uint8_t m_timeTrialRivalCarIdx;
 
         friend std::ostream& operator<<(std::ostream& os, const PacketLapData& data);
     };

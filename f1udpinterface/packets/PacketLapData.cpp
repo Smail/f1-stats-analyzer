@@ -9,10 +9,10 @@ namespace F122::Network {
             m_timeTrialRivalCarIdx{bytes[971]} {}
 
     PacketLapData::Data::Data(const std::array<std::uint8_t, 43>& bytes) :
-            m_lastLapTimeInMS{util::convert<uint32>({bytes[0], bytes[1], bytes[2], bytes[3]})},
-            m_currentLapTimeInMS{util::convert<uint32>({bytes[4], bytes[5], bytes[6], bytes[7]})},
-            m_sector1TimeInMS{util::convert<uint16>({bytes[8], bytes[9]})},
-            m_sector2TimeInMS{util::convert<uint16>({bytes[10], bytes[11]})},
+            m_lastLapTimeInMS{util::convert<std::uint32_t>({bytes[0], bytes[1], bytes[2], bytes[3]})},
+            m_currentLapTimeInMS{util::convert<std::uint32_t>({bytes[4], bytes[5], bytes[6], bytes[7]})},
+            m_sector1TimeInMS{util::convert<std::uint16_t>({bytes[8], bytes[9]})},
+            m_sector2TimeInMS{util::convert<std::uint16_t>({bytes[10], bytes[11]})},
             m_lapDistance{util::convert<float>({bytes[12], bytes[13], bytes[14], bytes[15]})},
             m_totalDistance{util::convert<float>({bytes[16], bytes[17], bytes[18], bytes[19]})},
             m_safetyCarDelta{util::convert<float>({bytes[20], bytes[21], bytes[22], bytes[23]})},
@@ -30,8 +30,8 @@ namespace F122::Network {
             m_driverStatus{bytes[35]},
             m_resultStatus{bytes[36]},
             m_pitLaneTimerActive{bytes[37]},
-            m_pitLaneTimeInLaneInMS{util::convert<uint16>({bytes[38], bytes[39]})},
-            m_pitStopTimerInMS{util::convert<uint16>({bytes[40], bytes[41]})},
+            m_pitLaneTimeInLaneInMS{util::convert<std::uint16_t>({bytes[38], bytes[39]})},
+            m_pitStopTimerInMS{util::convert<std::uint16_t>({bytes[40], bytes[41]})},
             m_pitStopShouldServePen{bytes[42]} {}
 
     std::ostream& operator<<(std::ostream& os, const PacketLapData::Data& data) {

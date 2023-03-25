@@ -4,30 +4,30 @@
 namespace F122::Network {
     PacketSessionData::MarshalZone::MarshalZone(const std::array<std::uint8_t, 5>& bytes) :
             m_zoneStart{util::convert<float>({bytes[0], bytes[1], bytes[2], bytes[3]})},
-            m_zoneFlag{static_cast<int8>(bytes[4])} {}
+            m_zoneFlag{static_cast<std::int8_t>(bytes[4])} {}
 
     PacketSessionData::WeatherForecastSample::WeatherForecastSample(const std::array<std::uint8_t, 8>& bytes) :
             m_sessionType{bytes[0]},
             m_timeOffset{bytes[1]},
             m_weather{bytes[2]},
-            m_trackTemperature{static_cast<int8>(bytes[3])},
-            m_trackTemperatureChange{static_cast<int8>(bytes[4])},
-            m_airTemperature{static_cast<int8>(bytes[5])},
-            m_airTemperatureChange{static_cast<int8>(bytes[6])},
+            m_trackTemperature{static_cast<std::int8_t>(bytes[3])},
+            m_trackTemperatureChange{static_cast<std::int8_t>(bytes[4])},
+            m_airTemperature{static_cast<std::int8_t>(bytes[5])},
+            m_airTemperatureChange{static_cast<std::int8_t>(bytes[6])},
             m_rainPercentage{bytes[7]} {}
 
     PacketSessionData::PacketSessionData(const std::array<std::uint8_t, 632>& bytes) :
             m_header{{util::copy_resize<std::uint8_t, 632, 24>(bytes)}},
             m_weather{bytes[24]},
-            m_trackTemperature{static_cast<int8>(bytes[25])},
-            m_airTemperature{static_cast<int8>(bytes[26])},
+            m_trackTemperature{static_cast<std::int8_t>(bytes[25])},
+            m_airTemperature{static_cast<std::int8_t>(bytes[26])},
             m_totalLaps{bytes[27]},
-            m_trackLength{util::convert<uint16>({bytes[28], bytes[29]})},
+            m_trackLength{util::convert<std::uint16_t>({bytes[28], bytes[29]})},
             m_sessionType{bytes[30]},
-            m_trackId{static_cast<int8>(bytes[31])},
+            m_trackId{static_cast<std::int8_t>(bytes[31])},
             m_formula{bytes[32]},
-            m_sessionTimeLeft{util::convert<uint16>({bytes[33], bytes[34]})},
-            m_sessionDuration{util::convert<uint16>({bytes[35], bytes[36]})},
+            m_sessionTimeLeft{util::convert<std::uint16_t>({bytes[33], bytes[34]})},
+            m_sessionDuration{util::convert<std::uint16_t>({bytes[35], bytes[36]})},
             m_pitSpeedLimit{bytes[37]},
             m_gamePaused{bytes[38]},
             m_isSpectating{bytes[39]},
@@ -41,9 +41,9 @@ namespace F122::Network {
             m_weatherForecastSamples{util::batch_create<WeatherForecastSample, 632, 8, 56, 151>(bytes)},
             m_forecastAccuracy{bytes[599]},
             m_aiDifficulty{bytes[600]},
-            m_seasonLinkIdentifier{util::convert<uint32>({bytes[601], bytes[602], bytes[603], bytes[604]})},
-            m_weekendLinkIdentifier{util::convert<uint32>({bytes[605], bytes[606], bytes[607], bytes[608]})},
-            m_sessionLinkIdentifier{util::convert<uint32>({bytes[609], bytes[610], bytes[611], bytes[612]})},
+            m_seasonLinkIdentifier{util::convert<std::uint32_t>({bytes[601], bytes[602], bytes[603], bytes[604]})},
+            m_weekendLinkIdentifier{util::convert<std::uint32_t>({bytes[605], bytes[606], bytes[607], bytes[608]})},
+            m_sessionLinkIdentifier{util::convert<std::uint32_t>({bytes[609], bytes[610], bytes[611], bytes[612]})},
             m_pitStopWindowIdealLap{bytes[613]},
             m_pitStopWindowLatestLap{bytes[614]},
             m_pitStopRejoinPosition{bytes[615]},
@@ -58,7 +58,7 @@ namespace F122::Network {
             m_dynamicRacingLineType{bytes[624]},
             m_gameMode{bytes[625]},
             m_ruleSet{bytes[626]},
-            m_timeOfDay{util::convert<uint32>({bytes[627], bytes[628], bytes[629], bytes[630]})},
+            m_timeOfDay{util::convert<std::uint32_t>({bytes[627], bytes[628], bytes[629], bytes[630]})},
             m_sessionLength{bytes[631]} {}
 
     std::ostream& operator<<(std::ostream& os, const PacketSessionData::MarshalZone& zone) {

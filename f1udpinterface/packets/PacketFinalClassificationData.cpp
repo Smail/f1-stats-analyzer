@@ -10,7 +10,7 @@ namespace F122::Network {
             m_points{bytes[3]},
             m_numPitStops{bytes[4]},
             m_resultStatus{bytes[5]},
-            m_bestLapTimeInMS{util::convert<uint32>({bytes[6], bytes[7], bytes[8], bytes[9]})},
+            m_bestLapTimeInMS{util::convert<std::uint32_t>({bytes[6], bytes[7], bytes[8], bytes[9]})},
             m_totalRaceTime{util::convert<double>(
                     {bytes[10], bytes[11], bytes[12], bytes[13], bytes[14], bytes[15], bytes[16], bytes[17]})},
             m_penaltiesTime{bytes[18]},

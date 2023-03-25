@@ -1,8 +1,9 @@
 #pragma once
 
-#include "PacketHeader.h"
 #include <array>
+#include <cstdint>
 #include <string>
+#include "PacketHeader.h"
 
 namespace F122::Network {
     /// This packet contains lap times and tyre usage for the session.<br><br><b>This packet works slightly differently
@@ -22,16 +23,16 @@ namespace F122::Network {
             explicit LapHistoryData(const std::array<std::uint8_t, 11>& bytes);
 
             /// Lap time in milliseconds
-            uint32 m_lapTimeInMS;
+            std::uint32_t m_lapTimeInMS;
             /// Sector 1 time in milliseconds
-            uint16 m_sector1TimeInMS;
+            std::uint16_t m_sector1TimeInMS;
             /// Sector 2 time in milliseconds
-            uint16 m_sector2TimeInMS;
+            std::uint16_t m_sector2TimeInMS;
             /// Sector 3 time in milliseconds
-            uint16 m_sector3TimeInMS;
+            std::uint16_t m_sector3TimeInMS;
             /// 0x01 bit set-lap valid, 0x02 bit set-sector 1 valid,
             /// 0x04 bit set-sector 2 valid, 0x08 bit set-sector 3 valid
-            uint8 m_lapValidBitFlags;
+            std::uint8_t m_lapValidBitFlags;
 
             friend std::ostream& operator<<(std::ostream& os, const LapHistoryData& data);
         };
@@ -42,11 +43,11 @@ namespace F122::Network {
             explicit TyreStintHistoryData(const std::array<std::uint8_t, 3>& bytes);
 
             /// Lap the tyre usage ends on (255 of current tyre)
-            uint8 m_endLap;
+            std::uint8_t m_endLap;
             /// Actual tyres used by this driver
-            uint8 m_tyreActualCompound;
+            std::uint8_t m_tyreActualCompound;
             /// Visual tyres used by this driver
-            uint8 m_tyreVisualCompound;
+            std::uint8_t m_tyreVisualCompound;
 
             friend std::ostream& operator<<(std::ostream& os, const TyreStintHistoryData& data);
         };
@@ -56,19 +57,19 @@ namespace F122::Network {
 
         PacketHeader m_header;
         /// Index of the car this lap data relates to
-        uint8 m_carIdx;
+        std::uint8_t m_carIdx;
         /// Num laps in the data (including current partial lap)
-        uint8 m_numLaps;
+        std::uint8_t m_numLaps;
         /// Number of tyre stints in the data
-        uint8 m_numTyreStints;
+        std::uint8_t m_numTyreStints;
         /// Lap the best lap time was achieved on
-        uint8 m_bestLapTimeLapNum;
+        std::uint8_t m_bestLapTimeLapNum;
         /// Lap the best Sector 1 time was achieved on
-        uint8 m_bestSector1LapNum;
+        std::uint8_t m_bestSector1LapNum;
         /// Lap the best Sector 2 time was achieved on
-        uint8 m_bestSector2LapNum;
+        std::uint8_t m_bestSector2LapNum;
         /// Lap the best Sector 3 time was achieved on
-        uint8 m_bestSector3LapNum;
+        std::uint8_t m_bestSector3LapNum;
         /// 100 laps of data max
         std::array<LapHistoryData, 100> m_lapHistoryData;
         std::array<TyreStintHistoryData, 8> m_tyreStintsHistoryData;

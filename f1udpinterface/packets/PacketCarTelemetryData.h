@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include "PacketHeader.h"
 
 namespace F122::Network {
@@ -17,7 +18,7 @@ namespace F122::Network {
             explicit Data(const std::array<std::uint8_t, 60>& bytes);
 
             /// Speed of car in kilometres per hour
-            uint16 m_speed;
+            std::uint16_t m_speed;
             /// Amount of throttle applied (0.0 to 1.0)
             float m_throttle;
             /// Steering (-1.0 (full lock left) to 1.0 (full lock right))
@@ -25,29 +26,29 @@ namespace F122::Network {
             /// Amount of brake applied (0.0 to 1.0)
             float m_brake;
             /// Amount of clutch applied (0 to 100)
-            uint8 m_clutch;
+            std::uint8_t m_clutch;
             /// Gear selected (1-8, N=0, R=-1)
-            int8 m_gear;
+            std::int8_t m_gear;
             /// Engine RPM
-            uint16 m_engineRPM;
+            std::uint16_t m_engineRPM;
             /// 0 = off, 1 = on
-            uint8 m_drs;
+            std::uint8_t m_drs;
             /// Rev lights indicator (percentage)
-            uint8 m_revLightsPercent;
+            std::uint8_t m_revLightsPercent;
             /// Rev lights (bit 0 = leftmost LED, bit 14 = rightmost LED)
-            uint16 m_revLightsBitValue;
+            std::uint16_t m_revLightsBitValue;
             /// Brakes temperature (celsius)
-            std::array<uint16, 4> m_brakesTemperature;
+            std::array<std::uint16_t, 4> m_brakesTemperature;
             /// Tyres surface temperature (celsius)
-            std::array<uint8, 4> m_tyresSurfaceTemperature;
+            std::array<std::uint8_t, 4> m_tyresSurfaceTemperature;
             /// Tyres inner temperature (celsius)
-            std::array<uint8, 4> m_tyresInnerTemperature;
+            std::array<std::uint8_t, 4> m_tyresInnerTemperature;
             /// Engine temperature (celsius)
-            uint16 m_engineTemperature;
+            std::uint16_t m_engineTemperature;
             /// Tyres pressure (PSI)
             std::array<float, 4> m_tyresPressure;
             /// Driving surface, see appendices
-            std::array<uint8, 4> m_surfaceType;
+            std::array<std::uint8_t, 4> m_surfaceType;
 
             /// Returns if the car's DRS is currently active, i.e., if the wing is open.
             [[nodiscard]] bool is_drs_open() const {
@@ -60,19 +61,19 @@ namespace F122::Network {
     public:
         explicit PacketCarTelemetryData(const std::array<std::uint8_t, 1347>& bytes);
 
+        friend std::ostream& operator<<(std::ostream& os, const PacketCarTelemetryData& data);
+
         PacketHeader m_header;
         std::array<Data, 22> m_carTelemetryData;
         /// Index of MFD panel open (255 = MFD closed)
         /// Single player, race – 0 = Car setup, 1 = Pits, 2 = Damage, 3 = Engine, 4 = Temperatures
         /// May vary depending on game mode
-        uint8 m_mfdPanelIndex;
+        std::uint8_t m_mfdPanelIndex;
         /// Secondary player, race – 0 = Car setup, 1 = Pits, 2 = Damage, 3 = Engine, 4 = Temperatures
         /// May vary depending on game mode
-        uint8 m_mfdPanelIndexSecondaryPlayer;
+        std::uint8_t m_mfdPanelIndexSecondaryPlayer;
         /// Suggested gear for the player (1-8) - 0 if no gear suggested
-        int8 m_suggestedGear;
-
-        friend std::ostream& operator<<(std::ostream& os, const PacketCarTelemetryData& data);
+        std::int8_t m_suggestedGear;
     };
 
     std::ostream& operator<<(std::ostream& os, const PacketCarTelemetryData::Data& data);
