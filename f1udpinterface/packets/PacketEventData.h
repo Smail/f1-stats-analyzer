@@ -9,7 +9,7 @@
 #pragma pack(1)
 
 namespace F122::Network {
-    constexpr std::uint64_t to_ascii_int(const std::string &str) {
+    constexpr std::uint64_t to_ascii_int(const std::string& str) {
         if (str.length() != 4) throw std::invalid_argument("Expected string of length 4");
         return (str[0] << 24) | (str[1] << 16) | (str[2] << 8) | (str[3] << 0);
     }
@@ -62,7 +62,7 @@ namespace F122::Network {
 
         static std::string to_string(EventStringCodes enumCase);
 
-        static EventStringCodes from(const std::string &str);
+        static EventStringCodes from(const std::string& str);
 
         union EventDataDetails {
             struct {
@@ -158,10 +158,10 @@ namespace F122::Network {
         /// Event details - should be interpreted differently for each type
         EventDataDetails m_eventDetails;
 
-        friend std::ostream &operator<<(std::ostream &os, const PacketEventData &data);
+        friend std::ostream& operator<<(std::ostream& os, const PacketEventData& data);
     };
 
-    std::ostream &operator<<(std::ostream &os, const PacketEventData &data);
+    std::ostream& operator<<(std::ostream& os, const PacketEventData& data);
 }
 
 #pragma pack()

@@ -13,9 +13,9 @@ namespace F122::Network {
     struct PacketCarStatusData {
         struct Data {
             Data() = default;
-            
+
             explicit Data(const std::array<std::uint8_t, 47>& bytes);
-            
+
             /// Traction control - 0 = off, 1 = medium, 2 = full
             uint8 m_tractionControl;
             /// 0 (off) - 1 (on)
@@ -79,7 +79,7 @@ namespace F122::Network {
 
             [[nodiscard]] std::string ers_deploy_mode() const;
 
-            friend std::ostream &operator<<(std::ostream &os, const Data &data);
+            friend std::ostream& operator<<(std::ostream& os, const Data& data);
         };
 
     public:
@@ -88,12 +88,12 @@ namespace F122::Network {
         PacketHeader m_header;
         std::array<Data, 22> m_carStatusData;
 
-        friend std::ostream &operator<<(std::ostream &os, const PacketCarStatusData &data);
+        friend std::ostream& operator<<(std::ostream& os, const PacketCarStatusData& data);
     };
 
-    std::ostream &operator<<(std::ostream &os, const PacketCarStatusData &data);
+    std::ostream& operator<<(std::ostream& os, const PacketCarStatusData& data);
 
-    std::ostream &operator<<(std::ostream &os, const PacketCarStatusData::Data &data);
+    std::ostream& operator<<(std::ostream& os, const PacketCarStatusData::Data& data);
 }
 
 #pragma pack()

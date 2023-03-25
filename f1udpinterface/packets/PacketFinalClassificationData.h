@@ -51,7 +51,7 @@ namespace F122::Network {
 
             [[nodiscard]] std::string to_string() const;
 
-            friend std::ostream &operator<<(std::ostream &os, const Data &data);
+            friend std::ostream& operator<<(std::ostream& os, const Data& data);
         };
 
     public:
@@ -62,12 +62,12 @@ namespace F122::Network {
         uint8 m_numCars;
         std::array<Data, 22> m_classificationData;
 
-        friend std::ostream &operator<<(std::ostream &os, const PacketFinalClassificationData &data);
+        friend std::ostream& operator<<(std::ostream& os, const PacketFinalClassificationData& data);
     };
 
-    std::ostream &operator<<(std::ostream &os, const PacketFinalClassificationData &data);
+    std::ostream& operator<<(std::ostream& os, const PacketFinalClassificationData& data);
 
-    std::ostream &operator<<(std::ostream &os, const PacketFinalClassificationData::Data &data);
+    std::ostream& operator<<(std::ostream& os, const PacketFinalClassificationData::Data& data);
 }
 
 #pragma pack()

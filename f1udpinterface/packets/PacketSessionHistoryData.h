@@ -22,7 +22,7 @@ namespace F122::Network {
             LapHistoryData() = default;
 
             explicit LapHistoryData(const std::array<std::uint8_t, 11>& bytes);
-            
+
             /// Lap time in milliseconds
             uint32 m_lapTimeInMS;
             /// Sector 1 time in milliseconds
@@ -35,7 +35,7 @@ namespace F122::Network {
             /// 0x04 bit set-sector 2 valid, 0x08 bit set-sector 3 valid
             uint8 m_lapValidBitFlags;
 
-            friend std::ostream &operator<<(std::ostream &os, const LapHistoryData &data);
+            friend std::ostream& operator<<(std::ostream& os, const LapHistoryData& data);
         };
 
         struct TyreStintHistoryData {
@@ -50,7 +50,7 @@ namespace F122::Network {
             /// Visual tyres used by this driver
             uint8 m_tyreVisualCompound;
 
-            friend std::ostream &operator<<(std::ostream &os, const TyreStintHistoryData &data);
+            friend std::ostream& operator<<(std::ostream& os, const TyreStintHistoryData& data);
         };
 
     public:
@@ -75,14 +75,14 @@ namespace F122::Network {
         std::array<LapHistoryData, 100> m_lapHistoryData;
         std::array<TyreStintHistoryData, 8> m_tyreStintsHistoryData;
 
-        friend std::ostream &operator<<(std::ostream &os, const PacketSessionHistoryData &data);
+        friend std::ostream& operator<<(std::ostream& os, const PacketSessionHistoryData& data);
     };
 
-    std::ostream &operator<<(std::ostream &os, const PacketSessionHistoryData &data);
+    std::ostream& operator<<(std::ostream& os, const PacketSessionHistoryData& data);
 
-    std::ostream &operator<<(std::ostream &os, const PacketSessionHistoryData::TyreStintHistoryData &data);
+    std::ostream& operator<<(std::ostream& os, const PacketSessionHistoryData::TyreStintHistoryData& data);
 
-    std::ostream &operator<<(std::ostream &os, const PacketSessionHistoryData::LapHistoryData &data);
+    std::ostream& operator<<(std::ostream& os, const PacketSessionHistoryData::LapHistoryData& data);
 }
 
 #pragma pack()

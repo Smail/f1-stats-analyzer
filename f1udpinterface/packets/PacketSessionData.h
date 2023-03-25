@@ -18,20 +18,20 @@ namespace F122::Network {
             MarshalZone() = default;
 
             explicit MarshalZone(const std::array<std::uint8_t, 5>& bytes);
-            
+
             /// Fraction (0..1) of way through the lap the marshal zone starts
             float m_zoneStart;
             /// -1 = invalid/unknown, 0 = none, 1 = green, 2 = blue, 3 = yellow, 4 = red
             int8 m_zoneFlag;
 
-            friend std::ostream &operator<<(std::ostream &os, const MarshalZone &zone);
+            friend std::ostream& operator<<(std::ostream& os, const MarshalZone& zone);
         };
 
         struct WeatherForecastSample {
             WeatherForecastSample() = default;
 
             explicit WeatherForecastSample(const std::array<std::uint8_t, 8>& bytes);
-            
+
             /// 0 = unknown, 1 = P1, 2 = P2, 3 = P3, 4 = Short P, 5 = Q1
             /// 6 = Q2, 7 = Q3, 8 = Short Q, 9 = OSQ, 10 = R, 11 = R2
             /// 12 = R3, 13 = Time Trial
@@ -51,12 +51,12 @@ namespace F122::Network {
             /// Rain percentage (0-100)
             uint8 m_rainPercentage;
 
-            friend std::ostream &operator<<(std::ostream &os, const WeatherForecastSample &forecastSample);
+            friend std::ostream& operator<<(std::ostream& os, const WeatherForecastSample& forecastSample);
         };
 
     public:
         explicit PacketSessionData(const std::array<std::uint8_t, 632>& bytes);
-        
+
         PacketHeader m_header;
         /// Weather - 0 = clear, 1 = light cloud, 2 = overcast, 3 = light rain, 4 = heavy rain, 5 = storm
         uint8 m_weather;
@@ -148,14 +148,14 @@ namespace F122::Network {
         /// 0 = None, 2 = Very Short, 3 = Short, 4 = Medium, 5 = Medium Long, 6 = Long, 7 = Full
         uint8 m_sessionLength;
 
-        friend std::ostream &operator<<(std::ostream &os, const PacketSessionData &data);
+        friend std::ostream& operator<<(std::ostream& os, const PacketSessionData& data);
     };
 
-    std::ostream &operator<<(std::ostream &os, const PacketSessionData &data);
+    std::ostream& operator<<(std::ostream& os, const PacketSessionData& data);
 
-    std::ostream &operator<<(std::ostream &os, const PacketSessionData::MarshalZone &zone);
+    std::ostream& operator<<(std::ostream& os, const PacketSessionData::MarshalZone& zone);
 
-    std::ostream &operator<<(std::ostream &os, const PacketSessionData::WeatherForecastSample &forecastSample);
+    std::ostream& operator<<(std::ostream& os, const PacketSessionData::WeatherForecastSample& forecastSample);
 }
 
 #pragma pack()

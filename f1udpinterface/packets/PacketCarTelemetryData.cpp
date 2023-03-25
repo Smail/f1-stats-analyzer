@@ -53,7 +53,7 @@ namespace F122::Network {
         return os;
     }
 
-    std::ostream &operator<<(std::ostream &os, const PacketCarTelemetryData::Data &data) {
+    std::ostream& operator<<(std::ostream& os, const PacketCarTelemetryData::Data& data) {
         os << "m_speed: " << std::to_string(data.m_speed) << "\n"
            << "m_throttle: " << std::to_string(data.m_throttle) << "\n"
            << "m_steer: " << std::to_string(data.m_steer) << "\n"

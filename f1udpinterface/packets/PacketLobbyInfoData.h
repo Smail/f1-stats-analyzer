@@ -32,7 +32,7 @@ namespace F122::Network {
             /// 0 = not ready, 1 = ready, 2 = spectating
             uint8 m_readyStatus;
 
-            friend std::ostream &operator<<(std::ostream &os, const Data &data);
+            friend std::ostream& operator<<(std::ostream& os, const Data& data);
         };
 
     public:
@@ -44,12 +44,12 @@ namespace F122::Network {
         /// Data of each player
         std::array<Data, 22> m_lobbyPlayers;
 
-        friend std::ostream &operator<<(std::ostream &os, const PacketLobbyInfoData &data);
+        friend std::ostream& operator<<(std::ostream& os, const PacketLobbyInfoData& data);
     };
 
-    std::ostream &operator<<(std::ostream &os, const PacketLobbyInfoData &data);
+    std::ostream& operator<<(std::ostream& os, const PacketLobbyInfoData& data);
 
-    std::ostream &operator<<(std::ostream &os, const PacketLobbyInfoData::Data &data);
+    std::ostream& operator<<(std::ostream& os, const PacketLobbyInfoData::Data& data);
 }
 
 #pragma pack()

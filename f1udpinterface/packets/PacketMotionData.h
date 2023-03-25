@@ -20,7 +20,7 @@ namespace F122::Network {
             Data() = default;
 
             explicit Data(const std::array<std::uint8_t, 60>& bytes);
-            
+
             /// World space X position
             float m_worldPositionX;
             /// World space Y position
@@ -58,12 +58,12 @@ namespace F122::Network {
             /// Roll angle in radians
             float m_roll;
 
-            friend std::ostream &operator<<(std::ostream &os, const Data &data);
+            friend std::ostream& operator<<(std::ostream& os, const Data& data);
         };
 
     public:
         explicit PacketMotionData(const std::array<std::uint8_t, 1464>& bytes);
-        
+
         PacketHeader m_header;
         /// Data for all cars on track
         /// Extra player car ONLY data
@@ -99,12 +99,12 @@ namespace F122::Network {
         /// Current front wheels angle in radians
         float m_frontWheelsAngle;
 
-        friend std::ostream &operator<<(std::ostream &os, const PacketMotionData &data);
+        friend std::ostream& operator<<(std::ostream& os, const PacketMotionData& data);
     };
-    
-    std::ostream &operator<<(std::ostream &os, const PacketMotionData &data);
 
-    std::ostream &operator<<(std::ostream &os, const PacketMotionData::Data &data);
+    std::ostream& operator<<(std::ostream& os, const PacketMotionData& data);
+
+    std::ostream& operator<<(std::ostream& os, const PacketMotionData::Data& data);
 }
 
 #pragma pack()

@@ -7,7 +7,7 @@
 #pragma pack(1)
 
 namespace F122::Network {
-    
+
     /// This is a list of participants in the race. If the vehicle is controlled by AI, then the name will be the driver
     /// name. If this is a multiplayer game, the names will be the Steam Id on PC, or the LAN name if appropriate.
     /// N.B. on Xbox One, the names will always be the driver name, on PS4 the name will be the LAN name if
@@ -22,7 +22,7 @@ namespace F122::Network {
             Data() = default;
 
             explicit Data(const std::array<std::uint8_t, 56>& bytes);
-            
+
             /// Whether the vehicle is AI (1) or Human (0) controlled
             uint8 m_aiControlled;
             /// Driver id - see appendix, 255 if network human
@@ -47,7 +47,7 @@ namespace F122::Network {
 
             [[nodiscard]] bool is_ai_controlled() const;
 
-            friend std::ostream &operator<<(std::ostream &os, const Data &data);
+            friend std::ostream& operator<<(std::ostream& os, const Data& data);
         };
 
     private:
@@ -60,12 +60,12 @@ namespace F122::Network {
         uint8 m_numActiveCars;
         std::array<Data, 22> m_participants;
 
-        friend std::ostream &operator<<(std::ostream &os, const PacketParticipantsData &data);
+        friend std::ostream& operator<<(std::ostream& os, const PacketParticipantsData& data);
     };
 
-    std::ostream &operator<<(std::ostream &os, const PacketParticipantsData &data);
+    std::ostream& operator<<(std::ostream& os, const PacketParticipantsData& data);
 
-    std::ostream &operator<<(std::ostream &os, const PacketParticipantsData::Data &data);
+    std::ostream& operator<<(std::ostream& os, const PacketParticipantsData::Data& data);
 }
 
 #pragma pack()

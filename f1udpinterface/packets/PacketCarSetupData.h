@@ -63,21 +63,21 @@ namespace F122::Network {
             /// Fuel load
             float m_fuelLoad;
 
-            friend std::ostream &operator<<(std::ostream &os, const Data &data);
+            friend std::ostream& operator<<(std::ostream& os, const Data& data);
         };
 
     public:
         explicit PacketCarSetupData(const std::array<std::uint8_t, 1102>& bytes);
-        
+
         PacketHeader m_header;
         std::array<Data, 22> m_carSetups;
 
-        friend std::ostream &operator<<(std::ostream &os, const PacketCarSetupData &data);
+        friend std::ostream& operator<<(std::ostream& os, const PacketCarSetupData& data);
     };
 
-    std::ostream &operator<<(std::ostream &os, const PacketCarSetupData::Data &data);
+    std::ostream& operator<<(std::ostream& os, const PacketCarSetupData::Data& data);
 
-    std::ostream &operator<<(std::ostream &os, const PacketCarSetupData &data);
+    std::ostream& operator<<(std::ostream& os, const PacketCarSetupData& data);
 }
 
 #pragma pack()

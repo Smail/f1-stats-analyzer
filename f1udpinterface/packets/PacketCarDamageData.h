@@ -61,7 +61,7 @@ namespace F122::Network {
             /// Engine seized, 0 = OK, 1 = fault
             uint8 m_engineSeized;
 
-            friend std::ostream &operator<<(std::ostream &os, const Data &data);
+            friend std::ostream& operator<<(std::ostream& os, const Data& data);
         };
 
     public:
@@ -70,12 +70,12 @@ namespace F122::Network {
         PacketHeader m_header;
         std::array<Data, 22> m_carDamageData;
 
-        friend std::ostream &operator<<(std::ostream &os, const PacketCarDamageData &data);
+        friend std::ostream& operator<<(std::ostream& os, const PacketCarDamageData& data);
     };
 
-    std::ostream &operator<<(std::ostream &os, const PacketCarDamageData &data);
+    std::ostream& operator<<(std::ostream& os, const PacketCarDamageData& data);
 
-    std::ostream &operator<<(std::ostream &os, const PacketCarDamageData::Data &data);
+    std::ostream& operator<<(std::ostream& os, const PacketCarDamageData::Data& data);
 }
 
 #pragma pack()

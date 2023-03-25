@@ -17,7 +17,7 @@ namespace F122::Network {
             Data() = default;
 
             explicit Data(const std::array<std::uint8_t, 60>& bytes);
-            
+
             /// Speed of car in kilometres per hour
             uint16 m_speed;
             /// Amount of throttle applied (0.0 to 1.0)
@@ -56,7 +56,7 @@ namespace F122::Network {
                 return m_drs == 1;
             }
 
-            friend std::ostream &operator<<(std::ostream &os, const Data &data);
+            friend std::ostream& operator<<(std::ostream& os, const Data& data);
         };
 
     public:
@@ -74,12 +74,12 @@ namespace F122::Network {
         /// Suggested gear for the player (1-8) - 0 if no gear suggested
         int8 m_suggestedGear;
 
-        friend std::ostream &operator<<(std::ostream &os, const PacketCarTelemetryData &data);
+        friend std::ostream& operator<<(std::ostream& os, const PacketCarTelemetryData& data);
     };
 
-    std::ostream &operator<<(std::ostream &os, const PacketCarTelemetryData::Data &data);
+    std::ostream& operator<<(std::ostream& os, const PacketCarTelemetryData::Data& data);
 
-    std::ostream &operator<<(std::ostream &os, const PacketCarTelemetryData &data);
+    std::ostream& operator<<(std::ostream& os, const PacketCarTelemetryData& data);
 }
 
 #pragma pack()

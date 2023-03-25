@@ -68,7 +68,7 @@ namespace F122::Network {
             /// Whether the car should serve a penalty at this stop
             uint8 m_pitStopShouldServePen;
 
-            friend std::ostream &operator<<(std::ostream &os, const Data &data);
+            friend std::ostream& operator<<(std::ostream& os, const Data& data);
         };
 
     public:
@@ -82,12 +82,12 @@ namespace F122::Network {
         /// Index of Rival car in time trial (255 if invalid)
         uint8 m_timeTrialRivalCarIdx;
 
-        friend std::ostream &operator<<(std::ostream &os, const PacketLapData &data);
+        friend std::ostream& operator<<(std::ostream& os, const PacketLapData& data);
     };
 
-    std::ostream &operator<<(std::ostream &os, const PacketLapData &data);
+    std::ostream& operator<<(std::ostream& os, const PacketLapData& data);
 
-    std::ostream &operator<<(std::ostream &os, const PacketLapData::Data &data);
+    std::ostream& operator<<(std::ostream& os, const PacketLapData::Data& data);
 }
 
 #pragma pack()
