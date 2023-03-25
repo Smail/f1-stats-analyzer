@@ -1,3 +1,4 @@
+#include <stdexcept>
 #include "PenaltyTypeId.h"
 
 namespace F122 {
@@ -39,6 +40,10 @@ namespace F122 {
                 return "Retired";
             case PenaltyTypeId::BLACK_FLAG_TIMER:
                 return "Black flag timer";
+            default:
+                throw std::invalid_argument("Unknown enum value: " + std::to_string(
+                        static_cast<std::underlying_type<PenaltyTypeId>::type>(id)
+                ));
         }
     }
 }

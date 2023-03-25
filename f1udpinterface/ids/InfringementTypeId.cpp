@@ -1,3 +1,4 @@
+#include <stdexcept>
 #include "InfringementTypeId.h"
 
 namespace F122 {
@@ -113,6 +114,10 @@ namespace F122 {
                 return "Mandatory pitstop";
             case InfringementTypeId::ATTRIBUTE_ASSIGNED:
                 return "Attribute assigned";
+            default:
+                throw std::invalid_argument("Unknown enum value: " + std::to_string(
+                        static_cast<std::underlying_type<InfringementTypeId>::type>(id)
+                ));
         }
     }
 }
