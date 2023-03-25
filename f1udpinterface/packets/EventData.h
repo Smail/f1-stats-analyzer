@@ -73,50 +73,50 @@ namespace F122::Network::Packets {
             } FastestLap;
 
             struct {
-                std::uint8_t vehicleIdx;
                 /// Vehicle index of car retiring
+                std::uint8_t vehicleIdx;
             } Retirement;
 
             struct {
-                std::uint8_t vehicleIdx;
                 /// Vehicle index of team mate
+                std::uint8_t vehicleIdx;
             } TeamMateInPits;
 
             struct {
-                std::uint8_t vehicleIdx;
                 /// Vehicle index of the race winner
+                std::uint8_t vehicleIdx;
             } RaceWinner;
 
             struct {
-                std::uint8_t penaltyType;
                 /// Penalty type – see Appendices
-                std::uint8_t infringementType;
+                std::uint8_t penaltyType;
                 /// Infringement type – see Appendices
-                std::uint8_t vehicleIdx;
+                std::uint8_t infringementType;
                 /// Vehicle index of the car the penalty is applied to
-                std::uint8_t otherVehicleIdx;
+                std::uint8_t vehicleIdx;
                 /// Vehicle index of the other car involved
-                std::uint8_t time;
+                std::uint8_t otherVehicleIdx;
                 /// Time gained, or time spent doing action in seconds
-                std::uint8_t lapNum;
+                std::uint8_t time;
                 /// Lap the penalty occurred on
-                std::uint8_t placesGained;
+                std::uint8_t lapNum;
                 /// Number of places gained by this
+                std::uint8_t placesGained;
             } Penalty;
 
             struct {
-                std::uint8_t vehicleIdx;
                 /// Vehicle index of the vehicle triggering speed trap
-                float speed;
+                std::uint8_t vehicleIdx;
                 /// Top speed achieved in kilometres per hour
-                std::uint8_t isOverallFastestInSession;
+                float speed;
                 /// Overall fastest speed in session = 1, otherwise 0
-                std::uint8_t isDriverFastestInSession;
+                std::uint8_t isOverallFastestInSession;
                 /// Fastest speed for driver in session = 1, otherwise 0
-                std::uint8_t fastestVehicleIdxInSession;
+                std::uint8_t isDriverFastestInSession;
                 /// Vehicle index of the vehicle that is the fastest in this session
-                float fastestSpeedInSession;
+                std::uint8_t fastestVehicleIdxInSession;
                 /// Speed of the vehicle that is the fastest in this session
+                float fastestSpeedInSession;
             } SpeedTrap;
 
             struct {
@@ -142,7 +142,7 @@ namespace F122::Network::Packets {
             } Flashback;
 
             struct {
-                /// Bit flags specifying which buttons are being pressed currently - see appendices
+                /// Bit flags specifying which buttons are being pressed currently - @see ButtonFlags
                 std::uint32_t m_buttonStatus;
             } Buttons;
 
