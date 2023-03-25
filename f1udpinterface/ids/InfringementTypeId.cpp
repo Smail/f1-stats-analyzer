@@ -120,4 +120,8 @@ namespace F122 {
                 ));
         }
     }
+
+    std::ostream& operator<<(std::ostream& os, const InfringementTypeId& id) {
+        return (os << to_string(id));
+    }
 }

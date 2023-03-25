@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <ostream>
 
 namespace F122 {
     enum class TrackId {
@@ -38,4 +39,6 @@ namespace F122 {
     };
 
     std::string to_string(TrackId id);
+
+    std::ostream& operator<<(std::ostream& os, const TrackId& id);
 }

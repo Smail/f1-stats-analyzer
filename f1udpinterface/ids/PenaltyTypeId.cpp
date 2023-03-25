@@ -46,4 +46,8 @@ namespace F122 {
                 ));
         }
     }
+
+    std::ostream& operator<<(std::ostream& os, const PenaltyTypeId& id) {
+        return (os << to_string(id));
+    }
 }

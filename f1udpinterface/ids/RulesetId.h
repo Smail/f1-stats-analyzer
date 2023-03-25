@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <ostream>
 
 namespace F122 {
     enum class RulesetId {
@@ -16,4 +17,6 @@ namespace F122 {
     };
 
     std::string to_string(RulesetId id);
+
+    std::ostream& operator<<(std::ostream& os, const RulesetId& id);
 }

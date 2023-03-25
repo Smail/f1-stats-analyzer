@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <ostream>
 
 namespace F122 {
     enum class SurfaceTypeId {
@@ -21,4 +22,6 @@ namespace F122 {
     };
 
     std::string to_string(SurfaceTypeId id);
+
+    std::ostream& operator<<(std::ostream& os, const SurfaceTypeId& id);
 }

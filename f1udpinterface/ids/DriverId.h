@@ -134,5 +134,5 @@ namespace F122 {
 
     std::string to_string(DriverId id);
 
-    std::ostream& operator<<(std::ostream& os, DriverId obj);
+    std::ostream& operator<<(std::ostream& os, const DriverId& id);
 }

@@ -60,4 +60,8 @@ namespace F122 {
             // @formatter:on
         }
     }
+
+    std::ostream& operator<<(std::ostream& os, const TeamId& id) {
+        return (os << to_string(id));
+    }
 }

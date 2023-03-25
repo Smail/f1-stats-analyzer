@@ -136,7 +136,7 @@ namespace F122 {
         }
     }
 
-    std::ostream& operator<<(std::ostream& os, DriverId obj) {
-        return (os << to_string(obj));
+    std::ostream& operator<<(std::ostream& os, const DriverId& id) {
+        return (os << to_string(id));
     }
 }

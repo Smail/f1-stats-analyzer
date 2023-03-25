@@ -25,4 +25,8 @@ namespace F122 {
             // @formatter:on
         }
     }
+
+    std::ostream& operator<<(std::ostream& os, const GameModeId& id) {
+        return (os << to_string(id));
+    }
 }

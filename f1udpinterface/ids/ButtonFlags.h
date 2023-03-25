@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <string>
 #include <stdexcept>
+#include <ostream>
 
 namespace F122 {
     enum class ButtonFlags : std::uint32_t {
@@ -43,4 +44,6 @@ namespace F122 {
     };
 
     std::string to_string(ButtonFlags value);
+
+    std::ostream& operator<<(std::ostream& os, const ButtonFlags& buttonFlag);
 }
