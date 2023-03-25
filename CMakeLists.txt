@@ -30,7 +30,12 @@ set(FILES f1udpinterface/packets/PacketHeader.h f1udpinterface/packets/SessionDa
         f1udpinterface/packets/src/FinalClassificationData.cpp f1udpinterface/packets/src/LobbyInfoData.cpp
         f1udpinterface/packets/src/MotionData.cpp f1udpinterface/packets/src/ParticipantsData.cpp
         f1udpinterface/packets/src/SessionData.cpp f1udpinterface/packets/src/LapData.cpp
-        f1udpinterface/packets/src/CarStatusData.cpp f1udpinterface/ids/src/DriverId.cpp f1udpinterface/ids/src/ButtonFlags.cpp f1udpinterface/ids/src/GameModeId.cpp f1udpinterface/ids/src/InfringementTypeId.cpp f1udpinterface/ids/src/NationalityId.cpp f1udpinterface/ids/src/PenaltyTypeId.cpp f1udpinterface/ids/src/RulesetId.cpp f1udpinterface/ids/src/SurfaceTypeId.cpp f1udpinterface/ids/src/TeamId.cpp f1udpinterface/ids/src/TrackId.cpp f1udpinterface/packets/Packet.h f1udpinterface/packets/src/Packet.cpp)
+        f1udpinterface/packets/src/CarStatusData.cpp f1udpinterface/ids/src/DriverId.cpp
+        f1udpinterface/ids/src/ButtonFlags.cpp f1udpinterface/ids/src/GameModeId.cpp
+        f1udpinterface/ids/src/InfringementTypeId.cpp f1udpinterface/ids/src/NationalityId.cpp
+        f1udpinterface/ids/src/PenaltyTypeId.cpp f1udpinterface/ids/src/RulesetId.cpp
+        f1udpinterface/ids/src/SurfaceTypeId.cpp f1udpinterface/ids/src/TeamId.cpp f1udpinterface/ids/src/TrackId.cpp
+        f1udpinterface/packets/Packet.h f1udpinterface/packets/src/Packet.cpp)
 
 add_executable(${PROJECT_NAME} main.cpp ${FILES} f1udpinterface/packets/src/SessionHistoryData.cpp)
 
