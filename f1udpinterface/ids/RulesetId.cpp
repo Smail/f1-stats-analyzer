@@ -17,7 +17,7 @@ namespace F122 {
             default: throw std::invalid_argument("Unknown enum value: " + std::to_string(
                                                             static_cast<std::underlying_type<RulesetId>::type>(id)
                                                 ));
-            // @formatter: on
+            // @formatter:on
         }
     }
 }
