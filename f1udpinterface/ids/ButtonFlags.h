@@ -1,9 +1,10 @@
 #pragma once
 
+#include <cstdint>
 #include <string>
 
 namespace F122 {
-    enum class ButtonFlags : unsigned {
+    enum class ButtonFlags : std::uint32_t {
         CROSS_OR_A = 0x00000001,
         TRIANGLE_OR_Y = 0x00000002,
         CIRCLE_OR_B = 0x00000004,
