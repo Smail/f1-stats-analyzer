@@ -1,12 +1,56 @@
 #include "../EventData.h"
 #include "../../../util.h"
+#include "../../ids/ButtonFlags.h"
 
 namespace F122::Network::Packets {
     EventData::EventData(const std::array<std::uint8_t, SIZE>& bytes) :
             Packet(bytes),
             m_header{{util::copy_resize<std::uint8_t, SIZE, PacketHeader::SIZE>(bytes)}},
-            m_eventStringCode{util::copy_resize<std::uint8_t, SIZE, 4, PacketHeader::SIZE>(bytes)} {
-        // TODO init m_eventDetails: Check for string code to get size of struct
+            m_eventStringCode{util::copy_resize<std::uint8_t, SIZE, 4, PacketHeader::SIZE>(bytes)},
+            m_eventDetails{} {
+
+        constexpr size_t expectedSizeOfEventDetailsSegment = 12;
+        constexpr size_t offset = PacketHeader::SIZE + 4 * sizeof(std::uint8_t);
+        static_assert(SIZE - offset == expectedSizeOfEventDetailsSegment, "Invalid size");
+        const auto code = eventCode();
+
+        if (code == EventStringCodes::FASTEST_LAP) {
+            m_eventDetails.FastestLap.vehicleIdx = bytes[offset];
+            m_eventDetails.FastestLap.vehicleIdx = bytes[offset + 1];
+        } else if (code == EventStringCodes::RETIREMENT || code == EventStringCodes::TEAM_MATE_IN_PITS ||
+                   code == EventStringCodes::RACE_WINNER || code == EventStringCodes::START_LIGHTS ||
+                   code == EventStringCodes::DRIVE_THROUGH_SERVED || code == EventStringCodes::STOP_GO_SERVED) {
+            // All cases have the same struct layout, specifically a struct, that contains only one byte,
+            // so we'll merge them all into one case.
+            m_eventDetails.Retirement.vehicleIdx = bytes[offset];
+        } else if (code == EventStringCodes::PENALTY_ISSUED) {
+            m_eventDetails.Penalty.penaltyType = bytes[offset];
+            m_eventDetails.Penalty.infringementType = bytes[offset + 1];
+            m_eventDetails.Penalty.vehicleIdx = bytes[offset + 2];
+            m_eventDetails.Penalty.otherVehicleIdx = bytes[offset + 3];
+            m_eventDetails.Penalty.time = bytes[offset + 4];
+            m_eventDetails.Penalty.lapNum = bytes[offset + 5];
+            m_eventDetails.Penalty.placesGained = bytes[offset + 6];
+        } else if (code == EventStringCodes::SPEED_TRAP_TRIGGERED) {
+            m_eventDetails.SpeedTrap.vehicleIdx = bytes[offset];
+            m_eventDetails.SpeedTrap.speed = util::convert<float>(
+                    {bytes[offset + 1], bytes[offset + 2], bytes[offset + 3], bytes[offset + 4]});
+            m_eventDetails.SpeedTrap.isOverallFastestInSession = bytes[offset + 5];
+            m_eventDetails.SpeedTrap.isDriverFastestInSession = bytes[offset + 6];
+            m_eventDetails.SpeedTrap.fastestVehicleIdxInSession = bytes[offset + 7];
+            m_eventDetails.SpeedTrap.fastestSpeedInSession = util::convert<float>(
+                    {bytes[offset + 8], bytes[offset + 9], bytes[offset + 10], bytes[offset + 11]});
+        } else if (code == EventStringCodes::FLASHBACK) {
+            m_eventDetails.Flashback.flashbackFrameIdentifier = util::convert<std::uint32_t>(
+                    {bytes[offset], bytes[offset + 1], bytes[offset + 2], bytes[offset + 3]});
+            m_eventDetails.Flashback.flashbackSessionTime = util::convert<float>(
+                    {bytes[offset + 4], bytes[offset + 5], bytes[offset + 6], bytes[offset + 7]});
+        } else if (code == EventStringCodes::BUTTON_STATUS) {
+            m_eventDetails.Buttons.m_buttonStatus = util::convert<std::uint32_t>(
+                    {bytes[offset], bytes[offset + 1], bytes[offset + 2], bytes[offset + 3]});
+        } else {
+            // Other cases don't have data attached to them
+        }
     }
 
     EventData::~EventData() = default;
@@ -14,41 +58,62 @@ namespace F122::Network::Packets {
     std::string EventData::EventDataDetails::to_string(EventData::EventStringCodes type) const {
         std::stringstream ss;
 
-        if (type == EventStringCodes::FASTEST_LAP) {
-            ss << "vehicleIdx: " << std::to_string(FastestLap.vehicleIdx) << "\n";
-            ss << "lapTime: " << std::to_string(FastestLap.lapTime);
-        } else if (type == EventStringCodes::RETIREMENT) {
-            ss << "vehicleIdx: " << std::to_string(Retirement.vehicleIdx);
-        } else if (type == EventStringCodes::TEAM_MATE_IN_PITS) {
-            ss << "vehicleIdx: " << std::to_string(TeamMateInPits.vehicleIdx);
-        } else if (type == EventStringCodes::RACE_WINNER) {
-            ss << "vehicleIdx: " << std::to_string(RaceWinner.vehicleIdx);
-        } else if (type == EventStringCodes::PENALTY_ISSUED) {
-            ss << "penaltyType: " << std::to_string(Penalty.penaltyType) << "\n";
-            ss << "infringementType: " << std::to_string(Penalty.infringementType) << "\n";
-            ss << "vehicleIdx: " << std::to_string(Penalty.vehicleIdx) << "\n";
-            ss << "otherVehicleIdx: " << std::to_string(Penalty.otherVehicleIdx) << "\n";
-            ss << "time: " << std::to_string(Penalty.time) << "\n";
-            ss << "lapNum: " << std::to_string(Penalty.lapNum) << "\n";
-            ss << "placesGained: " << std::to_string(Penalty.placesGained);
-        } else if (type == EventStringCodes::SPEED_TRAP_TRIGGERED) {
-            ss << "vehicleIdx: " << std::to_string(SpeedTrap.vehicleIdx) << "\n";
-            ss << "speed: " << std::to_string(SpeedTrap.speed) << "\n";
-            ss << "isOverallFastestInSession: " << std::to_string(SpeedTrap.isOverallFastestInSession) << "\n";
-            ss << "isDriverFastestInSession: " << std::to_string(SpeedTrap.isDriverFastestInSession) << "\n";
-            ss << "fastestSpeedInSession: " << std::to_string(SpeedTrap.fastestSpeedInSession) << "\n";
-            ss << "fastestVehicleIdxInSession: " << std::to_string(SpeedTrap.fastestVehicleIdxInSession);
-        } else if (type == EventStringCodes::START_LIGHTS) {
-            ss << "numLights: " << std::to_string(StartLights.numLights);
-        } else if (type == EventStringCodes::DRIVE_THROUGH_SERVED) {
-            ss << "vehicleIdx: " << std::to_string(DriveThroughPenaltyServed.vehicleIdx);
-        } else if (type == EventStringCodes::STOP_GO_SERVED) {
-            ss << "vehicleIdx: " << std::to_string(StopGoPenaltyServed.vehicleIdx);
-        } else if (type == EventStringCodes::FLASHBACK) {
-            ss << "flashbackFrameIdentifier: " << std::to_string(Flashback.flashbackFrameIdentifier) << "\n";
-            ss << "flashbackSessionTime: " << std::to_string(Flashback.flashbackSessionTime);
-        } else if (type == EventStringCodes::BUTTON_STATUS) {
-            ss << "m_buttonStatus: " << std::to_string(Buttons.m_buttonStatus);
+        if (type == EventStringCodes::BUTTON_STATUS) {
+            std::uint32_t mask = Buttons.m_buttonStatus;
+            ss << "m_buttonStatus: " << std::to_string(mask);
+
+            // TODO create proper iterator for type ButtonFlags
+            ButtonFlagsIterator iter{};
+
+            while (iter.hasNext()) {
+                ButtonFlags flags = iter.next();
+                if ((mask & static_cast<std::uint32_t>(flags)) == static_cast<std::uint32_t>(flags)) {
+                    ss << std::endl << flags;
+                }
+            }
+
+            return ss.str();
+        }
+
+        switch (type) {
+            case EventStringCodes::FASTEST_LAP:
+                ss << "vehicleIdx: " << std::to_string(FastestLap.vehicleIdx) << std::endl;
+                ss << "lapTime: " << std::to_string(FastestLap.lapTime);
+                break;
+            case EventStringCodes::RETIREMENT:
+            case EventStringCodes::TEAM_MATE_IN_PITS:
+            case EventStringCodes::RACE_WINNER:
+            case EventStringCodes::DRIVE_THROUGH_SERVED:
+            case EventStringCodes::STOP_GO_SERVED:
+                ss << "vehicleIdx: " << std::to_string(Retirement.vehicleIdx);
+                break;
+            case EventStringCodes::PENALTY_ISSUED:
+                ss << "penaltyType: " << std::to_string(Penalty.penaltyType) << "\n";
+                ss << "infringementType: " << std::to_string(Penalty.infringementType) << "\n";
+                ss << "vehicleIdx: " << std::to_string(Penalty.vehicleIdx) << "\n";
+                ss << "otherVehicleIdx: " << std::to_string(Penalty.otherVehicleIdx) << "\n";
+                ss << "time: " << std::to_string(Penalty.time) << "\n";
+                ss << "lapNum: " << std::to_string(Penalty.lapNum) << "\n";
+                ss << "placesGained: " << std::to_string(Penalty.placesGained);
+                break;
+            case EventStringCodes::SPEED_TRAP_TRIGGERED:
+                ss << "vehicleIdx: " << std::to_string(SpeedTrap.vehicleIdx) << "\n";
+                ss << "speed: " << std::to_string(SpeedTrap.speed) << "\n";
+                ss << "isOverallFastestInSession: " << std::to_string(SpeedTrap.isOverallFastestInSession) << "\n";
+                ss << "isDriverFastestInSession: " << std::to_string(SpeedTrap.isDriverFastestInSession) << "\n";
+                ss << "fastestSpeedInSession: " << std::to_string(SpeedTrap.fastestSpeedInSession) << "\n";
+                ss << "fastestVehicleIdxInSession: " << std::to_string(SpeedTrap.fastestVehicleIdxInSession);
+                break;
+            case EventStringCodes::START_LIGHTS:
+                ss << "numLights: " << std::to_string(StartLights.numLights);
+                break;
+            case EventStringCodes::FLASHBACK:
+                ss << "flashbackFrameIdentifier: " << std::to_string(Flashback.flashbackFrameIdentifier) << "\n";
+                ss << "flashbackSessionTime: " << std::to_string(Flashback.flashbackSessionTime);
+                break;
+            default:
+                ss << "This event never contains data." << std::endl;
+                break;
         }
 
         return ss.str();
@@ -91,8 +156,23 @@ namespace F122::Network::Packets {
             case static_cast<std::uint64_t>(EventStringCodes::BUTTON_STATUS):
                 return EventStringCodes::BUTTON_STATUS;
             default:
-                throw std::invalid_argument("Can't match argument string to an enum case.");
+                throw std::invalid_argument("Can't match argument string to an enum value.");
         }
+    }
+
+    EventData::EventStringCodes EventData::eventCode() const {
+        char cs[5] = {
+                static_cast<char>(m_eventStringCode[0]), static_cast<char>(m_eventStringCode[1]),
+                static_cast<char>(m_eventStringCode[2]), static_cast<char>(m_eventStringCode[3]), '\0'
+        };
+
+        return EventData::from(std::string{cs});
+    }
+
+    std::string EventData::eventString() const {
+        // Double convert to make sure the code actually exists (eventCode() will itself create a string and
+        // convert it then to the appropriate enum value, which we here then use to convert it back to a string again).
+        return EventData::to_string(eventCode());
     }
 
     std::string EventData::to_string(EventData::EventStringCodes enumCase) {
@@ -105,17 +185,9 @@ namespace F122::Network::Packets {
     }
 
     std::ostream& operator<<(std::ostream& os, const EventData& data) {
-        char cs[5] = {
-                static_cast<char>(data.m_eventStringCode[0]), static_cast<char>(data.m_eventStringCode[1]),
-                static_cast<char>(data.m_eventStringCode[2]), static_cast<char>(data.m_eventStringCode[3]), '\0'
-        };
-
-        EventData::EventStringCodes eventCode = EventData::from(std::string{cs});
-        std::string eventCodeString = EventData::to_string(eventCode);
-
         os << "m_header: " << "\n" << data.m_header << "\n"
-           << "m_eventStringCode: " << eventCodeString << "\n"
-           << "m_eventDetails: " << "\n" << data.m_eventDetails.to_string(eventCode) << "\n";
+           << "m_eventStringCode: " << data.eventString() << "\n"
+           << "m_eventDetails: " << "\n" << data.m_eventDetails.to_string(data.eventCode()) << "\n";
 
         return os;
     }

@@ -156,6 +156,10 @@ namespace F122::Network::Packets {
 
         ~EventData() override;
 
+        [[nodiscard]] EventStringCodes eventCode() const;
+
+        [[nodiscard]] std::string eventString() const;
+
         friend std::ostream& operator<<(std::ostream& os, const EventData& data);
 
         PacketHeader m_header;
@@ -163,6 +167,7 @@ namespace F122::Network::Packets {
         std::array<std::uint8_t, 4> m_eventStringCode;
         /// Event details - should be interpreted differently for each type
         EventDataDetails m_eventDetails;
+
         // TODO
 //        static_assert(PacketHeader::SIZE + sizeof(m_suspensionPosition) + sizeof(m_suspensionVelocity) +
 //                      sizeof(m_suspensionAcceleration) + sizeof(m_wheelSpeed) + sizeof(m_wheelSlip) +

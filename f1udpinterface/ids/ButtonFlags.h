@@ -43,6 +43,26 @@ namespace F122 {
         // @formatter:on
     };
 
+    class ButtonFlagsIterator {
+    public:
+        ButtonFlagsIterator() = default;
+
+        [[nodiscard]] bool hasNext() const {
+            return position <= static_cast<size_t>(ButtonFlags::UDP_ACTION_12);
+        }
+
+        ButtonFlags next() {
+            auto result = static_cast<ButtonFlags>(position);
+
+            position <<= 1;
+
+            return result;
+        }
+
+    private:
+        size_t position{1};
+    };
+
     std::string to_string(ButtonFlags value);
 
     std::ostream& operator<<(std::ostream& os, const ButtonFlags& buttonFlag);
