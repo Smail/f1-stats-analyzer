@@ -4,8 +4,6 @@
 #include <string>
 #include <array>
 
-#pragma pack(1)
-
 namespace F122::Network {
 
     /// This is a list of participants in the race. If the vehicle is controlled by AI, then the name will be the driver
@@ -67,5 +65,3 @@ namespace F122::Network {
 
     std::ostream& operator<<(std::ostream& os, const PacketParticipantsData::Data& data);
 }
-
-#pragma pack()

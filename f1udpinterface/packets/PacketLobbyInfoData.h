@@ -3,8 +3,6 @@
 #include <ostream>
 #include "PacketHeader.h"
 
-#pragma pack(1)
-
 namespace F122::Network {
     /// This packet details the players currently in a multiplayer lobby. It details each player’s selected car, any
     /// AI involved in the game and also the ready status of each of the participants.<br>
@@ -51,5 +49,3 @@ namespace F122::Network {
 
     std::ostream& operator<<(std::ostream& os, const PacketLobbyInfoData::Data& data);
 }
-
-#pragma pack()

@@ -2,8 +2,6 @@
 
 #include "PacketHeader.h"
 
-#pragma pack(1)
-
 namespace F122::Network {
     /// This packet details the final classification at the end of the race, and the data will match with the post
     /// race results screen. This is especially useful for multiplayer games where it is not always possible to send
@@ -69,5 +67,3 @@ namespace F122::Network {
 
     std::ostream& operator<<(std::ostream& os, const PacketFinalClassificationData::Data& data);
 }
-
-#pragma pack()

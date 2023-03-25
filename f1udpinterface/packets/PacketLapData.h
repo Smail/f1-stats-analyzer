@@ -3,8 +3,6 @@
 #include <ostream>
 #include "PacketHeader.h"
 
-#pragma pack(1)
-
 namespace F122::Network {
     /// The lap data packet gives details of all the cars in the session.<br>
     /// <br>
@@ -89,5 +87,3 @@ namespace F122::Network {
 
     std::ostream& operator<<(std::ostream& os, const PacketLapData::Data& data);
 }
-
-#pragma pack()

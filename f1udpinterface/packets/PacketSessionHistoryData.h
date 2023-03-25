@@ -4,8 +4,6 @@
 #include <array>
 #include <string>
 
-#pragma pack(1)
-
 namespace F122::Network {
     /// This packet contains lap times and tyre usage for the session.<br><br><b>This packet works slightly differently
     /// to other packets. To reduce CPU and bandwidth, each packet relates to a specific vehicle and is
@@ -84,5 +82,3 @@ namespace F122::Network {
 
     std::ostream& operator<<(std::ostream& os, const PacketSessionHistoryData::LapHistoryData& data);
 }
-
-#pragma pack()

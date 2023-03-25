@@ -2,8 +2,6 @@
 
 #include "PacketHeader.h"
 
-#pragma pack(1)
-
 namespace F122::Network {
     /// This packet details car statuses for all the cars in the race.<br>
     /// <br>
@@ -95,5 +93,3 @@ namespace F122::Network {
 
     std::ostream& operator<<(std::ostream& os, const PacketCarStatusData::Data& data);
 }
-
-#pragma pack()

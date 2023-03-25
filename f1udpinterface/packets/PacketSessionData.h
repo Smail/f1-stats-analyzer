@@ -5,8 +5,6 @@
 #include <array>
 #include "PacketHeader.h"
 
-#pragma pack(1)
-
 namespace F122::Network {
     /// The session packet includes details about the current session in progress.<br>
     /// <br>
@@ -157,5 +155,3 @@ namespace F122::Network {
 
     std::ostream& operator<<(std::ostream& os, const PacketSessionData::WeatherForecastSample& forecastSample);
 }
-
-#pragma pack()

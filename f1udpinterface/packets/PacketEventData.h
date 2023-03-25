@@ -6,8 +6,6 @@
 #include <ostream>
 #include "PacketHeader.h"
 
-#pragma pack(1)
-
 namespace F122::Network {
     constexpr std::uint64_t to_ascii_int(const std::string& str) {
         if (str.length() != 4) throw std::invalid_argument("Expected string of length 4");
@@ -163,5 +161,3 @@ namespace F122::Network {
 
     std::ostream& operator<<(std::ostream& os, const PacketEventData& data);
 }
-
-#pragma pack()

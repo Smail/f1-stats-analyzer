@@ -4,8 +4,6 @@
 #include <array>
 #include "PacketHeader.h"
 
-#pragma pack(1)
-
 namespace F122::Network {
     /// This packet details car damage parameters for all the cars in the race.<br>
     /// <br>
@@ -77,5 +75,3 @@ namespace F122::Network {
 
     std::ostream& operator<<(std::ostream& os, const PacketCarDamageData::Data& data);
 }
-
-#pragma pack()

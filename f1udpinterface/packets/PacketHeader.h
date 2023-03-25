@@ -5,8 +5,6 @@
 #include <string>
 #include <array>
 
-#pragma pack(1)
-
 namespace F122::Network {
     using int8 = std::int8_t;
     using uint8 = std::uint8_t;
@@ -78,5 +76,3 @@ namespace F122::Network {
 
     std::ostream& operator<<(std::ostream& os, const PacketHeader& header);
 }
-
-#pragma pack()

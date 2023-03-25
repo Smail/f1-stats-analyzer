@@ -2,8 +2,6 @@
 
 #include "PacketHeader.h"
 
-#pragma pack(1)
-
 namespace F122::Network {
     /// This packet details telemetry for all the cars in the race. It details various values that would be recorded
     /// on the car such as speed, throttle application, DRS etc. Note that the rev light configurations are
@@ -81,5 +79,3 @@ namespace F122::Network {
 
     std::ostream& operator<<(std::ostream& os, const PacketCarTelemetryData& data);
 }
-
-#pragma pack()

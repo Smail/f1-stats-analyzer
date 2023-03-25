@@ -4,8 +4,6 @@
 #include <array>
 #include "PacketHeader.h"
 
-#pragma pack(1)
-
 namespace F122::Network {
     /// The motion packet gives physics data for all the cars being driven. There is additional data for the car
     /// being driven with the goal of being able to drive a motion platform setup.
@@ -106,5 +104,3 @@ namespace F122::Network {
 
     std::ostream& operator<<(std::ostream& os, const PacketMotionData::Data& data);
 }
-
-#pragma pack()
