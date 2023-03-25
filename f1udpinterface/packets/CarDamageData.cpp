@@ -29,8 +29,11 @@ namespace F122::Network::Packets {
             m_engineSeized{bytes[41]} {}
 
     CarDamageData::CarDamageData(const std::array<std::uint8_t, 948>& bytes) :
+            Packet(bytes),
             m_header{{util::copy_resize<std::uint8_t, 948, 24>(bytes)}},
             m_carDamageData{util::batch_create<Data, 948, 42, 22, 24>(bytes)} {}
+
+    CarDamageData::~CarDamageData() = default;
 
     std::ostream& operator<<(std::ostream& os, const CarDamageData& data) {
         os << "m_header: " << "\n" << data.m_header << "\n"

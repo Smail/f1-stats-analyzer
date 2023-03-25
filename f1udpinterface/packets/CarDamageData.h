@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <ostream>
 #include <array>
+#include "Packet.h"
 #include "PacketHeader.h"
 
 namespace F122::Network::Packets {
@@ -11,7 +12,7 @@ namespace F122::Network::Packets {
     /// Frequency: 2 per second<br>
     /// Size: 948 bytes<br>
     /// Version: 1<br>
-    struct CarDamageData {
+    struct CarDamageData : public Packet {
         struct Data {
             Data() = default;
 
@@ -65,6 +66,8 @@ namespace F122::Network::Packets {
 
     public:
         explicit CarDamageData(const std::array<std::uint8_t, 948>& bytes);
+
+        ~CarDamageData() override;
 
         friend std::ostream& operator<<(std::ostream& os, const CarDamageData& data);
 
