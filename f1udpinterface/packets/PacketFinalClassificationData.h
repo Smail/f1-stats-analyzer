@@ -1,7 +1,6 @@
 #pragma once
 
 #include "PacketHeader.h"
-#include "../../util.h"
 
 #pragma pack(1)
 
@@ -15,6 +14,10 @@ namespace F122::Network {
     /// Version: 1<br>
     struct PacketFinalClassificationData {
         struct Data {
+            Data() = default;
+
+            explicit Data(const std::array<std::uint8_t, 45>& bytes);
+
             /// Finishing position
             uint8 m_position;
             /// Number of laps completed
@@ -46,52 +49,25 @@ namespace F122::Network {
             /// The lap number stints end on
             std::array<uint8, 8> m_tyreStintsEndLaps;
 
-            [[nodiscard]] std::string to_string() const {
-                std::stringstream ss;
+            [[nodiscard]] std::string to_string() const;
 
-                ss << "m_position: " << std::to_string(m_position) << "\n"
-                   << "m_numLaps: " << std::to_string(m_numLaps) << "\n"
-                   << "m_gridPosition: " << std::to_string(m_gridPosition) << "\n"
-                   << "m_points: " << std::to_string(m_points) << "\n"
-                   << "m_numPitStops: " << std::to_string(m_numPitStops) << "\n"
-                   << "m_resultStatus: " << std::to_string(m_resultStatus) << "\n"
-                   << "m_bestLapTimeInMS: " << std::to_string(m_bestLapTimeInMS) << "\n"
-                   << "m_totalRaceTime: " << std::to_string(m_totalRaceTime) << "\n"
-                   << "m_penaltiesTime: " << std::to_string(m_penaltiesTime) << "\n"
-                   << "m_numPenalties: " << std::to_string(m_numPenalties) << "\n"
-                   << "m_numTyreStints: " << std::to_string(m_numTyreStints) << "\n"
-                   << "m_tyreStintsActual: " << util::to_string(m_tyreStintsActual) << "\n"
-                   << "m_tyreStintsVisual: " << util::to_string(m_tyreStintsVisual) << "\n"
-                   << "m_tyreStintsEndLaps: " << util::to_string(m_tyreStintsEndLaps);
-
-                return ss.str();
-            }
-
-            friend std::ostream &operator<<(std::ostream &os, const Data &data) {
-                os << data.to_string();
-                return os;
-            }
+            friend std::ostream &operator<<(std::ostream &os, const Data &data);
         };
 
     public:
+        explicit PacketFinalClassificationData(const std::array<std::uint8_t, 1015>& bytes);
+
         PacketHeader m_header;
         /// Number of cars in the final classification
         uint8 m_numCars;
         std::array<Data, 22> m_classificationData;
 
-        friend std::ostream &operator<<(std::ostream &os, const PacketFinalClassificationData &data) {
-            os << "m_header: " << "\n" << data.m_header << "\n"
-               << "m_numCars: " << data.m_numCars << "\n"
-               << "m_classificationData: " << "\n\n";
-
-            for (size_t i = 0; i < data.m_classificationData.size(); ++i) {
-                os << "Car " << std::to_string(i) << ": " << "\n";
-                os << data.m_classificationData[i] << (i < data.m_classificationData.size() - 1 ? "\n\n" : "");
-            }
-
-            return os;
-        }
+        friend std::ostream &operator<<(std::ostream &os, const PacketFinalClassificationData &data);
     };
+
+    std::ostream &operator<<(std::ostream &os, const PacketFinalClassificationData &data);
+
+    std::ostream &operator<<(std::ostream &os, const PacketFinalClassificationData::Data &data);
 }
 
 #pragma pack()

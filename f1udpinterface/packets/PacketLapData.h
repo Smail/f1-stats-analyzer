@@ -1,3 +1,5 @@
+#pragma once
+
 #include <ostream>
 #include "PacketHeader.h"
 
@@ -11,6 +13,10 @@ namespace F122::Network {
     /// Version: 1<br>
     struct PacketLapData {
         struct Data {
+            Data() = default;
+
+            explicit Data(const std::array<std::uint8_t, 43>& bytes);
+
             /// Last lap time in milliseconds
             uint32 m_lastLapTimeInMS;
             /// Current time around the lap in milliseconds
@@ -62,37 +68,12 @@ namespace F122::Network {
             /// Whether the car should serve a penalty at this stop
             uint8 m_pitStopShouldServePen;
 
-            friend std::ostream &operator<<(std::ostream &os, const Data &data) {
-                os << "m_lastLapTimeInMS: " << std::to_string(data.m_lastLapTimeInMS) << "\n"
-                   << "m_currentLapTimeInMS: " << std::to_string(data.m_currentLapTimeInMS) << "\n"
-                   << "m_sector1TimeInMS: " << std::to_string(data.m_sector1TimeInMS) << "\n"
-                   << "m_sector2TimeInMS: " << std::to_string(data.m_sector2TimeInMS) << "\n"
-                   << "m_lapDistance: " << std::to_string(data.m_lapDistance) << "\n"
-                   << "m_totalDistance: " << std::to_string(data.m_totalDistance) << "\n"
-                   << "m_safetyCarDelta: " << std::to_string(data.m_safetyCarDelta) << "\n"
-                   << "m_carPosition: " << std::to_string(data.m_carPosition) << "\n"
-                   << "m_currentLapNum: " << std::to_string(data.m_currentLapNum) << "\n"
-                   << "m_pitStatus: " << std::to_string(data.m_pitStatus) << "\n"
-                   << "m_numPitStops: " << std::to_string(data.m_numPitStops) << "\n"
-                   << "m_sector: " << std::to_string(data.m_sector) << "\n"
-                   << "m_currentLapInvalid: " << std::to_string(data.m_currentLapInvalid) << "\n"
-                   << "m_penalties: " << std::to_string(data.m_penalties) << "\n"
-                   << "m_warnings: " << std::to_string(data.m_warnings) << "\n"
-                   << "m_numUnservedDriveThroughPens: " << std::to_string(data.m_numUnservedDriveThroughPens) << "\n"
-                   << "m_numUnservedStopGoPens: " << std::to_string(data.m_numUnservedStopGoPens) << "\n"
-                   << "m_gridPosition: " << std::to_string(data.m_gridPosition) << "\n"
-                   << "m_driverStatus: " << std::to_string(data.m_driverStatus) << "\n"
-                   << "m_resultStatus: " << std::to_string(data.m_resultStatus) << "\n"
-                   << "m_pitLaneTimerActive: " << std::to_string(data.m_pitLaneTimerActive) << "\n"
-                   << "m_pitLaneTimeInLaneInMS: " << std::to_string(data.m_pitLaneTimeInLaneInMS) << "\n"
-                   << "m_pitStopTimerInMS: " << std::to_string(data.m_pitStopTimerInMS) << "\n"
-                   << "m_pitStopShouldServePen: " << std::to_string(data.m_pitStopShouldServePen) << "\n";
-
-                return os;
-            }
+            friend std::ostream &operator<<(std::ostream &os, const Data &data);
         };
 
     public:
+        explicit PacketLapData(const std::array<std::uint8_t, 972>& bytes);
+
         PacketHeader m_header;
         /// Lap data for all cars on track
         std::array<Data, 22> m_lapData;
@@ -101,20 +82,12 @@ namespace F122::Network {
         /// Index of Rival car in time trial (255 if invalid)
         uint8 m_timeTrialRivalCarIdx;
 
-        friend std::ostream &operator<<(std::ostream &os, const PacketLapData &data) {
-            os << "m_header: " << "\n" << data.m_header << "\n"
-               << "m_timeTrialPBCarIdx: " << std::to_string(data.m_timeTrialPBCarIdx) << "\n"
-               << "m_timeTrialRivalCarIdx: " << std::to_string(data.m_timeTrialRivalCarIdx) << "\n"
-               << "m_lapData: " << "\n\n";
-
-            for (size_t i = 0; i < data.m_lapData.size(); ++i) {
-                os << "Lap " << std::to_string(i) << ": " << "\n";
-                os << data.m_lapData[i] << (i < data.m_lapData.size() - 1 ? "\n" : "");
-            }
-
-            return os;
-        }
+        friend std::ostream &operator<<(std::ostream &os, const PacketLapData &data);
     };
+
+    std::ostream &operator<<(std::ostream &os, const PacketLapData &data);
+
+    std::ostream &operator<<(std::ostream &os, const PacketLapData::Data &data);
 }
 
 #pragma pack()

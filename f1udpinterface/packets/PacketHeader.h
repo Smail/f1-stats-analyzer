@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <ostream>
 #include <string>
+#include <array>
 
 #pragma pack(1)
 
@@ -43,47 +44,11 @@ namespace F122::Network {
             SESSION_HISTORY = 11,
         };
 
-        static PacketId from(uint8 value) {
-            if (value < static_cast<uint8>(PacketId::MOTION) || value > static_cast<uint8>(PacketId::SESSION_HISTORY)) {
-                throw std::out_of_range("Value must be between [" +
-                                        std::to_string(static_cast<uint8>(PacketId::MOTION)) + ", " +
-                                        std::to_string(static_cast<uint8>(PacketId::SESSION_HISTORY)) + "]"
-                );
-            }
+        static PacketId from(uint8 value);
 
-            return static_cast<PacketId>(value);
-        }
+        explicit PacketHeader(const std::array<std::uint8_t, 24>& bytes);
 
-        static std::string to_string(PacketId id) {
-            switch (id) {
-                case PacketId::MOTION:
-                    return "Motion";
-                case PacketId::SESSION:
-                    return "Session";
-                case PacketId::LAP_DATA:
-                    return "Lap Data";
-                case PacketId::EVENT:
-                    return "Event";
-                case PacketId::PARTICIPANTS:
-                    return "Participant";
-                case PacketId::CAR_SETUPS:
-                    return "Car Setups";
-                case PacketId::CAR_TELEMETRY:
-                    return "Car Telemetry";
-                case PacketId::CAR_STATUS:
-                    return "Car Status";
-                case PacketId::FINAL_CLASSIFICATION:
-                    return "Final Classification";
-                case PacketId::LOBBY_INFO:
-                    return "Lobby Info";
-                case PacketId::CAR_DAMAGE:
-                    return "Car Damage";
-                case PacketId::SESSION_HISTORY:
-                    return "Session History";
-                default:
-                    throw std::invalid_argument("Unknown argument case");
-            }
-        }
+        static std::string to_string(PacketId id);
 
     public:
         /// 2022
@@ -108,21 +73,10 @@ namespace F122::Network {
         /// 255 if no second player
         uint8 m_secondaryPlayerCarIndex;
 
-        friend std::ostream &operator<<(std::ostream &os, const PacketHeader &header) {
-            os << "m_packetFormat: " << std::to_string(header.m_packetFormat) << "\n"
-               << "m_gameMajorVersion: " << std::to_string(header.m_gameMajorVersion) << "\n"
-               << "m_gameMinorVersion: " << std::to_string(header.m_gameMinorVersion) << "\n"
-               << "m_packetVersion: " << std::to_string(header.m_packetVersion) << "\n"
-               << "m_packetId: " << to_string(from(header.m_packetId)) << "\n"
-               << "m_sessionUID: " << std::to_string(header.m_sessionUID) << "\n"
-               << "m_sessionTime: " << std::to_string(header.m_sessionTime) << "\n"
-               << "m_frameIdentifier: " << std::to_string(header.m_frameIdentifier) << "\n"
-               << "m_playerCarIndex: " << std::to_string(header.m_playerCarIndex) << "\n"
-               << "m_secondaryPlayerCarIndex: " << std::to_string(header.m_secondaryPlayerCarIndex) << "\n";
-
-            return os;
-        }
+        friend std::ostream& operator<<(std::ostream& os, const PacketHeader& header);
     };
+
+    std::ostream& operator<<(std::ostream& os, const PacketHeader& header);
 }
 
 #pragma pack()

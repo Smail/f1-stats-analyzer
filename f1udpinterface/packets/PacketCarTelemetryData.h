@@ -1,7 +1,6 @@
 #pragma once
 
 #include "PacketHeader.h"
-#include "../../util.h"
 
 #pragma pack(1)
 
@@ -15,6 +14,10 @@ namespace F122::Network {
     /// Version: 1<br>
     struct PacketCarTelemetryData {
         struct Data {
+            Data() = default;
+
+            explicit Data(const std::array<std::uint8_t, 60>& bytes);
+            
             /// Speed of car in kilometres per hour
             uint16 m_speed;
             /// Amount of throttle applied (0.0 to 1.0)
@@ -53,29 +56,12 @@ namespace F122::Network {
                 return m_drs == 1;
             }
 
-            friend std::ostream &operator<<(std::ostream &os, const Data &data) {
-                os << "m_speed: " << std::to_string(data.m_speed) << "\n"
-                   << "m_throttle: " << std::to_string(data.m_throttle) << "\n"
-                   << "m_steer: " << std::to_string(data.m_steer) << "\n"
-                   << "m_brake: " << std::to_string(data.m_brake) << "\n"
-                   << "m_clutch: " << std::to_string(data.m_clutch) << "\n"
-                   << "m_gear: " << std::to_string(data.m_gear) << "\n"
-                   << "m_engineRPM: " << std::to_string(data.m_engineRPM) << "\n"
-                   << "m_drs: " << std::to_string(data.m_drs) << "\n"
-                   << "m_revLightsPercent: " << std::to_string(data.m_revLightsPercent) << "\n"
-                   << "m_revLightsBitValue: " << std::to_string(data.m_revLightsBitValue) << "\n"
-                   << "m_brakesTemperature: " << util::to_string(data.m_brakesTemperature) << "\n"
-                   << "m_tyresSurfaceTemperature: " << util::to_string(data.m_tyresSurfaceTemperature) << "\n"
-                   << "m_tyresInnerTemperature: " << util::to_string(data.m_tyresInnerTemperature) << "\n"
-                   << "m_engineTemperature: " << std::to_string(data.m_engineTemperature) << "\n"
-                   << "m_tyresPressure: " << util::to_string(data.m_tyresPressure) << "\n"
-                   << "m_surfaceType: " << util::to_string(data.m_surfaceType);
-
-                return os;
-            }
+            friend std::ostream &operator<<(std::ostream &os, const Data &data);
         };
 
     public:
+        explicit PacketCarTelemetryData(const std::array<std::uint8_t, 1347>& bytes);
+
         PacketHeader m_header;
         std::array<Data, 22> m_carTelemetryData;
         /// Index of MFD panel open (255 = MFD closed)
@@ -88,21 +74,12 @@ namespace F122::Network {
         /// Suggested gear for the player (1-8) - 0 if no gear suggested
         int8 m_suggestedGear;
 
-        friend std::ostream &operator<<(std::ostream &os, const PacketCarTelemetryData &data) {
-            os << "m_header: " << "\n" << data.m_header << "\n"
-               << "m_mfdPanelIndex: " << std::to_string(data.m_mfdPanelIndex) << "\n"
-               << "m_mfdPanelIndexSecondaryPlayer: " << std::to_string(data.m_mfdPanelIndexSecondaryPlayer) << "\n"
-               << "m_suggestedGear: " << std::to_string(data.m_suggestedGear) << "\n"
-               << "m_carTelemetryData: " << "\n\n";
-
-            for (size_t i = 0; i < data.m_carTelemetryData.size(); ++i) {
-                os << "Car " << std::to_string(i) << ": " << "\n";
-                os << data.m_carTelemetryData[i] << (i < data.m_carTelemetryData.size() - 1 ? "\n\n" : "");
-            }
-
-            return os;
-        }
+        friend std::ostream &operator<<(std::ostream &os, const PacketCarTelemetryData &data);
     };
+
+    std::ostream &operator<<(std::ostream &os, const PacketCarTelemetryData::Data &data);
+
+    std::ostream &operator<<(std::ostream &os, const PacketCarTelemetryData &data);
 }
 
 #pragma pack()

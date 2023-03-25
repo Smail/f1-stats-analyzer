@@ -12,6 +12,10 @@ namespace F122::Network {
     /// Version: 1<br>
     struct PacketCarStatusData {
         struct Data {
+            Data() = default;
+            
+            explicit Data(const std::array<std::uint8_t, 47>& bytes);
+            
             /// Traction control - 0 = off, 1 = medium, 2 = full
             uint8 m_tractionControl;
             /// 0 (off) - 1 (on)
@@ -73,67 +77,23 @@ namespace F122::Network {
                 return m_drsActivationDistance;
             }
 
-            [[nodiscard]] std::string ers_deploy_mode() const {
-                switch (m_ersDeployMode) {
-                    case 0:
-                        return "None";
-                    case 1:
-                        return "Medium";
-                    case 2:
-                        return "Hotlap";
-                    case 3:
-                        return "Overtake";
-                    default:
-                        throw std::runtime_error(
-                                "Invalid state: " + std::to_string(m_ersDeployMode) + " is not valid value");
-                }
-            }
+            [[nodiscard]] std::string ers_deploy_mode() const;
 
-            friend std::ostream &operator<<(std::ostream &os, const Data &data) {
-                os << "m_tractionControl: " << std::to_string(data.m_tractionControl) << "\n"
-                   << "m_antiLockBrakes: " << std::to_string(data.m_antiLockBrakes) << "\n"
-                   << "m_fuelMix: " << std::to_string(data.m_fuelMix) << "\n"
-                   << "m_frontBrakeBias: " << std::to_string(data.m_frontBrakeBias) << "\n"
-                   << "m_pitLimiterStatus: " << std::to_string(data.m_pitLimiterStatus) << "\n"
-                   << "m_fuelInTank: " << std::to_string(data.m_fuelInTank) << "\n"
-                   << "m_fuelCapacity: " << std::to_string(data.m_fuelCapacity) << "\n"
-                   << "m_fuelRemainingLaps: " << std::to_string(data.m_fuelRemainingLaps) << "\n"
-                        << "m_maxRPM: " << std::to_string(data.m_maxRPM) << "\n"
-                        << "m_idleRPM: " << std::to_string(data.m_idleRPM) << "\n"
-                        << "m_maxGears: " << std::to_string(data.m_maxGears) << "\n"
-                        << "m_drsAllowed: " << std::to_string(data.m_drsAllowed) << "\n"
-                        << "m_drsActivationDistance: " << std::to_string(data.m_drsActivationDistance) << "\n"
-                        << "m_actualTyreCompound: " << std::to_string(data.m_actualTyreCompound) << "\n"
-                        << "m_visualTyreCompound: " << std::to_string(data.m_visualTyreCompound) << "\n"
-                        << "m_tyresAgeLaps: " << std::to_string(data.m_tyresAgeLaps) << "\n"
-                        << "m_vehicleFiaFlags: " << std::to_string(data.m_vehicleFiaFlags) << "\n"
-                        << "m_ersStoreEnergy: " << std::to_string(data.m_ersStoreEnergy) << " Joules" << "\n"
-                        << "m_ersDeployMode: " << data.ers_deploy_mode() << "\n"
-                   << "m_ersHarvestedThisLapMGUK: " << std::to_string(data.m_ersHarvestedThisLapMGUK) << "\n"
-                   << "m_ersHarvestedThisLapMGUH: " << std::to_string(data.m_ersHarvestedThisLapMGUH) << "\n"
-                   << "m_ersDeployedThisLap: " << std::to_string(data.m_ersDeployedThisLap) << "\n"
-                   << "m_networkPaused: " << std::to_string(data.m_networkPaused) << "\n";
-
-                return os;
-            }
+            friend std::ostream &operator<<(std::ostream &os, const Data &data);
         };
 
     public:
+        explicit PacketCarStatusData(const std::array<std::uint8_t, 1058>& bytes);
+
         PacketHeader m_header;
         std::array<Data, 22> m_carStatusData;
 
-        friend std::ostream &operator<<(std::ostream &os, const PacketCarStatusData &data) {
-            os << "m_header: " << "\n" << data.m_header << "\n"
-               << "m_carStatusData: " << "\n\n";
-
-            for (size_t i = 0; i < data.m_carStatusData.size(); ++i) {
-                os << "Car " << std::to_string(i) << ": " << "\n";
-                os << data.m_carStatusData[i] << (i < data.m_carStatusData.size() - 1 ? "\n" : "");
-            }
-
-            return os;
-        }
+        friend std::ostream &operator<<(std::ostream &os, const PacketCarStatusData &data);
     };
+
+    std::ostream &operator<<(std::ostream &os, const PacketCarStatusData &data);
+
+    std::ostream &operator<<(std::ostream &os, const PacketCarStatusData::Data &data);
 }
 
 #pragma pack()

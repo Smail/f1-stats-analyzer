@@ -16,7 +16,7 @@ find_package(Qt6 COMPONENTS
         Charts
         REQUIRED)
 
-add_executable(${PROJECT_NAME} main.cpp f1udpinterface/packets/PacketHeader.h f1udpinterface/packets/PacketSessionData.h
+set(FILES f1udpinterface/packets/PacketHeader.h f1udpinterface/packets/PacketSessionData.h
         f1udpinterface/packets/PacketMotionData.h f1udpinterface/packets/PacketEventData.h f1udpinterface/packets/PacketLapData.h
         f1udpinterface/packets/PacketParticipantsData.h f1udpinterface/packets/PacketCarSetupData.h f1udpinterface/packets/PacketFinalClassificationData.h
         f1udpinterface/packets/PacketLobbyInfoData.h f1udpinterface/packets/PacketCarDamageData.h f1udpinterface/packets/PacketCarStatusData.h
@@ -24,17 +24,12 @@ add_executable(${PROJECT_NAME} main.cpp f1udpinterface/packets/PacketHeader.h f1
         f1udpinterface/ids/RulesetId.h f1udpinterface/ids/SurfaceTypeId.h f1udpinterface/ids/PenaltyTypeId.h
         f1udpinterface/ids/InfringementTypeId.h f1udpinterface/ids/ButtonFlags.h f1udpinterface/ids/GameModeId.h
         f1udpinterface/packets/PacketCarTelemetryData.h f1udpinterface/packets/PacketSessionHistoryData.h
-        f1udpinterface/public.h util.h f1udpinterface/PacketFactory.cpp f1udpinterface/PacketFactory.h)
+        f1udpinterface/public.h util.h f1udpinterface/PacketFactory.cpp f1udpinterface/PacketFactory.h
+        f1udpinterface/packets/PacketHeader.cpp f1udpinterface/packets/PacketCarDamageData.cpp util.cpp f1udpinterface/packets/PacketCarSetupData.cpp f1udpinterface/packets/PacketCarTelemetryData.cpp f1udpinterface/packets/PacketEventData.cpp f1udpinterface/packets/PacketFinalClassificationData.cpp f1udpinterface/packets/PacketLobbyInfoData.cpp f1udpinterface/packets/PacketMotionData.cpp f1udpinterface/packets/PacketParticipantsData.cpp f1udpinterface/packets/PacketSessionData.cpp f1udpinterface/packets/PacketLapData.cpp f1udpinterface/packets/PacketCarStatusData.cpp)
 
-add_executable(${PROJECT_NAME}_test test/main.cpp f1udpinterface/packets/PacketHeader.h f1udpinterface/packets/PacketSessionData.h
-        f1udpinterface/packets/PacketMotionData.h f1udpinterface/packets/PacketEventData.h f1udpinterface/packets/PacketLapData.h
-        f1udpinterface/packets/PacketParticipantsData.h f1udpinterface/packets/PacketCarSetupData.h f1udpinterface/packets/PacketFinalClassificationData.h
-        f1udpinterface/packets/PacketLobbyInfoData.h f1udpinterface/packets/PacketCarDamageData.h f1udpinterface/packets/PacketCarStatusData.h
-        f1udpinterface/ids/TeamId.h f1udpinterface/ids/DriverId.h f1udpinterface/ids/TrackId.h f1udpinterface/ids/NationalityId.h
-        f1udpinterface/ids/RulesetId.h f1udpinterface/ids/SurfaceTypeId.h f1udpinterface/ids/PenaltyTypeId.h
-        f1udpinterface/ids/InfringementTypeId.h f1udpinterface/ids/ButtonFlags.h f1udpinterface/ids/GameModeId.h
-        f1udpinterface/packets/PacketCarTelemetryData.h f1udpinterface/packets/PacketSessionHistoryData.h
-        f1udpinterface/public.h util.h f1udpinterface/PacketFactory.cpp f1udpinterface/PacketFactory.h)
+add_executable(${PROJECT_NAME} main.cpp ${FILES} f1udpinterface/packets/PacketSessionHistoryData.cpp)
+
+add_executable(${PROJECT_NAME}_test test/main.cpp ${FILES})
 
 target_link_libraries(${PROJECT_NAME}
         Qt::Core
