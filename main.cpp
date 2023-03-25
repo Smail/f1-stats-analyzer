@@ -11,7 +11,6 @@
 #include <thread>
 
 #include "f1udpinterface/public.h"
-#include "f1udpinterface/PacketFactory.h"
 
 static int abc = 12;
 
@@ -60,7 +59,6 @@ int main(int argc, char* argv[]) {
             processTheDatagram(datagram, file, series);
         }
     });
-
 
     series->append(0, 6);
     series->append(2, 4);
