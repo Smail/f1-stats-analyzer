@@ -15,8 +15,7 @@ namespace F122 {
             case RulesetId::CHECKPOINT_CHALLENGE:    return "Checkpoint Challenge";
             case RulesetId::PRACTICE_AND_QUALIFYING: return "Practice & Qualifying";
             default: throw std::invalid_argument("Unknown enum value: " + std::to_string(
-                                                            static_cast<std::underlying_type<RulesetId>::type>(id)
-                                                ));
+                                                 static_cast<std::underlying_type<RulesetId>::type>(id)));
             // @formatter:on
         }
     }

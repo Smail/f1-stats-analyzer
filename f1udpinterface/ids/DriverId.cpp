@@ -130,8 +130,7 @@ namespace F122 {
             case DriverId::SERGIO_SETTE_CAMARA:  return "Sérgio Sette Câmara";
             case DriverId::JURI_VIPS:            return "Juri Vips";
             default: throw std::invalid_argument("Unknown enum case." + std::to_string(
-                                                            static_cast<std::underlying_type<DriverId>::type>(id)
-                                                ));
+                                                 static_cast<std::underlying_type<DriverId>::type>(id)));
             // @formatter:on
         }
     }

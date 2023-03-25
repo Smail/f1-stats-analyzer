@@ -57,6 +57,8 @@ namespace F122 {
             case TeamId::ASTON_MARTIN_VANTAGE_F1_EDITION:         return "Aston Martin Vantage F1 Edition";
             case TeamId::ASTON_MARTIN_VANTAGE_SAFETY_CAR:         return "Aston Martin Vantage Safety Car";
             case TeamId::MERCEDES_AMG_GT_BLACK_SERIES_SAFETY_CAR: return "Mercedes AMG GT Black Series Safety Car";
+            default: throw std::invalid_argument("Unknown enum value: " + std::to_string(
+                                                 static_cast<std::underlying_type<TeamId>::type>(id)));
             // @formatter:on
         }
     }

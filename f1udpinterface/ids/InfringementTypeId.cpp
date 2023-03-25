@@ -116,8 +116,7 @@ namespace F122 {
                 return "Attribute assigned";
             default:
                 throw std::invalid_argument("Unknown enum value: " + std::to_string(
-                        static_cast<std::underlying_type<InfringementTypeId>::type>(id)
-                ));
+                                            static_cast<std::underlying_type<InfringementTypeId>::type>(id)));
         }
     }
 

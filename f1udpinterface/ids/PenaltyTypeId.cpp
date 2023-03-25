@@ -42,8 +42,7 @@ namespace F122 {
                 return "Black flag timer";
             default:
                 throw std::invalid_argument("Unknown enum value: " + std::to_string(
-                        static_cast<std::underlying_type<PenaltyTypeId>::type>(id)
-                ));
+                        static_cast<std::underlying_type<PenaltyTypeId>::type>(id)));
         }
     }
 

@@ -20,8 +20,7 @@ namespace F122 {
             case GameModeId::CAREER_22_ONLINE:          return "Career '22 Online";
             case GameModeId::BENCHMARK:                 return "Benchmark";
             default: throw std::invalid_argument("Unknown enum value: " + std::to_string(
-                                                            static_cast<std::underlying_type<GameModeId>::type>(id)
-                                                 ));
+                                                 static_cast<std::underlying_type<GameModeId>::type>(id)));
             // @formatter:on
         }
     }
