@@ -9,6 +9,7 @@
 /// This will not change throughout the session and
 /// all the arrays that are sent use this vehicle index to dereference the correct piece of data.
 
+#include "packets/Packet.h"
 #include "packets/PacketHeader.h"
 #include "packets/MotionData.h"
 #include "packets/SessionData.h"
