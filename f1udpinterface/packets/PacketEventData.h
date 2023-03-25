@@ -7,7 +7,7 @@
 #include <cstdint>
 #include "PacketHeader.h"
 
-namespace F122::Network {
+namespace F122::Network::Packets {
     constexpr std::uint64_t to_ascii_int(const std::string& str) {
         if (str.length() != 4) throw std::invalid_argument("Expected string of length 4");
         return (str[0] << 24) | (str[1] << 16) | (str[2] << 8) | (str[3] << 0);

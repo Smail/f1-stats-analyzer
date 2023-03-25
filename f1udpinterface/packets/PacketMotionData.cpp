@@ -1,7 +1,7 @@
 #include "PacketMotionData.h"
 #include "../../util.h"
 
-namespace F122::Network {
+namespace F122::Network::Packets {
     PacketMotionData::PacketMotionData(const std::array<std::uint8_t, 1464>& bytes) :
             m_header{{util::copy_resize<std::uint8_t, 1464, 24>(bytes)}},
             m_carMotionData{util::batch_create<Data, 1464, 60, 22, 24>(bytes)},

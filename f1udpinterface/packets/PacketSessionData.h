@@ -6,7 +6,7 @@
 #include <array>
 #include "PacketHeader.h"
 
-namespace F122::Network {
+namespace F122::Network::Packets {
     /// The session packet includes details about the current session in progress.<br>
     /// <br>
     /// Frequency: 2 per second<br>

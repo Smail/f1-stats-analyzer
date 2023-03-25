@@ -4,7 +4,7 @@
 #include <ostream>
 #include "PacketHeader.h"
 
-namespace F122::Network {
+namespace F122::Network::Packets {
     /// The lap data packet gives details of all the cars in the session.<br>
     /// <br>
     /// Frequency: Rate as specified in menus<br>

@@ -4,7 +4,7 @@
 #include <ostream>
 #include "PacketHeader.h"
 
-namespace F122::Network {
+namespace F122::Network::Packets {
     /// This packet details the players currently in a multiplayer lobby. It details each player’s selected car, any
     /// AI involved in the game and also the ready status of each of the participants.<br>
     /// <br>

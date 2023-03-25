@@ -1,7 +1,7 @@
 #include "PacketParticipantsData.h"
 #include "../../util.h"
 
-namespace F122::Network {
+namespace F122::Network::Packets {
     PacketParticipantsData::Data::Data(const std::array<std::uint8_t, 56>& bytes) :
             m_aiControlled{bytes[0]},
             m_driverId{bytes[1]},

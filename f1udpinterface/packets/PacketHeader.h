@@ -5,7 +5,7 @@
 #include <string>
 #include <array>
 
-namespace F122::Network {
+namespace F122::Network::Packets {
     /// Size: 24 bytes
     struct PacketHeader {
         enum class PacketId : std::uint8_t {

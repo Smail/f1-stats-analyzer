@@ -2,7 +2,7 @@
 #include "PacketFinalClassificationData.h"
 #include "../../util.h"
 
-namespace F122::Network {
+namespace F122::Network::Packets {
     PacketFinalClassificationData::Data::Data(const std::array<std::uint8_t, 45>& bytes) :
             m_position{bytes[0]},
             m_numLaps{bytes[1]},

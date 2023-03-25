@@ -1,7 +1,7 @@
 #include "PacketSessionHistoryData.h"
 #include "../../util.h"
 
-namespace F122::Network {
+namespace F122::Network::Packets {
     PacketSessionHistoryData::LapHistoryData::LapHistoryData(const std::array<std::uint8_t, 11>& bytes) :
             m_lapTimeInMS{util::convert<std::uint32_t>({bytes[0], bytes[1], bytes[2], bytes[3]})},
             m_sector1TimeInMS{util::convert<std::uint16_t>({bytes[4], bytes[5]})},

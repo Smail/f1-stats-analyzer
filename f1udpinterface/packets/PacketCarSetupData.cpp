@@ -1,7 +1,7 @@
 #include "PacketCarSetupData.h"
 #include "../../util.h"
 
-namespace F122::Network {
+namespace F122::Network::Packets {
     PacketCarSetupData::Data::Data(const std::array<std::uint8_t, 49>& bytes) :
             m_frontWing{bytes[0]},
             m_rearWing{bytes[1]},

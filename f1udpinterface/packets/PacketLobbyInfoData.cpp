@@ -1,7 +1,7 @@
 #include "PacketLobbyInfoData.h"
 #include "../../util.h"
 
-namespace F122::Network {
+namespace F122::Network::Packets {
     PacketLobbyInfoData::Data::Data(const std::array<std::uint8_t, 53>& bytes) :
             m_aiControlled{bytes[0]},
             m_teamId{bytes[1]},

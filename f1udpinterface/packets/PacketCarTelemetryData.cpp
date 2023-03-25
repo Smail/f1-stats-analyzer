@@ -1,7 +1,7 @@
 #include "PacketCarTelemetryData.h"
 #include "../../util.h"
 
-namespace F122::Network {
+namespace F122::Network::Packets {
     PacketCarTelemetryData::Data::Data(const std::array<std::uint8_t, 60>& bytes) :
             m_speed{util::convert<std::uint16_t>({bytes[0], bytes[1]})},
             m_throttle{util::convert<float>({bytes[2], bytes[3], bytes[4], bytes[5]})},

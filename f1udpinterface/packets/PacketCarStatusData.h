@@ -3,7 +3,7 @@
 #include <cstdint>
 #include "PacketHeader.h"
 
-namespace F122::Network {
+namespace F122::Network::Packets {
     /// This packet details car statuses for all the cars in the race.<br>
     /// <br>
     /// Frequency: Rate as specified in menus<br>

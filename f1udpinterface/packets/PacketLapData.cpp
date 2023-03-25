@@ -1,7 +1,7 @@
 #include "PacketLapData.h"
 #include "../../util.h"
 
-namespace F122::Network {
+namespace F122::Network::Packets {
     PacketLapData::PacketLapData(const std::array<std::uint8_t, 972>& bytes) :
             m_header{{util::copy_resize<std::uint8_t, 972, 24>(bytes)}},
             m_lapData{util::batch_create<Data, 972, 43, 22, 24>(bytes)},

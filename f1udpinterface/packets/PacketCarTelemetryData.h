@@ -3,7 +3,7 @@
 #include <cstdint>
 #include "PacketHeader.h"
 
-namespace F122::Network {
+namespace F122::Network::Packets {
     /// This packet details telemetry for all the cars in the race. It details various values that would be recorded
     /// on the car such as speed, throttle application, DRS etc. Note that the rev light configurations are
     /// presented separately as well and will mimic real life driver preferences.<br>

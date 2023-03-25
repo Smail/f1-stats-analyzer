@@ -1,7 +1,7 @@
 #include "PacketEventData.h"
 #include "../../util.h"
 
-namespace F122::Network {
+namespace F122::Network::Packets {
     PacketEventData::PacketEventData(const std::array<std::uint8_t, 40>& bytes) :
             m_header{{util::copy_resize<std::uint8_t, 40, 24>(bytes)}},
             m_eventStringCode{util::copy_resize<std::uint8_t, 40, 4, 24 + 1>(bytes)} {

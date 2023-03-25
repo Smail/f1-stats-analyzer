@@ -1,7 +1,7 @@
 #include "PacketCarStatusData.h"
 #include "../../util.h"
 
-namespace F122::Network {
+namespace F122::Network::Packets {
     PacketCarStatusData::Data::Data(const std::array<std::uint8_t, 47>& bytes) :
             m_tractionControl{bytes[0]},
             m_antiLockBrakes{bytes[1]},

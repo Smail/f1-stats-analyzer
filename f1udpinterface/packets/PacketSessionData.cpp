@@ -1,7 +1,7 @@
 #include "PacketSessionData.h"
 #include "../../util.h"
 
-namespace F122::Network {
+namespace F122::Network::Packets {
     PacketSessionData::MarshalZone::MarshalZone(const std::array<std::uint8_t, 5>& bytes) :
             m_zoneStart{util::convert<float>({bytes[0], bytes[1], bytes[2], bytes[3]})},
             m_zoneFlag{static_cast<std::int8_t>(bytes[4])} {}

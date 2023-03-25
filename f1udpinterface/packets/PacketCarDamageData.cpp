@@ -1,7 +1,7 @@
 #include "PacketCarDamageData.h"
 #include "../../util.h"
 
-namespace F122::Network {
+namespace F122::Network::Packets {
     PacketCarDamageData::Data::Data(const std::array<std::uint8_t, 42>& bytes) :
             m_tyresWear{util::convert<float>({bytes[0], bytes[1], bytes[2], bytes[3]}),
                         util::convert<float>({bytes[4], bytes[5], bytes[6], bytes[7]}),

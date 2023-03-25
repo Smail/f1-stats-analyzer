@@ -5,7 +5,7 @@
 #include <string>
 #include "PacketHeader.h"
 
-namespace F122::Network {
+namespace F122::Network::Packets {
     /// This packet contains lap times and tyre usage for the session.<br><br><b>This packet works slightly differently
     /// to other packets. To reduce CPU and bandwidth, each packet relates to a specific vehicle and is
     /// sent every 1/20 s, and the vehicle being sent is cycled through. Therefore in a 20 car race you

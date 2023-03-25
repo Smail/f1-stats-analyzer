@@ -5,7 +5,7 @@
 #include <array>
 #include "PacketHeader.h"
 
-namespace F122::Network {
+namespace F122::Network::Packets {
     /// The motion packet gives physics data for all the cars being driven. There is additional data for the car
     /// being driven with the goal of being able to drive a motion platform setup.
     /// N.B. For the normalised vectors below, to convert to float values divide by 32767.0f – 16-bit signed values

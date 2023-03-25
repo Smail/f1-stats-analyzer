@@ -5,7 +5,7 @@
 #include <array>
 #include "PacketHeader.h"
 
-namespace F122::Network {
+namespace F122::Network::Packets {
     /// This packet details car damage parameters for all the cars in the race.<br>
     /// <br>
     /// Frequency: 2 per second<br>

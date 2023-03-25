@@ -15,7 +15,7 @@
 static int abc = 12;
 
 void processTheDatagram(const QNetworkDatagram& datagram, std::ofstream& file, QLineSeries* series) {
-    using namespace F122::Network;
+    using namespace F122::Network::Packets;
     QByteArray bytes = datagram.data();
 
     std::array<std::uint8_t, 24> packetHeaderBytes{};

@@ -1,7 +1,7 @@
 #include "PacketHeader.h"
 #include "../../util.h"
 
-namespace F122::Network {
+namespace F122::Network::Packets {
     PacketHeader::PacketHeader(const std::array<std::uint8_t, 24>& bytes) :
             m_packetFormat{util::convert<std::uint16_t>({bytes[0], bytes[1]})},
             m_gameMajorVersion{bytes[2]},
