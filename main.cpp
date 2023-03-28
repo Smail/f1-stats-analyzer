@@ -105,8 +105,11 @@ PacketVariant createPacket(const QByteArray& bytes) {
 }
 
 void processTheDatagram(const QNetworkDatagram& datagram, std::ofstream& file, QLineSeries* series) {
-    if (datagram.data().size() == EventData::SIZE)
-        std::visit([](const auto& x) { std::cout << (*x) << std::endl; }, createPacket(datagram.data()));
+    auto packet = createPacket(datagram.data());
+    std::visit([&file](const auto& x) {
+        std::cout << (*x) << std::endl;
+        file << (*x) << std::endl;
+    }, packet);
 }
 
 int main(int argc, char* argv[]) {
