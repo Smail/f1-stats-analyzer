@@ -4,7 +4,7 @@
 #include <ostream>
 
 namespace F122 {
-    enum class DriverId {
+    enum class DriverId : std::uint8_t {
         CARLOS_SAINZ = 0,
         LOUIS_DELETRAZ = 56,
         THEO_POURCHAIRE = 115,
