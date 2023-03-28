@@ -36,13 +36,13 @@ namespace F122::Network::Packets {
             std::uint8_t m_driverId;
             /// Network id - unique identifier for network players
             std::uint8_t m_networkId;
-            /// Team id - see appendix
+            /// Team id, 255 if no team selected @see TeamId
             std::uint8_t m_teamId;
-            /// My team flag - 1 = My Team, 0 = otherwise
+            /// My team flag: 1 = My Team, 0 = otherwise
             std::uint8_t m_myTeam;
             /// Race number of the car
             std::uint8_t m_raceNumber;
-            /// Nationality of the driver
+            /// Nationality id of the driver, 255 if no nationality selected @see NationalityId
             std::uint8_t m_nationality;
             /// Name of participant in UTF-8 format – null terminated
             /// Will be truncated with ... (U+2026) if too long

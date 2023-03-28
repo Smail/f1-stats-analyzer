@@ -70,11 +70,11 @@ namespace F122::Network::Packets {
 
         PacketHeader m_header;
         std::array<Data, 22> m_carTelemetryData;
-        /// Index of MFD panel open (255 = MFD closed)
-        /// Single player, race – 0 = Car setup, 1 = Pits, 2 = Damage, 3 = Engine, 4 = Temperatures
+        /// Index of MFD panel open (255 = MFD closed)<br>
+        /// Single player, race: 0 = Car setup, 1 = Pits, 2 = Damage, 3 = Engine, 4 = Temperatures<br>
         /// May vary depending on game mode
         std::uint8_t m_mfdPanelIndex;
-        /// Secondary player, race – 0 = Car setup, 1 = Pits, 2 = Damage, 3 = Engine, 4 = Temperatures
+        /// Secondary player, race: 0 = Car setup, 1 = Pits, 2 = Damage, 3 = Engine, 4 = Temperatures<br>
         /// May vary depending on game mode
         std::uint8_t m_mfdPanelIndexSecondaryPlayer;
         /// Suggested gear for the player (1-8) - 0 if no gear suggested
