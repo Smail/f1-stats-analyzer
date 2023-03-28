@@ -1,3 +1,5 @@
+#include <sstream>
+#include <bitset>
 #include "../SessionHistoryData.h"
 #include "../../../util.h"
 
@@ -32,11 +34,19 @@ namespace F122::Network::Packets {
     SessionHistoryData::~SessionHistoryData() = default;
 
     std::string SessionHistoryData::LapHistoryData::lapValidString() const {
-        if (m_lapValidBitFlags == 0) return "None";
-        else if (m_lapValidBitFlags == 1) return "Medium";
-        else if (m_lapValidBitFlags == 2) return "Hotlap";
-        else if (m_lapValidBitFlags == 3) return "Overtake";
-        else throw std::runtime_error("Invalid state: " + std::to_string(m_lapValidBitFlags) + " is not valid value");
+        std::stringstream ss;
+
+        if ((m_lapValidBitFlags & 0x01) == m_lapValidBitFlags) ss << "Lap valid, ";
+        if ((m_lapValidBitFlags & 0x02) == m_lapValidBitFlags) ss << "Sector 1 valid, ";
+        if ((m_lapValidBitFlags & 0x04) == m_lapValidBitFlags) ss << "Sector 2 valid, ";
+        if ((m_lapValidBitFlags & 0x08) == m_lapValidBitFlags) ss << "Sector 3 valid, ";
+        if (m_lapValidBitFlags > 0b00001111)
+            throw std::runtime_error("Invalid state: " +
+                                     std::bitset<sizeof(m_lapValidBitFlags)>(m_lapValidBitFlags).to_string() +
+                                     " is not valid value");
+
+        auto str = ss.str();
+        return str.substr(0, std::max(static_cast<size_t>(0), str.size() - 2));
     }
 
     std::ostream& operator<<(std::ostream& os, const SessionHistoryData::LapHistoryData& data) {
