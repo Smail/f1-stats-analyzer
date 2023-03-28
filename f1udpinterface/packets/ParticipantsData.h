@@ -49,12 +49,6 @@ namespace F122::Network::Packets {
             std::array<char, 48> m_name;
             /// The player's UDP setting, 0 = restricted, 1 = public
             std::uint8_t m_yourTelemetry;
-
-            [[nodiscard]] std::string name() const;
-
-            [[nodiscard]] bool is_ai_controlled() const;
-
-            friend std::ostream& operator<<(std::ostream& os, const Data& data);
         };
 
     public:

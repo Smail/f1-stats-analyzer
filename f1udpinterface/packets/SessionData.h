@@ -36,6 +36,8 @@ namespace F122::Network::Packets {
 
             explicit WeatherForecastSample(const std::array<std::uint8_t, 8>& bytes);
 
+            friend std::ostream& operator<<(std::ostream& os, const WeatherForecastSample& forecastSample);
+
             /// 0 = unknown, 1 = P1, 2 = P2, 3 = P3, 4 = Short P, 5 = Q1
             /// 6 = Q2, 7 = Q3, 8 = Short Q, 9 = OSQ, 10 = R, 11 = R2
             /// 12 = R3, 13 = Time Trial
@@ -54,8 +56,6 @@ namespace F122::Network::Packets {
             std::int8_t m_airTemperatureChange;
             /// Rain percentage (0-100)
             std::uint8_t m_rainPercentage;
-
-            friend std::ostream& operator<<(std::ostream& os, const WeatherForecastSample& forecastSample);
         };
 
     public:

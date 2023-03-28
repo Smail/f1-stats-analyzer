@@ -19,6 +19,8 @@ namespace F122::Network::Packets {
 
             explicit Data(const std::array<std::uint8_t, SIZE>& bytes);
 
+            friend std::ostream& operator<<(std::ostream& os, const Data& data);
+
             /// Last lap time in milliseconds
             std::uint32_t m_lastLapTimeInMS;
             /// Current time around the lap in milliseconds
@@ -69,8 +71,6 @@ namespace F122::Network::Packets {
             std::uint16_t m_pitStopTimerInMS;
             /// Whether the car should serve a penalty at this stop
             std::uint8_t m_pitStopShouldServePen;
-
-            friend std::ostream& operator<<(std::ostream& os, const Data& data);
         };
 
     public:

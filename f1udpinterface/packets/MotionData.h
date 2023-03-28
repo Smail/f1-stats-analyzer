@@ -23,6 +23,8 @@ namespace F122::Network::Packets {
 
             explicit Data(const std::array<std::uint8_t, 60>& bytes);
 
+            friend std::ostream& operator<<(std::ostream& os, const Data& data);
+
             /// World space X position
             float m_worldPositionX;
             /// World space Y position
@@ -59,8 +61,6 @@ namespace F122::Network::Packets {
             float m_pitch;
             /// Roll angle in radians
             float m_roll;
-
-            friend std::ostream& operator<<(std::ostream& os, const Data& data);
         };
 
     public:

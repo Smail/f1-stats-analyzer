@@ -20,6 +20,8 @@ namespace F122::Network::Packets {
 
             explicit Data(const std::array<std::uint8_t, SIZE>& bytes);
 
+            friend std::ostream& operator<<(std::ostream& os, const Data& data);
+
             /// Speed of car in kilometres per hour
             std::uint16_t m_speed;
             /// Amount of throttle applied (0.0 to 1.0)

@@ -20,6 +20,8 @@ namespace F122::Network::Packets {
 
             explicit Data(const std::array<std::uint8_t, SIZE>& bytes);
 
+            friend std::ostream& operator<<(std::ostream& os, const Data& data);
+
             /// Front wing aero
             std::uint8_t m_frontWing;
             /// Rear wing aero
@@ -64,8 +66,6 @@ namespace F122::Network::Packets {
             std::uint8_t m_ballast;
             /// Fuel load
             float m_fuelLoad;
-
-            friend std::ostream& operator<<(std::ostream& os, const Data& data);
         };
 
     public:

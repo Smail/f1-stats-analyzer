@@ -49,14 +49,15 @@ namespace F122::Network::Packets {
 
             explicit TyreStintHistoryData(const std::array<std::uint8_t, 3>& bytes);
 
+            friend std::ostream& operator<<(std::ostream& os, const TyreStintHistoryData& data);
+
+
             /// Lap the tyre usage ends on (255 of current tyre)
             std::uint8_t m_endLap;
             /// Actual tyres used by this driver
             std::uint8_t m_tyreActualCompound;
             /// Visual tyres used by this driver
             std::uint8_t m_tyreVisualCompound;
-
-            friend std::ostream& operator<<(std::ostream& os, const TyreStintHistoryData& data);
         };
 
     public:

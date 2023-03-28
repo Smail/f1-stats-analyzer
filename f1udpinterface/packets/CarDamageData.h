@@ -20,6 +20,8 @@ namespace F122::Network::Packets {
 
             explicit Data(const std::array<std::uint8_t, SIZE>& bytes);
 
+            friend std::ostream& operator<<(std::ostream& os, const Data& data);
+
             /// Tyre wear (percentage)
             std::array<float, 4> m_tyresWear;
             /// Tyre damage (percentage)
@@ -62,8 +64,6 @@ namespace F122::Network::Packets {
             std::uint8_t m_engineBlown;
             /// Engine seized, 0 = OK, 1 = fault
             std::uint8_t m_engineSeized;
-
-            friend std::ostream& operator<<(std::ostream& os, const Data& data);
         };
 
     public:
