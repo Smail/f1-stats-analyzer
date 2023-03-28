@@ -19,6 +19,10 @@ namespace F122::Network::Packets {
 
             explicit Data(const std::array<std::uint8_t, SIZE>& bytes);
 
+            [[nodiscard]] std::string readyStatus() const;
+
+            friend std::ostream& operator<<(std::ostream& os, const Data& data);
+
             /// Whether the vehicle is AI (1) or Human (0) controlled
             std::uint8_t m_aiControlled;
             /// Team id - see appendix (255 if no team currently selected)
@@ -32,8 +36,6 @@ namespace F122::Network::Packets {
             std::uint8_t m_carNumber;
             /// 0 = not ready, 1 = ready, 2 = spectating
             std::uint8_t m_readyStatus;
-
-            friend std::ostream& operator<<(std::ostream& os, const Data& data);
         };
 
     public:

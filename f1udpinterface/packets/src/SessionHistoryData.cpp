@@ -31,12 +31,20 @@ namespace F122::Network::Packets {
 
     SessionHistoryData::~SessionHistoryData() = default;
 
+    std::string SessionHistoryData::LapHistoryData::lapValidString() const {
+        if (m_lapValidBitFlags == 0) return "None";
+        else if (m_lapValidBitFlags == 1) return "Medium";
+        else if (m_lapValidBitFlags == 2) return "Hotlap";
+        else if (m_lapValidBitFlags == 3) return "Overtake";
+        else throw std::runtime_error("Invalid state: " + std::to_string(m_lapValidBitFlags) + " is not valid value");
+    }
+
     std::ostream& operator<<(std::ostream& os, const SessionHistoryData::LapHistoryData& data) {
         os << "m_lapTimeInMS: " << std::to_string(data.m_lapTimeInMS) << "\n"
            << "m_sector1TimeInMS: " << std::to_string(data.m_sector1TimeInMS) << "\n"
            << "m_sector2TimeInMS: " << std::to_string(data.m_sector2TimeInMS) << "\n"
            << "m_sector3TimeInMS: " << std::to_string(data.m_sector3TimeInMS) << "\n"
-           << "m_lapValidBitFlags: " << std::to_string(data.m_lapValidBitFlags);
+           << "m_lapValidBitFlags: " << data.lapValidString();
 
         return os;
     }

@@ -34,6 +34,14 @@ namespace F122::Network::Packets {
 
     FinalClassificationData::~FinalClassificationData() = default;
 
+    std::string FinalClassificationData::Data::resultStatusString() const {
+        if (m_resultStatus == 0) return "None";
+        else if (m_resultStatus == 1) return "Medium";
+        else if (m_resultStatus == 2) return "Hotlap";
+        else if (m_resultStatus == 3) return "Overtake";
+        else throw std::runtime_error("Invalid state: " + std::to_string(m_resultStatus) + " is not valid value");
+    }
+
     std::string FinalClassificationData::Data::to_string() const {
         std::stringstream ss;
 
@@ -42,10 +50,10 @@ namespace F122::Network::Packets {
            << "m_gridPosition: " << std::to_string(m_gridPosition) << "\n"
            << "m_points: " << std::to_string(m_points) << "\n"
            << "m_numPitStops: " << std::to_string(m_numPitStops) << "\n"
-           << "m_resultStatus: " << std::to_string(m_resultStatus) << "\n"
-           << "m_bestLapTimeInMS: " << std::to_string(m_bestLapTimeInMS) << "\n"
-           << "m_totalRaceTime: " << std::to_string(m_totalRaceTime) << "\n"
-           << "m_penaltiesTime: " << std::to_string(m_penaltiesTime) << "\n"
+           << "m_resultStatus: " << resultStatusString() << "\n"
+           << "m_bestLapTimeInMS: " << std::to_string(m_bestLapTimeInMS) << " ms (best lap of session)" << "\n"
+           << "m_totalRaceTime: " << std::to_string(m_totalRaceTime) << " s (total race time without penalties)" << "\n"
+           << "m_penaltiesTime: " << std::to_string(m_penaltiesTime) << " s (accumulated penalty time)"<< "\n"
            << "m_numPenalties: " << std::to_string(m_numPenalties) << "\n"
            << "m_numTyreStints: " << std::to_string(m_numTyreStints) << "\n"
            << "m_tyreStintsActual: " << util::to_string(m_tyreStintsActual) << "\n"
@@ -56,8 +64,7 @@ namespace F122::Network::Packets {
     }
 
     std::ostream& operator<<(std::ostream& os, const FinalClassificationData::Data& data) {
-        os << data.to_string();
-        return os;
+        return (os << data.to_string());
     }
 
     std::ostream& operator<<(std::ostream& os, const FinalClassificationData& data) {

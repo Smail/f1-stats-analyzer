@@ -60,10 +60,6 @@ namespace F122::Network::Packets {
             BUTTON_STATUS = to_ascii_int("BUTN"),
         };
 
-        static std::string to_string(EventStringCodes enumCase);
-
-        static EventStringCodes from(const std::string& str);
-
         union EventDataDetails {
             struct {
                 /// Vehicle index of car achieving fastest lap
@@ -115,7 +111,7 @@ namespace F122::Network::Packets {
                 std::uint8_t isDriverFastestInSession;
                 /// Vehicle index of the vehicle that is the fastest in this session
                 std::uint8_t fastestVehicleIdxInSession;
-                /// Speed of the vehicle that is the fastest in this session
+                /// Speed of the vehicle that is the fastest in this session in km/h
                 float fastestSpeedInSession;
             } SpeedTrap;
 
@@ -161,6 +157,10 @@ namespace F122::Network::Packets {
         [[nodiscard]] std::string eventString() const;
 
         friend std::ostream& operator<<(std::ostream& os, const EventData& data);
+
+        static std::string to_string(EventStringCodes enumCase);
+
+        static EventStringCodes from(const std::string& str);
 
         PacketHeader m_header;
         /// Event string code @see EventStringCodes

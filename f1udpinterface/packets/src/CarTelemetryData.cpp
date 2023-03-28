@@ -1,5 +1,8 @@
 #include "../CarTelemetryData.h"
 #include "../../../util.h"
+#include "../../ids/SurfaceTypeId.h"
+#include <algorithm>
+#include <bitset>
 
 namespace F122::Network::Packets {
     CarTelemetryData::Data::Data(const std::array<std::uint8_t, SIZE>& bytes) :
@@ -57,22 +60,47 @@ namespace F122::Network::Packets {
     }
 
     std::ostream& operator<<(std::ostream& os, const CarTelemetryData::Data& data) {
-        os << "m_speed: " << std::to_string(data.m_speed) << "\n"
+        os << "m_speed: " << std::to_string(data.m_speed) << " km/h" << "\n"
            << "m_throttle: " << std::to_string(data.m_throttle) << "\n"
            << "m_steer: " << std::to_string(data.m_steer) << "\n"
            << "m_brake: " << std::to_string(data.m_brake) << "\n"
            << "m_clutch: " << std::to_string(data.m_clutch) << "\n"
            << "m_gear: " << std::to_string(data.m_gear) << "\n"
            << "m_engineRPM: " << std::to_string(data.m_engineRPM) << "\n"
-           << "m_drs: " << std::to_string(data.m_drs) << "\n"
-           << "m_revLightsPercent: " << std::to_string(data.m_revLightsPercent) << "\n"
-           << "m_revLightsBitValue: " << std::to_string(data.m_revLightsBitValue) << "\n"
-           << "m_brakesTemperature: " << util::to_string(data.m_brakesTemperature) << "\n"
-           << "m_tyresSurfaceTemperature: " << util::to_string(data.m_tyresSurfaceTemperature) << "\n"
-           << "m_tyresInnerTemperature: " << util::to_string(data.m_tyresInnerTemperature) << "\n"
-           << "m_engineTemperature: " << std::to_string(data.m_engineTemperature) << "\n"
-           << "m_tyresPressure: " << util::to_string(data.m_tyresPressure) << "\n"
-           << "m_surfaceType: " << util::to_string(data.m_surfaceType);
+           << "m_drs: " << std::boolalpha << std::to_string(data.m_drs) << std::noboolalpha << "\n"
+           << "m_revLightsPercent: " << std::to_string(data.m_revLightsPercent) << "%" << "\n"
+           << "m_revLightsBitValue: " << std::bitset<16>(data.m_revLightsBitValue) << "\n"
+           << "m_brakesTemperature: " << "["
+           << data.m_brakesTemperature[0] << " Celsius" << ", "
+           << data.m_brakesTemperature[1] << " Celsius"<< ", "
+           << data.m_brakesTemperature[2] << " Celsius"<< ", "
+           << data.m_brakesTemperature[3] << " Celsius"<< ", "
+           << "]\n"
+           << "m_tyresSurfaceTemperature: " << "["
+           << data.m_tyresSurfaceTemperature[0] << " Celsius" << ", "
+           << data.m_tyresSurfaceTemperature[1] << " Celsius"<< ", "
+           << data.m_tyresSurfaceTemperature[2] << " Celsius"<< ", "
+           << data.m_tyresSurfaceTemperature[3] << " Celsius"<< ", "
+           << "]\n"
+           << "m_tyresInnerTemperature: " << "["
+           << data.m_tyresInnerTemperature[0] << " Celsius" << ", "
+           << data.m_tyresInnerTemperature[1] << " Celsius"<< ", "
+           << data.m_tyresInnerTemperature[2] << " Celsius"<< ", "
+           << data.m_tyresInnerTemperature[3] << " Celsius"<< ", "
+           << "]\n"
+           << "m_engineTemperature: " << std::to_string(data.m_engineTemperature) << " Celsius" << "\n"
+           << "m_tyresPressure: " << "["
+           << data.m_tyresPressure[0] << " PSI" << ", "
+           << data.m_tyresPressure[1] << " PSI"<< ", "
+           << data.m_tyresPressure[2] << " PSI"<< ", "
+           << data.m_tyresPressure[3] << " PSI"<< ", "
+           << "]\n"
+           << "m_surfaceType: " << "["
+           << F122::to_string(static_cast<SurfaceTypeId>(data.m_surfaceType[0])) << ", "
+           << F122::to_string(static_cast<SurfaceTypeId>(data.m_surfaceType[1])) << ", "
+           << F122::to_string(static_cast<SurfaceTypeId>(data.m_surfaceType[2])) << ", "
+           << F122::to_string(static_cast<SurfaceTypeId>(data.m_surfaceType[3])) << ", "
+           << "]\n";
 
         return os;
     }

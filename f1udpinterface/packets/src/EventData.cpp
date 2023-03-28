@@ -1,6 +1,8 @@
 #include "../EventData.h"
 #include "../../../util.h"
 #include "../../ids/ButtonFlags.h"
+#include "../../ids/PenaltyTypeId.h"
+#include "../../ids/InfringementTypeId.h"
 
 namespace F122::Network::Packets {
     EventData::EventData(const std::array<std::uint8_t, SIZE>& bytes) :
@@ -78,7 +80,7 @@ namespace F122::Network::Packets {
         switch (type) {
             case EventStringCodes::FASTEST_LAP:
                 ss << "vehicleIdx: " << std::to_string(FastestLap.vehicleIdx) << std::endl;
-                ss << "lapTime: " << std::to_string(FastestLap.lapTime);
+                ss << "lapTime: " << std::to_string(FastestLap.lapTime) << " s";
                 break;
             case EventStringCodes::RETIREMENT:
             case EventStringCodes::TEAM_MATE_IN_PITS:
@@ -88,8 +90,9 @@ namespace F122::Network::Packets {
                 ss << "vehicleIdx: " << std::to_string(Retirement.vehicleIdx);
                 break;
             case EventStringCodes::PENALTY_ISSUED:
-                ss << "penaltyType: " << std::to_string(Penalty.penaltyType) << "\n";
-                ss << "infringementType: " << std::to_string(Penalty.infringementType) << "\n";
+                ss << "penaltyType: " << F122::to_string(static_cast<PenaltyTypeId>(Penalty.penaltyType)) << "\n";
+                ss << "infringementType: "
+                   << F122::to_string(static_cast<InfringementTypeId>(Penalty.infringementType)) << "\n";
                 ss << "vehicleIdx: " << std::to_string(Penalty.vehicleIdx) << "\n";
                 ss << "otherVehicleIdx: " << std::to_string(Penalty.otherVehicleIdx) << "\n";
                 ss << "time: " << std::to_string(Penalty.time) << "\n";
@@ -98,10 +101,12 @@ namespace F122::Network::Packets {
                 break;
             case EventStringCodes::SPEED_TRAP_TRIGGERED:
                 ss << "vehicleIdx: " << std::to_string(SpeedTrap.vehicleIdx) << "\n";
-                ss << "speed: " << std::to_string(SpeedTrap.speed) << "\n";
-                ss << "isOverallFastestInSession: " << std::to_string(SpeedTrap.isOverallFastestInSession) << "\n";
-                ss << "isDriverFastestInSession: " << std::to_string(SpeedTrap.isDriverFastestInSession) << "\n";
-                ss << "fastestSpeedInSession: " << std::to_string(SpeedTrap.fastestSpeedInSession) << "\n";
+                ss << "speed: " << std::to_string(SpeedTrap.speed) << " km/h" << "\n";
+                ss << "isOverallFastestInSession: " << std::boolalpha
+                   << (SpeedTrap.isOverallFastestInSession == 1) << std::noboolalpha << "\n";
+                ss << "isDriverFastestInSession: " << std::boolalpha
+                   << (SpeedTrap.isDriverFastestInSession == 1) << std::noboolalpha << "\n";
+                ss << "fastestSpeedInSession: " << std::to_string(SpeedTrap.fastestSpeedInSession) << " km/h" << "\n";
                 ss << "fastestVehicleIdxInSession: " << std::to_string(SpeedTrap.fastestVehicleIdxInSession);
                 break;
             case EventStringCodes::START_LIGHTS:
@@ -112,7 +117,7 @@ namespace F122::Network::Packets {
                 ss << "flashbackSessionTime: " << std::to_string(Flashback.flashbackSessionTime);
                 break;
             default:
-                ss << "This event never contains data." << std::endl;
+                ss << "This event doesn't contain data." << std::endl;
                 break;
         }
 
@@ -185,9 +190,9 @@ namespace F122::Network::Packets {
     }
 
     std::ostream& operator<<(std::ostream& os, const EventData& data) {
-        os << "m_header: " << "\n" << data.m_header << "\n"
+        os << "m_header: " << "\n" << data.m_header
            << "m_eventStringCode: " << data.eventString() << "\n"
-           << "m_eventDetails: " << "\n" << data.m_eventDetails.to_string(data.eventCode()) << "\n";
+           << "m_eventDetails: [" << "\n" << data.m_eventDetails.to_string(data.eventCode()) << "\n]\n";
 
         return os;
     }

@@ -34,47 +34,75 @@ namespace F122::Network::Packets {
 
     CarStatusData::~CarStatusData() = default;
 
+    std::uint16_t CarStatusData::Data::distance_to_next_drs_zone() const {
+        return m_drsActivationDistance;
+    }
+
+    bool CarStatusData::Data::is_drs_available() const {
+        return m_drsActivationDistance > 0;
+    }
+
+    std::string CarStatusData::Data::tractionControlString() const {
+        if (m_tractionControl == 0) return "OFF";
+        else if (m_tractionControl == 1) return "MEDIUM";
+        else if (m_tractionControl == 2) return "FULL";
+        else throw std::runtime_error("Invalid state: " + std::to_string(m_tractionControl) + " is not valid value");
+    }
+
+    std::string CarStatusData::Data::fuelMixString() const {
+        if (m_fuelMix == 0) return "LEAN";
+        else if (m_fuelMix == 1) return "STANDARD";
+        else if (m_fuelMix == 2) return "RICH";
+        else if (m_fuelMix == 3) return "MAX";
+        else throw std::runtime_error("Invalid state: " + std::to_string(m_fuelMix) + " is not valid value");
+    }
+
+    std::string CarStatusData::Data::fiaFlags() const {
+        if (m_vehicleFiaFlags == 0) return "None";
+        else if (m_vehicleFiaFlags == 1) return "Green";
+        else if (m_vehicleFiaFlags == 2) return "Blue";
+        else if (m_vehicleFiaFlags == 3) return "Yellow";
+        else if (m_vehicleFiaFlags == 4) return "Red";
+        else return "Invalid/Unknown";
+    }
+
+    std::string CarStatusData::Data::ers_deploy_mode() const {
+        if (m_ersDeployMode == 0) return "None";
+        else if (m_ersDeployMode == 1) return "Medium";
+        else if (m_ersDeployMode == 2) return "Hotlap";
+        else if (m_ersDeployMode == 3) return "Overtake";
+        else throw std::runtime_error("Invalid state: " + std::to_string(m_ersDeployMode) + " is not valid value");
+    }
+
     std::ostream& operator<<(std::ostream& os, const CarStatusData::Data& data) {
-        os << "m_tractionControl: " << std::to_string(data.m_tractionControl) << "\n"
-           << "m_antiLockBrakes: " << std::to_string(data.m_antiLockBrakes) << "\n"
-           << "m_fuelMix: " << std::to_string(data.m_fuelMix) << "\n"
-           << "m_frontBrakeBias: " << std::to_string(data.m_frontBrakeBias) << "\n"
-           << "m_pitLimiterStatus: " << std::to_string(data.m_pitLimiterStatus) << "\n"
-           << "m_fuelInTank: " << std::to_string(data.m_fuelInTank) << "\n"
-           << "m_fuelCapacity: " << std::to_string(data.m_fuelCapacity) << "\n"
+        std::string drsActivationDistance = data.m_drsActivationDistance == 0 ?
+                                            "DRS UNAVAILABLE" : (std::to_string(data.m_drsActivationDistance) + " m");
+
+        os << "m_tractionControl: " << data.tractionControlString() << "\n"
+           << "m_antiLockBrakes: " << (data.m_antiLockBrakes == 0 ? "OFF" : "ON") << "\n"
+           << "m_fuelMix: " << data.fuelMixString() << "\n"
+           << "m_frontBrakeBias: " << std::to_string(data.m_frontBrakeBias) << "%" << "\n"
+           << "m_pitLimiterStatus: " << (data.m_pitLimiterStatus ? "ON" : "OFF") << "\n"
+           << "m_fuelInTank: " << std::to_string(data.m_fuelInTank) << " l" << "\n"
+           << "m_fuelCapacity: " << std::to_string(data.m_fuelCapacity) << " l" << "\n"
            << "m_fuelRemainingLaps: " << std::to_string(data.m_fuelRemainingLaps) << "\n"
            << "m_maxRPM: " << std::to_string(data.m_maxRPM) << "\n"
            << "m_idleRPM: " << std::to_string(data.m_idleRPM) << "\n"
            << "m_maxGears: " << std::to_string(data.m_maxGears) << "\n"
-           << "m_drsAllowed: " << std::to_string(data.m_drsAllowed) << "\n"
-           << "m_drsActivationDistance: " << std::to_string(data.m_drsActivationDistance) << "\n"
+           << "m_drsAllowed: " << (data.m_drsAllowed ? "ALLOWED" : "NOT ALLOWED") << "\n"
+           << "m_drsActivationDistance: " << drsActivationDistance << "\n"
            << "m_actualTyreCompound: " << std::to_string(data.m_actualTyreCompound) << "\n"
            << "m_visualTyreCompound: " << std::to_string(data.m_visualTyreCompound) << "\n"
            << "m_tyresAgeLaps: " << std::to_string(data.m_tyresAgeLaps) << "\n"
-           << "m_vehicleFiaFlags: " << std::to_string(data.m_vehicleFiaFlags) << "\n"
+           << "m_vehicleFiaFlags: " << data.fiaFlags() << "\n"
            << "m_ersStoreEnergy: " << std::to_string(data.m_ersStoreEnergy) << " Joules" << "\n"
            << "m_ersDeployMode: " << data.ers_deploy_mode() << "\n"
-           << "m_ersHarvestedThisLapMGUK: " << std::to_string(data.m_ersHarvestedThisLapMGUK) << "\n"
-           << "m_ersHarvestedThisLapMGUH: " << std::to_string(data.m_ersHarvestedThisLapMGUH) << "\n"
-           << "m_ersDeployedThisLap: " << std::to_string(data.m_ersDeployedThisLap) << "\n"
-           << "m_networkPaused: " << std::to_string(data.m_networkPaused) << "\n";
+           << "m_ersHarvestedThisLapMGUK: " << std::to_string(data.m_ersHarvestedThisLapMGUK) << " Joules" << "\n"
+           << "m_ersHarvestedThisLapMGUH: " << std::to_string(data.m_ersHarvestedThisLapMGUH) << " Joules" << "\n"
+           << "m_ersDeployedThisLap: " << std::to_string(data.m_ersDeployedThisLap) << " Joules" << "\n"
+           << "m_networkPaused: " << std::boolalpha << data.m_networkPaused << std::noboolalpha << "\n";
 
         return os;
-    }
-
-    std::string CarStatusData::Data::ers_deploy_mode() const {
-        switch (m_ersDeployMode) {
-            case 0:
-                return "None";
-            case 1:
-                return "Medium";
-            case 2:
-                return "Hotlap";
-            case 3:
-                return "Overtake";
-            default:
-                throw std::runtime_error("Invalid state: " + std::to_string(m_ersDeployMode) + " is not valid value");
-        }
     }
 
     std::ostream& operator<<(std::ostream& os, const CarStatusData& data) {

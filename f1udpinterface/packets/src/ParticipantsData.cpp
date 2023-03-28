@@ -1,5 +1,8 @@
 #include "../ParticipantsData.h"
 #include "../../../util.h"
+#include "../../ids/NationalityId.h"
+#include "../../ids/TeamId.h"
+#include "../../ids/DriverId.h"
 
 namespace F122::Network::Packets {
     ParticipantsData::Data::Data(const std::array<std::uint8_t, SIZE>& bytes) :
@@ -38,14 +41,17 @@ namespace F122::Network::Packets {
     }
 
     std::ostream& operator<<(std::ostream& os, const ParticipantsData::Data& data) {
-        os << "m_aiControlled: " << std::to_string(data.m_aiControlled) << "\n"
-           << "m_driverId: " << std::to_string(data.m_driverId) << "\n"
+        os << "m_aiControlled: " << std::boolalpha << (data.m_aiControlled == 1) << std::noboolalpha << "\n"
+           << "m_driverId: " << (data.m_driverId == 255 ?
+                                 "Human Player" : F122::to_string(static_cast<DriverId>(data.m_driverId))) << "\n"
            << "m_networkId: " << std::to_string(data.m_networkId) << "\n"
-           << "m_teamId: " << std::to_string(data.m_teamId) << "\n"
-           << "m_myTeam: " << std::to_string(data.m_myTeam) << "\n"
+           << "m_teamId: " << (data.m_teamId == 255 ?
+                               "No team selected" : F122::to_string(static_cast<TeamId>(data.m_teamId))) << "\n"
+           << "m_myTeam: " << std::boolalpha << (data.m_myTeam == 1) << std::noboolalpha << "\n"
            << "m_raceNumber: " << std::to_string(data.m_raceNumber) << "\n"
-           << "m_nationality: " << std::to_string(data.m_nationality) << "\n"
-           << "m_yourTelemetry: " << std::to_string(data.m_yourTelemetry) << "\n"
+           << "m_nationality: " << (data.m_nationality == 255 ? "No nationality selected" : F122::to_string(
+                static_cast<NationalityId>(data.m_nationality))) << "\n"
+           << "m_yourTelemetry: " << (data.m_yourTelemetry ? "public" : "restricted") << "\n"
            << "m_name: " << data.name() << " " << util::to_string(data.m_name);
 
         return os;

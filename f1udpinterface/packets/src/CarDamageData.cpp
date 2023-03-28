@@ -48,27 +48,27 @@ namespace F122::Network::Packets {
     }
 
     std::ostream& operator<<(std::ostream& os, const CarDamageData::Data& data) {
-        os << "m_tyresWear: " << util::to_string(data.m_tyresWear) << "\n"
-           << "m_tyresDamage: " << util::to_string(data.m_tyresDamage) << "\n"
-           << "m_brakesDamage: " << util::to_string(data.m_brakesDamage) << "\n"
-           << "m_frontLeftWingDamage: " << std::to_string(data.m_frontLeftWingDamage) << "\n"
-           << "m_frontRightWingDamage: " << std::to_string(data.m_frontRightWingDamage) << "\n"
-           << "m_rearWingDamage: " << std::to_string(data.m_rearWingDamage) << "\n"
-           << "m_floorDamage: " << std::to_string(data.m_floorDamage) << "\n"
-           << "m_diffuserDamage: " << std::to_string(data.m_diffuserDamage) << "\n"
-           << "m_sidepodDamage: " << std::to_string(data.m_sidepodDamage) << "\n"
-           << "m_drsFault: " << std::to_string(data.m_drsFault) << "\n"
-           << "m_ersFault: " << std::to_string(data.m_ersFault) << "\n"
-           << "m_gearBoxDamage: " << std::to_string(data.m_gearBoxDamage) << "\n"
-           << "m_engineDamage: " << std::to_string(data.m_engineDamage) << "\n"
-           << "m_engineMGUHWear: " << std::to_string(data.m_engineMGUHWear) << "\n"
-           << "m_engineESWear: " << std::to_string(data.m_engineESWear) << "\n"
-           << "m_engineCEWear: " << std::to_string(data.m_engineCEWear) << "\n"
-           << "m_engineICEWear: " << std::to_string(data.m_engineICEWear) << "\n"
-           << "m_engineMGUKWear: " << std::to_string(data.m_engineMGUKWear) << "\n"
-           << "m_engineTCWear: " << std::to_string(data.m_engineTCWear) << "\n"
-           << "m_engineBlown: " << std::to_string(data.m_engineBlown) << "\n"
-           << "m_engineSeized: " << std::to_string(data.m_engineSeized) << "\n";
+        os << "m_tyresWear: " << util::to_string(data.m_tyresWear) << "%" << "\n"
+           << "m_tyresDamage: " << util::to_string(data.m_tyresDamage) << "%" << "\n"
+           << "m_brakesDamage: " << util::to_string(data.m_brakesDamage) << "%" << "\n"
+           << "m_frontLeftWingDamage: " << std::to_string(data.m_frontLeftWingDamage) << "%" << "\n"
+           << "m_frontRightWingDamage: " << std::to_string(data.m_frontRightWingDamage) << "%" << "\n"
+           << "m_rearWingDamage: " << std::to_string(data.m_rearWingDamage) << "%" << "\n"
+           << "m_floorDamage: " << std::to_string(data.m_floorDamage) << "%" << "\n"
+           << "m_diffuserDamage: " << std::to_string(data.m_diffuserDamage) << "%" << "\n"
+           << "m_sidepodDamage: " << std::to_string(data.m_sidepodDamage) << "%" << "\n"
+           << "m_drsFault: " << (data.m_drsFault ? "DRS FAULTY" : "DRS OK") << "\n"
+           << "m_ersFault: " << (data.m_ersFault ? "ERS FAULTY" : "ERS OK") << "\n"
+           << "m_gearBoxDamage: " << std::to_string(data.m_gearBoxDamage) << "%" << "\n"
+           << "m_engineDamage: " << std::to_string(data.m_engineDamage) << "%" << "\n"
+           << "m_engineMGUHWear: " << std::to_string(data.m_engineMGUHWear) << "%" << "\n"
+           << "m_engineESWear: " << std::to_string(data.m_engineESWear) << "%" << "\n"
+           << "m_engineCEWear: " << std::to_string(data.m_engineCEWear) << "%" << "\n"
+           << "m_engineICEWear: " << std::to_string(data.m_engineICEWear) << "%" << "\n"
+           << "m_engineMGUKWear: " << std::to_string(data.m_engineMGUKWear) << "%" << "\n"
+           << "m_engineTCWear: " << std::to_string(data.m_engineTCWear) << "%" << "\n"
+           << "m_engineBlown: " << (data.m_engineBlown ? "ENGINE HAS BLOWN" : "ENGINE OK") << "\n"
+           << "m_engineSeized: " << (data.m_engineSeized ? "ENGINE HAS SEIZED" : "ENGINE OK") << "\n";
 
         return os;
     }

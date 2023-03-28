@@ -37,6 +37,8 @@ namespace F122::Network::Packets {
             /// 0x04 bit set-sector 2 valid, 0x08 bit set-sector 3 valid
             std::uint8_t m_lapValidBitFlags;
 
+            [[nodiscard]] std::string lapValidString() const;
+
             friend std::ostream& operator<<(std::ostream& os, const LapHistoryData& data);
         };
 

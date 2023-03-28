@@ -46,10 +46,10 @@ namespace F122::Network::Packets {
     }
 
     std::ostream& operator<<(std::ostream& os, const CarSetupData::Data& data) {
-        os << "m_frontWing: " << std::to_string(data.m_frontWing) << "\n"
-           << "m_rearWing: " << std::to_string(data.m_rearWing) << "\n"
-           << "m_onThrottle: " << std::to_string(data.m_onThrottle) << "\n"
-           << "m_offThrottle: " << std::to_string(data.m_offThrottle) << "\n"
+        os << "m_frontWing: " << std::to_string(data.m_frontWing) << " (aero value)" << "\n"
+           << "m_rearWing: " << std::to_string(data.m_rearWing) << " (aero value)" << "\n"
+           << "m_onThrottle: " << std::to_string(data.m_onThrottle) << "%" << " (differential adj.)" << "\n"
+           << "m_offThrottle: " << std::to_string(data.m_offThrottle) << "%" << " (differential adj.)" << "\n"
            << "m_frontCamber: " << std::to_string(data.m_frontCamber) << "\n"
            << "m_rearCamber: " << std::to_string(data.m_rearCamber) << "\n"
            << "m_frontToe: " << std::to_string(data.m_frontToe) << "\n"
@@ -60,14 +60,14 @@ namespace F122::Network::Packets {
            << "m_rearAntiRollBar: " << std::to_string(data.m_rearAntiRollBar) << "\n"
            << "m_frontSuspensionHeight: " << std::to_string(data.m_frontSuspensionHeight) << "\n"
            << "m_rearSuspensionHeight: " << std::to_string(data.m_rearSuspensionHeight) << "\n"
-           << "m_brakePressure: " << std::to_string(data.m_brakePressure) << "\n"
-           << "m_brakeBias: " << std::to_string(data.m_brakeBias) << "\n"
-           << "m_rearLeftTyrePressure: " << std::to_string(data.m_rearLeftTyrePressure) << "\n"
-           << "m_rearRightTyrePressure: " << std::to_string(data.m_rearRightTyrePressure) << "\n"
-           << "m_frontLeftTyrePressure: " << std::to_string(data.m_frontLeftTyrePressure) << "\n"
-           << "m_frontRightTyrePressure: " << std::to_string(data.m_frontRightTyrePressure) << "\n"
-           << "m_ballast: " << std::to_string(data.m_ballast) << "\n"
-           << "m_fuelLoad: " << std::to_string(data.m_fuelLoad) << "\n";
+           << "m_brakePressure: " << std::to_string(data.m_brakePressure) << "%" << "\n"
+           << "m_brakeBias: " << std::to_string(data.m_brakeBias) << "%" << "\n"
+           << "m_rearLeftTyrePressure: " << std::to_string(data.m_rearLeftTyrePressure) << " PSI" << "\n"
+           << "m_rearRightTyrePressure: " << std::to_string(data.m_rearRightTyrePressure) << " PSI" << "\n"
+           << "m_frontLeftTyrePressure: " << std::to_string(data.m_frontLeftTyrePressure) << " PSI" << "\n"
+           << "m_frontRightTyrePressure: " << std::to_string(data.m_frontRightTyrePressure) << " PSI" << "\n"
+           << "m_ballast: " << std::to_string(data.m_ballast) << " kg" << "\n"
+           << "m_fuelLoad: " << std::to_string(data.m_fuelLoad) << " kg" << "\n";
 
         return os;
     }

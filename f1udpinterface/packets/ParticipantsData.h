@@ -24,6 +24,12 @@ namespace F122::Network::Packets {
 
             explicit Data(const std::array<std::uint8_t, SIZE>& bytes);
 
+            [[nodiscard]] std::string name() const;
+
+            [[nodiscard]] bool is_ai_controlled() const;
+
+            friend std::ostream& operator<<(std::ostream& os, const Data& data);
+
             /// Whether the vehicle is AI (1) or Human (0) controlled
             std::uint8_t m_aiControlled;
             /// Driver id - see appendix, 255 if network human

@@ -19,6 +19,12 @@ namespace F122::Network::Packets {
 
             explicit Data(const std::array<std::uint8_t, SIZE>& bytes);
 
+            [[nodiscard]] std::string to_string() const;
+
+            [[nodiscard]] std::string resultStatusString() const;
+
+            friend std::ostream& operator<<(std::ostream& os, const Data& data);
+
             /// Finishing position
             std::uint8_t m_position;
             /// Number of laps completed
@@ -49,10 +55,6 @@ namespace F122::Network::Packets {
             std::array<std::uint8_t, 8> m_tyreStintsVisual;
             /// The lap number stints end on
             std::array<std::uint8_t, 8> m_tyreStintsEndLaps;
-
-            [[nodiscard]] std::string to_string() const;
-
-            friend std::ostream& operator<<(std::ostream& os, const Data& data);
         };
 
     public:

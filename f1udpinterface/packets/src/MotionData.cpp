@@ -85,9 +85,9 @@ namespace F122::Network::Packets {
            << "m_gForceLateral: " << std::to_string(data.m_gForceLateral) << "\n"
            << "m_gForceLongitudinal: " << std::to_string(data.m_gForceLongitudinal) << "\n"
            << "m_gForceVertical: " << std::to_string(data.m_gForceVertical) << "\n"
-           << "m_yaw: " << std::to_string(data.m_yaw) << "\n"
-           << "m_pitch: " << std::to_string(data.m_pitch) << "\n"
-           << "m_roll: " << std::to_string(data.m_roll) << "\n";
+           << "m_yaw: " << std::to_string(data.m_yaw) << " rad" << "\n"
+           << "m_pitch: " << std::to_string(data.m_pitch) << " rad" << "\n"
+           << "m_roll: " << std::to_string(data.m_roll) << " rad" << "\n";
 
         return os;
     }

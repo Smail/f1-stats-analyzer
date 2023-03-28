@@ -16,17 +16,31 @@ namespace F122::Network::Packets {
 
             Data() = default;
 
-            explicit Data(const std::array<std::uint8_t, 47>& bytes);
+            explicit Data(const std::array<std::uint8_t, SIZE>& bytes);
 
-            /// Traction control - 0 = off, 1 = medium, 2 = full
+            [[nodiscard]] bool is_drs_available() const;
+
+            [[nodiscard]] std::uint16_t distance_to_next_drs_zone() const;
+
+            [[nodiscard]] std::string tractionControlString() const;
+
+            [[nodiscard]] std::string fuelMixString() const;
+
+            [[nodiscard]] std::string fiaFlags() const;
+
+            [[nodiscard]] std::string ers_deploy_mode() const;
+
+            friend std::ostream& operator<<(std::ostream& os, const Data& data);
+
+            /// Traction control: 0 = off, 1 = medium, 2 = full
             std::uint8_t m_tractionControl;
-            /// 0 (off) - 1 (on)
+            /// 0 = off, 1 = on
             std::uint8_t m_antiLockBrakes;
-            /// Fuel mix - 0 = lean, 1 = standard, 2 = rich, 3 = max
+            /// Fuel mix: 0 = lean, 1 = standard, 2 = rich, 3 = max
             std::uint8_t m_fuelMix;
             /// Front brake bias (percentage)
             std::uint8_t m_frontBrakeBias;
-            /// Pit limiter status - 0 = off, 1 = on
+            /// Pit limiter status: 0 = off, 1 = on
             std::uint8_t m_pitLimiterStatus;
             /// Current fuel mass
             float m_fuelInTank;
@@ -70,18 +84,6 @@ namespace F122::Network::Packets {
             float m_ersDeployedThisLap;
             /// Whether the car is paused in a network game
             std::uint8_t m_networkPaused;
-
-            [[nodiscard]] bool is_drs_available() const {
-                return m_drsActivationDistance > 0;
-            }
-
-            [[nodiscard]] std::uint16_t distance_to_next_drs_zone() const {
-                return m_drsActivationDistance;
-            }
-
-            [[nodiscard]] std::string ers_deploy_mode() const;
-
-            friend std::ostream& operator<<(std::ostream& os, const Data& data);
         };
 
     public:
