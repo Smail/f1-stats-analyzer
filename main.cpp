@@ -13,8 +13,11 @@
 #include "f1udpinterface/public.h"
 
 using namespace F122::Network::Packets;
-using PacketVariant = std::variant<CarDamageData*, CarSetupData*, CarStatusData*, CarTelemetryData*, EventData*,
-        FinalClassificationData*, LapData*, LobbyInfoData*, MotionData*, ParticipantsData*, SessionData*, SessionHistoryData*>;
+using PacketVariant = std::variant<std::unique_ptr<CarDamageData>, std::unique_ptr<CarSetupData>,
+        std::unique_ptr<CarStatusData>, std::unique_ptr<CarTelemetryData>, std::unique_ptr<EventData>,
+        std::unique_ptr<FinalClassificationData>, std::unique_ptr<LapData>, std::unique_ptr<LobbyInfoData>,
+        std::unique_ptr<MotionData>, std::unique_ptr<ParticipantsData>, std::unique_ptr<SessionData>,
+        std::unique_ptr<SessionHistoryData>>;
 
 template<size_t N>
 std::array<std::uint8_t, N> copy_to_array(const QByteArray& bytes) {
@@ -26,45 +29,45 @@ std::array<std::uint8_t, N> copy_to_array(const QByteArray& bytes) {
 
 /// A factory to create the specific data structure from the incoming network packet.
 PacketVariant createPacket(const QByteArray& bytes) {
-    std::variant<CarDamageData*, CarSetupData*, CarStatusData*, CarTelemetryData*, EventData*, FinalClassificationData*,
-            LapData*, LobbyInfoData*, MotionData*, ParticipantsData*, SessionData*, SessionHistoryData*> packetVariant{};
+    PacketVariant packetVariant{};
 
     switch (bytes.size()) {
         case CarDamageData::SIZE:
-            packetVariant = new CarDamageData{copy_to_array<CarDamageData::SIZE>(bytes)};
+            packetVariant = std::make_unique<CarDamageData>(CarDamageData{copy_to_array<CarDamageData::SIZE>(bytes)});
             break;
         case CarSetupData::SIZE:
-            packetVariant = new CarSetupData{copy_to_array<CarSetupData::SIZE>(bytes)};
+            packetVariant = std::make_unique<CarSetupData>(copy_to_array<CarSetupData::SIZE>(bytes));
             break;
         case CarStatusData::SIZE:
-            packetVariant = new CarStatusData{copy_to_array<CarStatusData::SIZE>(bytes)};
+            packetVariant = std::make_unique<CarStatusData>(copy_to_array<CarStatusData::SIZE>(bytes));
             break;
         case CarTelemetryData::SIZE:
-            packetVariant = new CarTelemetryData{copy_to_array<CarTelemetryData::SIZE>(bytes)};
+            packetVariant = std::make_unique<CarTelemetryData>(copy_to_array<CarTelemetryData::SIZE>(bytes));
             break;
         case EventData::SIZE:
-            packetVariant = new EventData{copy_to_array<EventData::SIZE>(bytes)};
+            packetVariant = std::make_unique<EventData>(copy_to_array<EventData::SIZE>(bytes));
             break;
         case FinalClassificationData::SIZE:
-            packetVariant = new FinalClassificationData{copy_to_array<FinalClassificationData::SIZE>(bytes)};
+            packetVariant = std::make_unique<FinalClassificationData>(
+                    copy_to_array<FinalClassificationData::SIZE>(bytes));
             break;
         case LapData::SIZE:
-            packetVariant = new LapData{copy_to_array<LapData::SIZE>(bytes)};
+            packetVariant = std::make_unique<LapData>(copy_to_array<LapData::SIZE>(bytes));
             break;
         case LobbyInfoData::SIZE:
-            packetVariant = new LobbyInfoData{copy_to_array<LobbyInfoData::SIZE>(bytes)};
+            packetVariant = std::make_unique<LobbyInfoData>(copy_to_array<LobbyInfoData::SIZE>(bytes));
             break;
         case MotionData::SIZE:
-            packetVariant = new MotionData{copy_to_array<MotionData::SIZE>(bytes)};
+            packetVariant = std::make_unique<MotionData>(copy_to_array<MotionData::SIZE>(bytes));
             break;
         case ParticipantsData::SIZE:
-            packetVariant = new ParticipantsData{copy_to_array<ParticipantsData::SIZE>(bytes)};
+            packetVariant = std::make_unique<ParticipantsData>(copy_to_array<ParticipantsData::SIZE>(bytes));
             break;
         case SessionData::SIZE:
-            packetVariant = new SessionData{copy_to_array<SessionData::SIZE>(bytes)};
+            packetVariant = std::make_unique<SessionData>(copy_to_array<SessionData::SIZE>(bytes));
             break;
         case SessionHistoryData::SIZE:
-            packetVariant = new SessionHistoryData{copy_to_array<SessionHistoryData::SIZE>(bytes)};
+            packetVariant = std::make_unique<SessionHistoryData>(copy_to_array<SessionHistoryData::SIZE>(bytes));
             break;
         default:
             throw std::invalid_argument(
@@ -72,36 +75,6 @@ PacketVariant createPacket(const QByteArray& bytes) {
     }
 
     return packetVariant;
-
-//    switch (bytes.size()) {
-//        case CarDamageData::SIZE:
-//            return new CarDamageData{copy_to_array<CarDamageData::SIZE>(bytes)};
-//        case CarSetupData::SIZE:
-//            return new CarSetupData{copy_to_array<CarSetupData::SIZE>(bytes)};
-//        case CarStatusData::SIZE:
-//            return new CarStatusData{copy_to_array<CarStatusData::SIZE>(bytes)};
-//        case CarTelemetryData::SIZE:
-//            return new CarTelemetryData{copy_to_array<CarTelemetryData::SIZE>(bytes)};
-//        case EventData::SIZE:
-//            return new EventData{copy_to_array<EventData::SIZE>(bytes)};
-//        case FinalClassificationData::SIZE:
-//            return new FinalClassificationData{copy_to_array<FinalClassificationData::SIZE>(bytes)};
-//        case LapData::SIZE:
-//            return new LapData{copy_to_array<LapData::SIZE>(bytes)};
-//        case LobbyInfoData::SIZE:
-//            return new LobbyInfoData{copy_to_array<LobbyInfoData::SIZE>(bytes)};
-//        case MotionData::SIZE:
-//            return new MotionData{copy_to_array<MotionData::SIZE>(bytes)};
-//        case ParticipantsData::SIZE:
-//            return new ParticipantsData{copy_to_array<ParticipantsData::SIZE>(bytes)};
-//        case SessionData::SIZE:
-//            return new SessionData{copy_to_array<SessionData::SIZE>(bytes)};
-//        case SessionHistoryData::SIZE:
-//            return new SessionHistoryData{copy_to_array<SessionHistoryData::SIZE>(bytes)};
-//        default:
-//            throw std::invalid_argument(
-//                    "Unknown byte size: The given byte array doesn't match any known type in this factory");
-//    }
 }
 
 void processTheDatagram(const QNetworkDatagram& datagram, std::ofstream& file, QLineSeries* series) {
