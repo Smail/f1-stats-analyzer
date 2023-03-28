@@ -20,6 +20,9 @@ namespace F122::Network::Packets {
 
             explicit Data(const std::array<std::uint8_t, SIZE>& bytes);
 
+            /// Returns if the car's DRS is currently active, i.e., if the wing is open.
+            [[nodiscard]] bool is_drs_open() const;
+
             friend std::ostream& operator<<(std::ostream& os, const Data& data);
 
             /// Speed of car in kilometres per hour
@@ -54,13 +57,6 @@ namespace F122::Network::Packets {
             std::array<float, 4> m_tyresPressure;
             /// Driving surface, see appendices
             std::array<std::uint8_t, 4> m_surfaceType;
-
-            /// Returns if the car's DRS is currently active, i.e., if the wing is open.
-            [[nodiscard]] bool is_drs_open() const {
-                return m_drs == 1;
-            }
-
-            friend std::ostream& operator<<(std::ostream& os, const Data& data);
         };
 
     public:

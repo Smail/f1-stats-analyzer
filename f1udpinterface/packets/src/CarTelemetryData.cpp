@@ -44,6 +44,10 @@ namespace F122::Network::Packets {
 
     CarTelemetryData::~CarTelemetryData() = default;
 
+    bool CarTelemetryData::Data::is_drs_open() const {
+        return m_drs == 1;
+    }
+
     std::ostream& operator<<(std::ostream& os, const CarTelemetryData& data) {
         os << "m_header: " << "\n" << data.m_header << "\n"
            << "m_mfdPanelIndex: " << std::to_string(data.m_mfdPanelIndex) << "\n"
