@@ -19,7 +19,7 @@ namespace F122::Network::Packets {
 
             MarshalZone() = default;
 
-            explicit MarshalZone(const std::array<std::uint8_t, 5>& bytes);
+            explicit MarshalZone(const std::array<std::uint8_t, SIZE>& bytes);
 
             /// Fraction (0..1) of way through the lap the marshal zone starts
             float m_zoneStart;
@@ -34,7 +34,7 @@ namespace F122::Network::Packets {
 
             WeatherForecastSample() = default;
 
-            explicit WeatherForecastSample(const std::array<std::uint8_t, 8>& bytes);
+            explicit WeatherForecastSample(const std::array<std::uint8_t, SIZE>& bytes);
 
             friend std::ostream& operator<<(std::ostream& os, const WeatherForecastSample& forecastSample);
 

@@ -23,7 +23,7 @@ namespace F122::Network::Packets {
 
             LapHistoryData() = default;
 
-            explicit LapHistoryData(const std::array<std::uint8_t, 11>& bytes);
+            explicit LapHistoryData(const std::array<std::uint8_t, SIZE>& bytes);
 
             /// Lap time in milliseconds
             std::uint32_t m_lapTimeInMS;
@@ -47,7 +47,7 @@ namespace F122::Network::Packets {
 
             TyreStintHistoryData() = default;
 
-            explicit TyreStintHistoryData(const std::array<std::uint8_t, 3>& bytes);
+            explicit TyreStintHistoryData(const std::array<std::uint8_t, SIZE>& bytes);
 
             friend std::ostream& operator<<(std::ostream& os, const TyreStintHistoryData& data);
 

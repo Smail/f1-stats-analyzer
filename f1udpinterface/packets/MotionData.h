@@ -21,7 +21,7 @@ namespace F122::Network::Packets {
 
             Data() = default;
 
-            explicit Data(const std::array<std::uint8_t, 60>& bytes);
+            explicit Data(const std::array<std::uint8_t, SIZE>& bytes);
 
             friend std::ostream& operator<<(std::ostream& os, const Data& data);
 
