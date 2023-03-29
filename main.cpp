@@ -184,7 +184,6 @@ int main(int argc, char* argv[]) {
     auto* worker = new Worker(speedChart, speedSeries, carActivationButtons, participantsData);
     worker->moveToThread(thread);
 
-    //
     QUdpSocket udpSocket;
     udpSocket.bind(20777, QUdpSocket::ShareAddress);
     QObject::connect(&udpSocket, &QUdpSocket::readyRead, [&udpSocket, &worker]() {
@@ -193,26 +192,12 @@ int main(int argc, char* argv[]) {
         }
     });
 
-    std::unique_ptr<QNetworkDatagram> datagram = nullptr;
-
-    QObject::connect(&udpSocket, &QUdpSocket::readyRead, [&udpSocket, &worker, &datagram]() {
-        while (datagram == nullptr && udpSocket.hasPendingDatagrams()) {
-            QNetworkDatagram d = udpSocket.receiveDatagram();
-
-            if (d.data().size() == CarTelemetryData::SIZE) {
-                datagram = std::make_unique<QNetworkDatagram>(d);
-            }
-
-            worker->insert(d);
-        }
-    });
-
-//    QObject::connect(worker, &Worker::error, [](const auto& x) { qDebug() << x; });
-//    QObject::connect(thread, &QThread::started, worker, &Worker::process);
-//    QObject::connect(worker, &Worker::finished, thread, &QThread::quit);
-//    QObject::connect(worker, &Worker::finished, worker, &Worker::deleteLater);
-//    QObject::connect(thread, &QThread::finished, thread, &QThread::deleteLater);
-//    thread->start();
+    QObject::connect(worker, &Worker::error, [](const auto& x) { qDebug() << x; });
+    QObject::connect(thread, &QThread::started, worker, &Worker::process);
+    QObject::connect(worker, &Worker::finished, thread, &QThread::quit);
+    QObject::connect(worker, &Worker::finished, worker, &Worker::deleteLater);
+    QObject::connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+    thread->start();
 
     return QApplication::exec();
 }
