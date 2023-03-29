@@ -53,58 +53,57 @@ namespace F122::Network::Packets {
            << "m_mfdPanelIndex: " << std::to_string(data.m_mfdPanelIndex) << "\n"
            << "m_mfdPanelIndexSecondaryPlayer: " << std::to_string(data.m_mfdPanelIndexSecondaryPlayer) << "\n"
            << "m_suggestedGear: " << std::to_string(data.m_suggestedGear) << "\n"
-           << "m_carTelemetryData: " << "\n\n";
+           << "m_carTelemetryData: [" << "\n\n";
 
         for (size_t i = 0; i < data.m_carTelemetryData.size(); ++i) {
             os << "Car " << std::to_string(i) << ": " << "\n";
             os << data.m_carTelemetryData[i] << (i < data.m_carTelemetryData.size() - 1 ? "\n\n" : "");
         }
 
-        return os;
+        return (os << "]\n");
     }
 
     std::ostream& operator<<(std::ostream& os, const CarTelemetryData::Data& data) {
         os << "m_speed: " << std::to_string(data.m_speed) << " km/h" << "\n"
-           << "m_throttle: " << std::to_string(data.m_throttle) << "\n"
-           << "m_steer: " << std::to_string(data.m_steer) << "\n"
-           << "m_brake: " << std::to_string(data.m_brake) << "\n"
-           << "m_clutch: " << std::to_string(data.m_clutch) << "\n"
-           << "m_gear: " << std::to_string(data.m_gear) << "\n"
+           << "m_throttle: " << std::to_string(data.m_throttle) << " [0.0, 1.0]" << "\n"
+           << "m_steer: " << std::to_string(data.m_steer) << " [-1.0 (full left), 1.0 (full right)]" << "\n"
+           << "m_brake: " << std::to_string(data.m_brake) << " [0.0, 1.0]" << "\n"
+           << "m_clutch: " << std::to_string(data.m_clutch) << " [0, 100]" << "\n"
+           << "m_gear: " << std::to_string(data.m_gear) << " (Selected Gear) [1-8, N=0, R=-1]" << "\n"
            << "m_engineRPM: " << std::to_string(data.m_engineRPM) << "\n"
-           << "m_drs: " << std::boolalpha << std::to_string(data.m_drs) << std::noboolalpha << "\n"
-           << "m_revLightsPercent: " << std::to_string(data.m_revLightsPercent) << "%" << "\n"
-           << "m_revLightsBitValue: " << std::bitset<16>(data.m_revLightsBitValue) << "\n"
+           << "m_drs: " << std::boolalpha << data.is_drs_open() << std::noboolalpha << "\n"
+           << "m_revLightsPercent: " << std::to_string(data.m_revLightsPercent) << " %" << "\n"
+           << "m_revLightsBitValue: " << std::bitset<15>(data.m_revLightsBitValue) << "\n"
            << "m_brakesTemperature: " << "["
-           << data.m_brakesTemperature[0] << " Celsius" << ", "
-           << data.m_brakesTemperature[1] << " Celsius"<< ", "
-           << data.m_brakesTemperature[2] << " Celsius"<< ", "
-           << data.m_brakesTemperature[3] << " Celsius"<< ", "
+           << std::to_string(data.m_brakesTemperature[0]) << " °C" << ", "
+           << std::to_string(data.m_brakesTemperature[1]) << " °C" << ", "
+           << std::to_string(data.m_brakesTemperature[2]) << " °C" << ", "
+           << std::to_string(data.m_brakesTemperature[3]) << " °C"
            << "]\n"
            << "m_tyresSurfaceTemperature: " << "["
-           << data.m_tyresSurfaceTemperature[0] << " Celsius" << ", "
-           << data.m_tyresSurfaceTemperature[1] << " Celsius"<< ", "
-           << data.m_tyresSurfaceTemperature[2] << " Celsius"<< ", "
-           << data.m_tyresSurfaceTemperature[3] << " Celsius"<< ", "
+           << std::to_string(data.m_tyresSurfaceTemperature[0]) << " °C" << ", "
+           << std::to_string(data.m_tyresSurfaceTemperature[1]) << " °C" << ", "
+           << std::to_string(data.m_tyresSurfaceTemperature[2]) << " °C" << ", "
+           << std::to_string(data.m_tyresSurfaceTemperature[3]) << " °C"
            << "]\n"
            << "m_tyresInnerTemperature: " << "["
-           << data.m_tyresInnerTemperature[0] << " Celsius" << ", "
-           << data.m_tyresInnerTemperature[1] << " Celsius"<< ", "
-           << data.m_tyresInnerTemperature[2] << " Celsius"<< ", "
-           << data.m_tyresInnerTemperature[3] << " Celsius"<< ", "
+           << std::to_string(data.m_tyresInnerTemperature[0]) << " °C" << ", "
+           << std::to_string(data.m_tyresInnerTemperature[1]) << " °C" << ", "
+           << std::to_string(data.m_tyresInnerTemperature[2]) << " °C" << ", "
+           << std::to_string(data.m_tyresInnerTemperature[3]) << " °C"
            << "]\n"
-           << "m_engineTemperature: " << std::to_string(data.m_engineTemperature) << " Celsius" << "\n"
+           << "m_engineTemperature: " << std::to_string(data.m_engineTemperature) << " °C" << "\n"
            << "m_tyresPressure: " << "["
-           << data.m_tyresPressure[0] << " PSI" << ", "
-           << data.m_tyresPressure[1] << " PSI"<< ", "
-           << data.m_tyresPressure[2] << " PSI"<< ", "
-           << data.m_tyresPressure[3] << " PSI"<< ", "
+           << std::to_string(data.m_tyresPressure[0]) << " PSI" << ", "
+           << std::to_string(data.m_tyresPressure[1]) << " PSI" << ", "
+           << std::to_string(data.m_tyresPressure[2]) << " PSI" << ", "
+           << std::to_string(data.m_tyresPressure[3]) << " PSI"
            << "]\n"
            << "m_surfaceType: " << "["
-           << F122::to_string(static_cast<SurfaceTypeId>(data.m_surfaceType[0])) << ", "
-           << F122::to_string(static_cast<SurfaceTypeId>(data.m_surfaceType[1])) << ", "
-           << F122::to_string(static_cast<SurfaceTypeId>(data.m_surfaceType[2])) << ", "
-           << F122::to_string(static_cast<SurfaceTypeId>(data.m_surfaceType[3])) << ", "
-           << "]\n";
+           << static_cast<SurfaceTypeId>(data.m_surfaceType[0]) << ", "
+           << static_cast<SurfaceTypeId>(data.m_surfaceType[1]) << ", "
+           << static_cast<SurfaceTypeId>(data.m_surfaceType[2]) << ", "
+           << static_cast<SurfaceTypeId>(data.m_surfaceType[3]) << "]";
 
         return os;
     }
