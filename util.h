@@ -4,6 +4,7 @@
 #include <string>
 #include <ostream>
 #include <array>
+#include <QByteArray>
 
 namespace util {
     template<typename T>
@@ -73,5 +74,13 @@ namespace util {
         }
 
         return result;
+    }
+
+    template<size_t N>
+    std::array<std::uint8_t, N> copy_to_array(const QByteArray& bytes) {
+        std::array<std::uint8_t, N> array{};
+        std::copy(bytes.begin(), bytes.end(), array.begin());
+
+        return array;
     }
 }
