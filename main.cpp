@@ -32,58 +32,6 @@ std::array<QLineSeries*, 22> throttleSeries;
 std::array<QLineSeries*, 22> breakSeries;
 std::array<CarActivationButton*, 22> carActivationButtons;
 
-void processTheDatagram(const QNetworkDatagram& datagram, QChart* chart) {
-    auto bytes = datagram.data();
-    auto packet = createPacket(bytes);
-
-    if (bytes.length() == CarTelemetryData::SIZE) {
-        std::unique_ptr<CarTelemetryData> telemetryData =
-                std::get<std::unique_ptr<CarTelemetryData>>(std::move(packet));
-        auto points = speedSeries[0]->points();
-        QPointF minXPoint = QPointF(0, 0);
-
-        if (!points.empty()) {
-            minXPoint = *std::min_element(points.begin(), points.end(),
-                                          [](const QPointF& p1, const QPointF& p2) { return p1.x() < p2.x(); });
-        }
-
-        // Increase length of x-axis. The x-axis is time.
-        const float time = telemetryData->m_header.m_sessionTime;
-        chart->axes(Qt::Horizontal)[0]->setRange(std::min(static_cast<double>(time), minXPoint.x()), time + 5);
-
-        for (int i = 0; i < speedSeries.size(); ++i) {
-            auto& carTelemetryData = telemetryData->m_carTelemetryData[i];
-            auto* carSpeedSeries = speedSeries[i];
-
-            (*carSpeedSeries) << QPointF(time, carTelemetryData.m_speed);
-        }
-    } else if (bytes.length() == ParticipantsData::SIZE) {
-        // TODO
-        participantsData = std::make_shared<ParticipantsData>(util::copy_to_array<ParticipantsData::SIZE>(bytes));
-
-        std::unordered_set<F122::TeamId> encounteredTeams;
-        for (int i = 0; i < 22; ++i) {
-            auto participant = participantsData->m_participants[i];
-
-            // 255 means no team is selected. This only happens if the received is an empty dummy object, i.e.,
-            // a car seat that doesn't participate in the race.
-            if (participant.m_teamId != 255) continue;
-
-            auto teamId = static_cast<F122::TeamId>(participant.m_teamId);
-            auto rgba = to_rgba(F122::from_team_id(teamId));
-            auto color = QColor(std::get<0>(rgba), std::get<1>(rgba), std::get<2>(rgba));
-
-            if (!encounteredTeams.contains(teamId)) {
-                color = color.darker(150);
-                encounteredTeams.insert(teamId);
-            }
-
-            speedSeries[i]->setColor(color);
-            carActivationButtons[i]->setText(QString::fromStdString(participant.name()));
-        }
-    }
-}
-
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
     QMainWindow window;
