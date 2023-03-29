@@ -6,7 +6,6 @@
 #include "PacketHeader.h"
 
 namespace F122::Network::Packets {
-
     /// This is a list of participants in the race. If the vehicle is controlled by AI, then the name will be the driver
     /// name. If this is a multiplayer game, the names will be the Steam Id on PC, or the LAN name if appropriate.
     /// N.B. on Xbox One, the names will always be the driver name, on PS4 the name will be the LAN name if
