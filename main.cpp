@@ -6,124 +6,213 @@
 #include <QChartView>
 #include <QChart>
 #include <QMainWindow>
+#include <QLabel>
+#include <QVBoxLayout>
 #include <thread>
 #include <iostream>
 #include <fstream>
+#include <QPushButton>
+#include <unordered_set>
+#include <QThread>
 
 #include "f1udpinterface/public.h"
+#include "gui/CarActivationButton.h"
+#include "gui/TeamColorMapping.h"
+#include "f1udpinterface/ids/TeamId.h"
+#include "gui/Worker.h"
+#include "f1udpinterface/packets/PacketFactory.h"
+#include "util.h"
 
 using namespace F122::Network::Packets;
-using PacketVariant = std::variant<std::unique_ptr<CarDamageData>, std::unique_ptr<CarSetupData>,
-        std::unique_ptr<CarStatusData>, std::unique_ptr<CarTelemetryData>, std::unique_ptr<EventData>,
-        std::unique_ptr<FinalClassificationData>, std::unique_ptr<LapData>, std::unique_ptr<LobbyInfoData>,
-        std::unique_ptr<MotionData>, std::unique_ptr<ParticipantsData>, std::unique_ptr<SessionData>,
-        std::unique_ptr<SessionHistoryData>>;
 
-template<size_t N>
-std::array<std::uint8_t, N> copy_to_array(const QByteArray& bytes) {
-    std::array<std::uint8_t, N> array{};
-    std::copy(bytes.begin(), bytes.end(), array.begin());
+std::shared_ptr<ParticipantsData> participantsData;
+// The number of max cars is 22
+std::array<QLineSeries*, 22> speedSeries;
+std::array<QLineSeries*, 22> throttleSeries;
+std::array<QLineSeries*, 22> breakSeries;
+std::array<CarActivationButton*, 22> carActivationButtons;
 
-    return array;
-}
+void processTheDatagram(const QNetworkDatagram& datagram, QChart* chart) {
+    auto bytes = datagram.data();
+    auto packet = createPacket(bytes);
 
-/// A factory to create the specific data structure from the incoming network packet.
-PacketVariant createPacket(const QByteArray& bytes) {
-    PacketVariant packetVariant{};
+    if (bytes.length() == CarTelemetryData::SIZE) {
+        std::unique_ptr<CarTelemetryData> telemetryData =
+                std::get<std::unique_ptr<CarTelemetryData>>(std::move(packet));
+        auto points = speedSeries[0]->points();
+        QPointF minXPoint = QPointF(0, 0);
 
-    switch (bytes.size()) {
-        case CarDamageData::SIZE:
-            packetVariant = std::make_unique<CarDamageData>(CarDamageData{copy_to_array<CarDamageData::SIZE>(bytes)});
-            break;
-        case CarSetupData::SIZE:
-            packetVariant = std::make_unique<CarSetupData>(copy_to_array<CarSetupData::SIZE>(bytes));
-            break;
-        case CarStatusData::SIZE:
-            packetVariant = std::make_unique<CarStatusData>(copy_to_array<CarStatusData::SIZE>(bytes));
-            break;
-        case CarTelemetryData::SIZE:
-            packetVariant = std::make_unique<CarTelemetryData>(copy_to_array<CarTelemetryData::SIZE>(bytes));
-            break;
-        case EventData::SIZE:
-            packetVariant = std::make_unique<EventData>(copy_to_array<EventData::SIZE>(bytes));
-            break;
-        case FinalClassificationData::SIZE:
-            packetVariant = std::make_unique<FinalClassificationData>(
-                    copy_to_array<FinalClassificationData::SIZE>(bytes));
-            break;
-        case LapData::SIZE:
-            packetVariant = std::make_unique<LapData>(copy_to_array<LapData::SIZE>(bytes));
-            break;
-        case LobbyInfoData::SIZE:
-            packetVariant = std::make_unique<LobbyInfoData>(copy_to_array<LobbyInfoData::SIZE>(bytes));
-            break;
-        case MotionData::SIZE:
-            packetVariant = std::make_unique<MotionData>(copy_to_array<MotionData::SIZE>(bytes));
-            break;
-        case ParticipantsData::SIZE:
-            packetVariant = std::make_unique<ParticipantsData>(copy_to_array<ParticipantsData::SIZE>(bytes));
-            break;
-        case SessionData::SIZE:
-            packetVariant = std::make_unique<SessionData>(copy_to_array<SessionData::SIZE>(bytes));
-            break;
-        case SessionHistoryData::SIZE:
-            packetVariant = std::make_unique<SessionHistoryData>(copy_to_array<SessionHistoryData::SIZE>(bytes));
-            break;
-        default:
-            throw std::invalid_argument(
-                    "Unknown byte size: The given byte array doesn't match any known type in this factory");
+        if (!points.empty()) {
+            minXPoint = *std::min_element(points.begin(), points.end(),
+                                          [](const QPointF& p1, const QPointF& p2) { return p1.x() < p2.x(); });
+        }
+
+        // Increase length of x-axis. The x-axis is time.
+        const float time = telemetryData->m_header.m_sessionTime;
+        chart->axes(Qt::Horizontal)[0]->setRange(std::min(static_cast<double>(time), minXPoint.x()), time + 5);
+
+        for (int i = 0; i < speedSeries.size(); ++i) {
+            auto& carTelemetryData = telemetryData->m_carTelemetryData[i];
+            auto* carSpeedSeries = speedSeries[i];
+
+            (*carSpeedSeries) << QPointF(time, carTelemetryData.m_speed);
+        }
+    } else if (bytes.length() == ParticipantsData::SIZE) {
+        // TODO
+        participantsData = std::make_shared<ParticipantsData>(util::copy_to_array<ParticipantsData::SIZE>(bytes));
+
+        std::unordered_set<F122::TeamId> encounteredTeams;
+        for (int i = 0; i < 22; ++i) {
+            auto participant = participantsData->m_participants[i];
+
+            // 255 means no team is selected. This only happens if the received is an empty dummy object, i.e.,
+            // a car seat that doesn't participate in the race.
+            if (participant.m_teamId != 255) continue;
+
+            auto teamId = static_cast<F122::TeamId>(participant.m_teamId);
+            auto rgba = to_rgba(F122::from_team_id(teamId));
+            auto color = QColor(std::get<0>(rgba), std::get<1>(rgba), std::get<2>(rgba));
+
+            if (!encounteredTeams.contains(teamId)) {
+                color = color.darker(150);
+                encounteredTeams.insert(teamId);
+            }
+
+            speedSeries[i]->setColor(color);
+            carActivationButtons[i]->setText(QString::fromStdString(participant.name()));
+        }
     }
-
-    return packetVariant;
-}
-
-void processTheDatagram(const QNetworkDatagram& datagram, std::ofstream& file, QLineSeries* series) {
-    auto packet = createPacket(datagram.data());
-    std::visit([&file](const auto& x) {
-        std::cout << (*x) << std::endl;
-        file << (*x) << std::endl;
-    }, packet);
 }
 
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
+    QMainWindow window;
+
+    auto* mainWidget = new QWidget(&window);
+    auto* layout = new QVBoxLayout();
+    auto* speedChart = new QChart();
+    auto* throttleChart = new QChart();
+
+    auto* btnLayout = new QHBoxLayout();
+    for (int i = 0; i < 22; ++i) {
+        speedSeries[i] = new QLineSeries(speedChart);
+        speedChart->addSeries(speedSeries[i]);
+
+        throttleSeries[i] = new QLineSeries(throttleChart);
+        throttleChart->addSeries(throttleSeries[i]);
+
+        // Create toggle button to turn each series on or off, i.e., display them or not.
+        auto* button = new CarActivationButton(speedSeries[i]);
+        carActivationButtons[i] = button;
+        button->setText(QString::fromStdString("Car " + std::to_string(i + 1)));
+        btnLayout->addWidget(button);
+    }
+
+    layout->addLayout(btnLayout);
+
+    {
+        auto* container = new QHBoxLayout();
+        auto* selectAllBtn = new QPushButton();
+
+        auto isAnyInactiveFunc = []() {
+            return std::any_of(carActivationButtons.begin(), carActivationButtons.end(),
+                               [](auto* x) { return !x->isActive(); });
+        };
+
+        auto setAppropriateButtonText = [&selectAllBtn](bool isAnyInactive) {
+            selectAllBtn->setText(QString::fromStdString(isAnyInactive ? "Select All" : "Deselect All"));
+        };
+
+        auto toggleAllButtons = [&isAnyInactiveFunc, &setAppropriateButtonText]() {
+            bool isAnyInactive = isAnyInactiveFunc();
+
+            std::cout << isAnyInactiveFunc() << std::endl;
+
+            std::for_each(carActivationButtons.begin(), carActivationButtons.end(),
+                          [&isAnyInactive](auto* x) { x->setIsActive(isAnyInactive); });
+            setAppropriateButtonText(!isAnyInactive);
+        };
+
+        std::cout << isAnyInactiveFunc() << std::endl;
+
+        setAppropriateButtonText(isAnyInactiveFunc());
+        QObject::connect(selectAllBtn, &QPushButton::clicked, toggleAllButtons);
+
+        container->addWidget(selectAllBtn);
+
+        layout->addLayout(container);
+    }
+
+    speedChart->legend()->hide();
+    speedChart->createDefaultAxes();
+    speedChart->setTitle("Driver Speed in km/h");
+
+    throttleChart->legend()->hide();
+    throttleChart->createDefaultAxes();
+    throttleChart->setTitle("Throttle Application");
+
+    // Set speedChart range to [0, 355], because the top speed is ~343 km/h.
+    speedChart->axes(Qt::Vertical /*, series */)[0]->setRange(0, 355);
+
+    auto* speedChartView = new QChartView(speedChart);
+    speedChartView->setRenderHint(QPainter::Antialiasing);
+
+    auto* throttleChartView = new QChartView(throttleChart);
+    throttleChartView->setRenderHint(QPainter::Antialiasing);
+
+    window.resize(400, 300);
+
+    auto* label = new QLabel(&window);
+    label->setText("first line\nsecond line");
+
+    layout->addWidget(label);
+    {
+        auto* chartContainer = new QHBoxLayout();
+
+        chartContainer->addWidget(speedChartView);
+        chartContainer->addWidget(throttleChartView);
+
+        layout->addLayout(chartContainer);
+    }
+
+    mainWidget->setLayout(layout);
+
+    window.setCentralWidget(mainWidget);
+    window.show();
+
+    auto* thread = new QThread();
+    auto* worker = new Worker(speedChart, speedSeries, carActivationButtons, participantsData);
+    worker->moveToThread(thread);
+
+    //
     QUdpSocket udpSocket;
-
-    auto* chart = new QChart();
-    auto* series = new QLineSeries();
-
     udpSocket.bind(20777, QUdpSocket::ShareAddress);
-    QObject::connect(&udpSocket, &QUdpSocket::readyRead, [&udpSocket, &series, &chart]() {
-        std::ofstream file{"output.txt", std::ios::trunc};
-
-        while (udpSocket.hasPendingDatagrams()) {
-            QNetworkDatagram datagram = udpSocket.receiveDatagram();
-            processTheDatagram(datagram, file, series);
+    QObject::connect(&udpSocket, &QUdpSocket::readyRead, [&udpSocket, &worker]() {
+        for (int i = 0; i < 25 && udpSocket.hasPendingDatagrams(); ++i) {
+            worker->insert(udpSocket.receiveDatagram());
         }
     });
 
-    series->append(0, 6);
-    series->append(2, 4);
-    series->append(3, 8);
-    series->append(7, 4);
-    series->append(10, 5);
-    *series << QPointF(11, 1) << QPointF(13, 3) << QPointF(17, 6) << QPointF(18, 3) << QPointF(20, 2);
+    std::unique_ptr<QNetworkDatagram> datagram = nullptr;
 
-    chart->legend()->hide();
-    chart->addSeries(series);
-    chart->createDefaultAxes();
-    chart->setTitle("Simple line chart example");
+    QObject::connect(&udpSocket, &QUdpSocket::readyRead, [&udpSocket, &worker, &datagram]() {
+        while (datagram == nullptr && udpSocket.hasPendingDatagrams()) {
+            QNetworkDatagram d = udpSocket.receiveDatagram();
 
-    series->attachAxis(chart->axisX());
-    series->attachAxis(chart->axisY());
+            if (d.data().size() == CarTelemetryData::SIZE) {
+                datagram = std::make_unique<QNetworkDatagram>(d);
+            }
 
-    auto* chartView = new QChartView(chart);
-    chartView->setRenderHint(QPainter::Antialiasing);
+            worker->insert(d);
+        }
+    });
 
-    QMainWindow window;
-    window.setCentralWidget(chartView);
-    window.resize(400, 300);
-    window.show();
+//    QObject::connect(worker, &Worker::error, [](const auto& x) { qDebug() << x; });
+//    QObject::connect(thread, &QThread::started, worker, &Worker::process);
+//    QObject::connect(worker, &Worker::finished, thread, &QThread::quit);
+//    QObject::connect(worker, &Worker::finished, worker, &Worker::deleteLater);
+//    QObject::connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+//    thread->start();
 
     return QApplication::exec();
 }

@@ -35,7 +35,7 @@ set(FILES f1udpinterface/packets/PacketHeader.h f1udpinterface/packets/SessionDa
         f1udpinterface/ids/src/InfringementTypeId.cpp f1udpinterface/ids/src/NationalityId.cpp
         f1udpinterface/ids/src/PenaltyTypeId.cpp f1udpinterface/ids/src/RulesetId.cpp
         f1udpinterface/ids/src/SurfaceTypeId.cpp f1udpinterface/ids/src/TeamId.cpp f1udpinterface/ids/src/TrackId.cpp
-        f1udpinterface/packets/Packet.h f1udpinterface/packets/src/Packet.cpp)
+        f1udpinterface/packets/Packet.h f1udpinterface/packets/src/Packet.cpp gui/CarActivationButton.cpp gui/CarActivationButton.h gui/TeamColorMapping.h gui/TeamColorMapping.cpp gui/Worker.cpp gui/Worker.h f1udpinterface/packets/src/PacketFactory.cpp f1udpinterface/packets/PacketFactory.h )
 
 add_executable(${PROJECT_NAME} main.cpp ${FILES} f1udpinterface/packets/src/SessionHistoryData.cpp)
 
